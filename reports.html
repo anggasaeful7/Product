@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Angsflow - Reports</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#60A5FA',
+                        secondary: '#3B82F6',
+                        accent: '#F59E0B',
+                        dark: '#0F172A',
+                        light: '#F8FAFC'
+                    },
+                    fontFamily: {
+                        'inter': ['Inter', 'sans-serif']
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'glow': 'glow 2s ease-in-out infinite alternate',
+                        'slide-up': 'slideUp 0.8s ease-out',
+                        'fade-in': 'fadeIn 1s ease-out',
+                        'pulse-slow': 'pulse 3s ease-in-out infinite',
+                        'bounce-slow': 'bounce 2s ease-in-out infinite',
+                        'progress': 'progress 2s ease-out',
+                        'wiggle': 'wiggle 1s ease-in-out infinite',
+                        'sparkle': 'sparkle 2s ease-in-out infinite'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        @keyframes glow {
+            from { box-shadow: 0 0 20px #60A5FA40; }
+            to { box-shadow: 0 0 30px #60A5FA80, 0 0 40px #60A5FA40; }
+        }
+        @keyframes slideUp {
+            from { transform: translateY(30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes progress {
+            from { width: 0%; }
+        }
+        @keyframes wiggle {
+            0%, 7% { transform: rotateZ(0); }
+            15% { transform: rotateZ(-15deg); }
+            20% { transform: rotateZ(10deg); }
+            25% { transform: rotateZ(-10deg); }
+            30% { transform: rotateZ(6deg); }
+            35% { transform: rotateZ(-4deg); }
+            40%, 100% { transform: rotateZ(0); }
+        }
+        @keyframes sparkle {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(1.1); }
+        }
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .gradient-text {
+            background: linear-gradient(135deg, #60A5FA, #3B82F6, #1E40AF);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .modal-backdrop {
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(8px);
+        }
+        .chart-container {
+            position: relative;
+            height: 300px;
+            width: 100%;
+        }
+        .timeline-item {
+            transition: all 0.3s ease;
+        }
+        .timeline-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+        .timeline-item.active {
+            background: linear-gradient(135deg, rgba(96, 165, 250, 0.2), rgba(59, 130, 246, 0.1));
+            border-color: rgba(96, 165, 250, 0.5);
+        }
+        .pro-badge {
+            background: linear-gradient(135deg, #F59E0B, #D97706);
+            animation: sparkle 2s ease-in-out infinite;
+        }
+        .export-button {
+            transition: all 0.3s ease;
+        }
+        .export-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        }
+        .ai-insight {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(124, 58, 237, 0.05));
+            border: 1px solid rgba(139, 92, 246, 0.3);
+        }
+        .category-item {
+            transition: all 0.3s ease;
+        }
+        .category-item:hover {
+            transform: scale(1.02);
+            background: rgba(255, 255, 255, 0.05);
+        }
+    </style>
+</head>
+<body class="font-inter bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 min-h-screen">
+    <!-- Animated Background -->
+    <div class="fixed inset-0 overflow-hidden pointer-events-none">
+        <div class="absolute -top-40 -right-40 w-80 h-80 bg-primary/20 rounded-full blur-3xl animate-float"></div>
+        <div class="absolute top-1/2 -left-40 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl animate-float" style="animation-delay: -2s;"></div>
+        <div class="absolute bottom-0 right-1/3 w-64 h-64 bg-indigo-500/15 rounded-full blur-3xl animate-float" style="animation-delay: -4s;"></div>
+    </div>
+
+    <!-- Sidebar (Desktop) -->
+    <div class="fixed inset-y-0 left-0 z-50 w-64 glass-effect border-r border-white/20 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out" id="sidebar">
+        <div class="flex flex-col h-full">
+            <!-- Logo -->
+            <div class="flex items-center px-6 py-4 border-b border-white/10">
+                <svg width="40" height="40" viewBox="0 0 48 48" class="animate-glow mr-3">
+                    <circle cx="24" cy="24" r="22" fill="url(#logoGradient)" stroke="rgba(96, 165, 250, 0.3)" stroke-width="2"/>
+                    <path d="M16 32 L20 20 L24 32 M18 28 L22 28" stroke="#ffffff" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M28 32 L28 20 M28 20 L34 20 M28 26 L32 26" stroke="#ffffff" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                    <defs>
+                        <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#60A5FA;stop-opacity:1" />
+                            <stop offset="50%" style="stop-color:#3B82F6;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#1E40AF;stop-opacity:1" />
+                        </linearGradient>
+                    </defs>
+                </svg>
+                <span class="text-xl font-bold text-white">Angs<span class="gradient-text">Flow</span></span>
+            </div>
+            
+            <!-- Navigation Menu -->
+            <nav class="flex-1 px-4 py-6 space-y-2">
+                <a href="#" class="flex items-center px-4 py-3 text-white/70 hover:text-white hover:bg-white/10 rounded-xl font-medium transition-all duration-200 group">
+                    <svg class="w-5 h-5 mr-3 group-hover:text-primary transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5a2 2 0 012-2h4a2 2 0 012 2v6H8V5z"></path>
+                    </svg>
+                    Dashboard
+                </a>
+                
+                <a href="#" class="flex items-center px-4 py-3 text-white/70 hover:text-white hover:bg-white/10 rounded-xl font-medium transition-all duration-200 group">
+                    <svg class="w-5 h-5 mr-3 group-hover:text-primary transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"></path>
+                    </svg>
+                    Transactions
+                </a>
+                
+                <a href="#" class="flex items-center px-4 py-3 text-white/70 hover:text-white hover:bg-white/10 rounded-xl font-medium transition-all duration-200 group">
+                    <svg class="w-5 h-5 mr-3 group-hover:text-primary transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 002 2z"></path>
+                    </svg>
+                    Budgets
+                </a>
+                
+                <a href="#" class="flex items-center px-4 py-3 text-white bg-primary/20 border border-primary/30 rounded-xl font-medium transition-all duration-200 group">
+                    <svg class="w-5 h-5 mr-3 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                    </svg>
+                    Reports
+                </a>
+                
+                <a href="#" class="flex items-center px-4 py-3 text-white/70 hover:text-white hover:bg-white/10 rounded-xl font-medium transition-all duration-200 group">
+                    <svg class="w-5 h-5 mr-3 group-hover:text-primary transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                    </svg>
+                    Settings
+                </a>
+            </nav>
+            
+            <!-- User Info -->
+            <div class="px-4 py-4 border-t border-white/10">
+                <div class="flex items-center px-4 py-3 bg-white/5 rounded-xl">
+                    <div class="w-10 h-10 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-full flex items-center justify-center text-white font-bold mr-3">
+                        JD
+                    </div>
+                    <div class="flex-1">
+                        <p class="text-white font-medium text-sm">John Doe</p>
+                        <p class="text-white/60 text-xs">Personal Account</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Top Navigation -->
+    <div class="lg:ml-64">
+        <nav class="glass-effect sticky top-0 z-40 border-b border-white/10">
+            <div class="px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between items-center h-16">
+                    <!-- Mobile menu button -->
+                    <button onclick="toggleSidebar()" class="lg:hidden p-2 text-white/70 hover:text-primary transition-colors">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                    </button>
+                    
+                    <!-- Page Title -->
+                    <h1 class="text-xl font-bold text-white">Reports</h1>
+                    
+                    <!-- Right side menu -->
+                    <div class="flex items-center space-x-4">
+                        <!-- Notifications -->
+                        <button class="relative p-2 text-white/70 hover:text-primary transition-colors">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-3.5-3.5a50.002 50.002 0 00-2.5-2.5V9a6 6 0 10-12 0v1.5c0 .9-.4 1.8-1.1 2.4L2 17h5m8 0v1a3 3 0 11-6 0v-1m6 0H9"></path>
+                            </svg>
+                        </button>
+                        
+                        <!-- User Profile -->
+                        <div class="flex items-center space-x-3">
+                            <div class="w-8 h-8 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-full flex items-center justify-center text-white font-bold text-sm">
+                                JD
+                            </div>
+                            <span class="text-white font-medium hidden sm:block">John Doe</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </div>
+
+    <!-- Bottom Navigation (Mobile) -->
+    <div class="lg:hidden fixed bottom-0 left-0 right-0 z-50 glass-effect border-t border-white/20">
+        <div class="grid grid-cols-5 h-16">
+            <a href="#" class="flex flex-col items-center justify-center text-white/60 hover:text-primary transition-colors">
+                <svg class="w-4 h-4 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2z"></path>
+                </svg>
+                <span class="text-xs font-medium">Dashboard</span>
+            </a>
+            <a href="#" class="flex flex-col items-center justify-center text-white/60 hover:text-primary transition-colors">
+                <svg class="w-4 h-4 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4"></path>
+                </svg>
+                <span class="text-xs font-medium">Transactions</span>
+            </a>
+            <a href="#" class="flex flex-col items-center justify-center text-white/60 hover:text-primary transition-colors">
+                <svg class="w-4 h-4 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01"></path>
+                </svg>
+                <span class="text-xs font-medium">Budgets</span>
+            </a>
+            <a href="#" class="flex flex-col items-center justify-center text-primary">
+                <svg class="w-4 h-4 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6"></path>
+                </svg>
+                <span class="text-xs font-medium">Reports</span>
+            </a>
+            <a href="#" class="flex flex-col items-center justify-center text-white/60 hover:text-primary transition-colors">
+                <svg class="w-4 h-4 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0"></path>
+                </svg>
+                <span class="text-xs font-medium">Settings</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="lg:ml-64 pb-20 lg:pb-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 relative z-10">
+            
+            <!-- Header Section -->
+            <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between mb-8">
+                <div>
+                    <h1 class="text-3xl font-bold text-white mb-2">Monthly Reports</h1>
+                    <p class="text-white/70">Comprehensive financial analysis and insights</p>
+                </div>
+                <div class="flex items-center space-x-3 mt-4 lg:mt-0">
+                    <!-- Export Buttons -->
+                    <button onclick="showProModal()" class="export-button bg-gradient-to-r from-emerald-500 to-teal-600 text-white px-4 py-2 rounded-xl font-medium flex items-center space-x-2 relative">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-4-4m4 4l4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        <span>Export CSV</span>
+                        <span class="pro-badge text-xs px-2 py-1 rounded-full text-white font-bold">PRO</span>
+                    </button>
+                    <button onclick="showProModal()" class="export-button bg-gradient-to-r from-rose-500 to-pink-600 text-white px-4 py-2 rounded-xl font-medium flex items-center space-x-2 relative">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707L16.414 6.5a1 1 0 00-.707-.293H7a2 2 0 00-2 2v11a2 2 0 002 2z"></path>
+                        </svg>
+                        <span>Export PDF</span>
+                        <span class="pro-badge text-xs px-2 py-1 rounded-full text-white font-bold">PRO</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Timeline Navigation -->
+            <div class="mb-8">
+                <h3 class="text-lg font-semibold text-white mb-4">Select Report Period</h3>
+                <div class="flex overflow-x-auto space-x-4 pb-4">
+                    <div class="timeline-item glass-effect rounded-xl p-4 border border-white/20 min-w-[200px] cursor-pointer" onclick="selectMonth('2024-01')">
+                        <div class="text-center">
+                            <p class="text-white/60 text-sm">January 2024</p>
+                            <p class="text-white font-semibold">Rp 45.2M</p>
+                            <div class="flex justify-center space-x-2 mt-2">
+                                <span class="w-2 h-2 bg-emerald-400 rounded-full"></span>
+                                <span class="w-2 h-2 bg-rose-400 rounded-full"></span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item glass-effect rounded-xl p-4 border border-white/20 min-w-[200px] cursor-pointer" onclick="selectMonth('2024-02')">
+                        <div class="text-center">
+                            <p class="text-white/60 text-sm">February 2024</p>
+                            <p class="text-white font-semibold">Rp 38.7M</p>
+                            <div class="flex justify-center space-x-2 mt-2">
+                                <span class="w-2 h-2 bg-emerald-400 rounded-full"></span>
+                                <span class="w-2 h-2 bg-rose-400 rounded-full"></span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item active glass-effect rounded-xl p-4 border border-primary/50 min-w-[200px] cursor-pointer" onclick="selectMonth('2024-03')">
+                        <div class="text-center">
+                            <p class="text-primary text-sm font-medium">March 2024</p>
+                            <p class="text-white font-semibold">Rp 52.1M</p>
+                            <div class="flex justify-center space-x-2 mt-2">
+                                <span class="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></span>
+                                <span class="w-2 h-2 bg-rose-400 rounded-full animate-pulse"></span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item glass-effect rounded-xl p-4 border border-white/20 min-w-[200px] cursor-pointer" onclick="selectMonth('2024-04')">
+                        <div class="text-center">
+                            <p class="text-white/60 text-sm">April 2024</p>
+                            <p class="text-white font-semibold">Rp 41.8M</p>
+                            <div class="flex justify-center space-x-2 mt-2">
+                                <span class="w-2 h-2 bg-emerald-400 rounded-full"></span>
+                                <span class="w-2 h-2 bg-rose-400 rounded-full"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Summary Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <!-- Income Card -->
+                <div class="glass-effect rounded-2xl p-6 border border-white/20">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="bg-emerald-500/20 rounded-xl p-3">
+                            <svg class="w-8 h-8 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 11l5-5m0 0l5 5m-5-5v12"></path>
+                            </svg>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-emerald-400 text-sm font-medium">+12.5%</p>
+                        </div>
+                    </div>
+                    <div>
+                        <p class="text-white/60 text-sm">Total Income</p>
+                        <p class="text-3xl font-bold text-white mb-2">Rp 75M</p>
+                        <p class="text-emerald-400 text-sm">March 2024</p>
+                    </div>
+                </div>
+
+                <!-- Expense Card -->
+                <div class="glass-effect rounded-2xl p-6 border border-white/20">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="bg-rose-500/20 rounded-xl p-3">
+                            <svg class="w-8 h-8 text-rose-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 13l-5 5m0 0l-5-5m5 5V6"></path>
+                            </svg>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-rose-400 text-sm font-medium">+8.3%</p>
+                        </div>
+                    </div>
+                    <div>
+                        <p class="text-white/60 text-sm">Total Expenses</p>
+                        <p class="text-3xl font-bold text-white mb-2">Rp 52.1M</p>
+                        <p class="text-rose-400 text-sm">March 2024</p>
+                    </div>
+                </div>
+
+                <!-- Balance Card -->
+                <div class="glass-effect rounded-2xl p-6 border border-white/20">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="bg-primary/20 rounded-xl p-3">
+                            <svg class="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"></path>
+                            </svg>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-primary text-sm font-medium">+22.8%</p>
+                        </div>
+                    </div>
+                    <div>
+                        <p class="text-white/60 text-sm">Net Balance</p>
+                        <p class="text-3xl font-bold text-white mb-2">Rp 22.9M</p>
+                        <p class="text-primary text-sm">March 2024</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts Section -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+                <!-- Category Breakdown Chart -->
+                <div class="glass-effect rounded-2xl border border-white/20 p-6">
+                    <div class="flex items-center justify-between mb-6">
+                        <h3 class="text-xl font-bold text-white">Expenses by Category</h3>
+                        <select class="glass-effect text-white text-sm px-3 py-2 rounded-lg border border-white/20 bg-transparent">
+                            <option value="expenses" class="bg-slate-800">Expenses</option>
+                            <option value="income" class="bg-slate-800">Income</option>
+                        </select>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="categoryChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Monthly Trend Chart -->
+                <div class="glass-effect rounded-2xl border border-white/20 p-6">
+                    <div class="flex items-center justify-between mb-6">
+                        <h3 class="text-xl font-bold text-white">Monthly Trend</h3>
+                        <select class="glass-effect text-white text-sm px-3 py-2 rounded-lg border border-white/20 bg-transparent">
+                            <option value="6months" class="bg-slate-800">Last 6 Months</option>
+                            <option value="12months" class="bg-slate-800">Last 12 Months</option>
+                        </select>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="trendChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Category Details -->
+            <div class="glass-effect rounded-2xl border border-white/20 mb-8">
+                <div class="px-6 py-4 border-b border-white/10">
+                    <h3 class="text-xl font-bold text-white">Category Breakdown</h3>
+                </div>
+                <div class="p-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <!-- Category Item 1 -->
+                        <div class="category-item glass-effect rounded-xl p-4 border border-white/10">
+                            <div class="flex items-center justify-between mb-3">
+                                <div class="flex items-center space-x-3">
+                                    <span class="text-2xl">🍽️</span>
+                                    <div>
+                                        <p class="text-white font-medium">Food & Dining</p>
+                                        <p class="text-white/60 text-sm">25 transactions</p>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-white font-semibold">Rp 8.5M</p>
+                                    <p class="text-rose-400 text-sm">16.3%</p>
+                                </div>
+                            </div>
+                            <div class="w-full bg-white/10 rounded-full h-2">
+                                <div class="bg-gradient-to-r from-orange-500 to-red-500 h-2 rounded-full" style="width: 16.3%"></div>
+                            </div>
+                        </div>
+
+                        <!-- Category Item 2 -->
+                        <div class="category-item glass-effect rounded-xl p-4 border border-white/10">
+                            <div class="flex items-center justify-between mb-3">
+                                <div class="flex items-center space-x-3">
+                                    <span class="text-2xl">🛍️</span>
+                                    <div>
+                                        <p class="text-white font-medium">Shopping</p>
+                                        <p class="text-white/60 text-sm">18 transactions</p>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-white font-semibold">Rp 12.2M</p>
+                                    <p class="text-rose-400 text-sm">23.4%</p>
+                                </div>
+                            </div>
+                            <div class="w-full bg-white/10 rounded-full h-2">
+                                <div class="bg-gradient-to-r from-pink-500 to-purple-500 h-2 rounded-full" style="width: 23.4%"></div>
+                            </div>
+                        </div>
+
+                        <!-- Category Item 3 -->
+                        <div class="category-item glass-effect rounded-xl p-4 border border-white/10">
+                            <div class="flex items-center justify-between mb-3">
+                                <div class="flex items-center space-x-3">
+                                    <span class="text-2xl">🚗</span>
+                                    <div>
+                                        <p class="text-white font-medium">Transportation</p>
+                                        <p class="text-white/60 text-sm">32 transactions</p>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-white font-semibold">Rp 6.8M</p>
+                                    <p class="text-rose-400 text-sm">13.1%</p>
+                                </div>
+                            </div>
+                            <div class="w-full bg-white/10 rounded-full h-2">
+                                <div class="bg-gradient-to-r from-blue-500 to-cyan-500 h-2 rounded-full" style="width: 13.1%"></div>
+                            </div>
+                        </div>
+
+                        <!-- Category Item 4 -->
+                        <div class="category-item glass-effect rounded-xl p-4 border border-white/10">
+                            <div class="flex items-center justify-between mb-3">
+                                <div class="flex items-center space-x-3">
+                                    <span class="text-2xl">📄</span>
+                                    <div>
+                                        <p class="text-white font-medium">Bills & Utilities</p>
+                                        <p class="text-white/60 text-sm">12 transactions</p>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-white font-semibold">Rp 15.3M</p>
+                                    <p class="text-rose-400 text-sm">29.4%</p>
+                                </div>
+                            </div>
+                            <div class="w-full bg-white/10 rounded-full h-2">
+                                <div class="bg-gradient-to-r from-yellow-500 to-orange-500 h-2 rounded-full" style="width: 29.4%"></div>
+                            </div>
+                        </div>
+
+                        <!-- Category Item 5 -->
+                        <div class="category-item glass-effect rounded-xl p-4 border border-white/10">
+                            <div class="flex items-center justify-between mb-3">
+                                <div class="flex items-center space-x-3">
+                                    <span class="text-2xl">🎬</span>
+                                    <div>
+                                        <p class="text-white font-medium">Entertainment</p>
+                                        <p class="text-white/60 text-sm">15 transactions</p>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-white font-semibold">Rp 4.2M</p>
+                                    <p class="text-rose-400 text-sm">8.1%</p>
+                                </div>
+                            </div>
+                            <div class="w-full bg-white/10 rounded-full h-2">
+                                <div class="bg-gradient-to-r from-green-500 to-teal-500 h-2 rounded-full" style="width: 8.1%"></div>
+                            </div>
+                        </div>
+
+                        <!-- Category Item 6 -->
+                        <div class="category-item glass-effect rounded-xl p-4 border border-white/10">
+                            <div class="flex items-center justify-between mb-3">
+                                <div class="flex items-center space-x-3">
+                                    <span class="text-2xl">🏥</span>
+                                    <div>
+                                        <p class="text-white font-medium">Healthcare</p>
+                                        <p class="text-white/60 text-sm">8 transactions</p>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-white font-semibold">Rp 5.1M</p>
+                                    <p class="text-rose-400 text-sm">9.8%</p>
+                                </div>
+                            </div>
+                            <div class="w-full bg-white/10 rounded-full h-2">
+                                <div class="bg-gradient-to-r from-indigo-500 to-purple-500 h-2 rounded-full" style="width: 9.8%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- AI Summary Section (Pro Feature) -->
+            <div class="ai-insight rounded-2xl p-6 mb-8 relative overflow-hidden">
+                <div class="absolute top-0 right-0 m-4">
+                    <span class="pro-badge text-xs px-3 py-1 rounded-full text-white font-bold">PRO</span>
+                </div>
+                
+                <div class="flex items-start space-x-4">
+                    <div class="bg-purple-500/20 rounded-xl p-3 flex-shrink-0">
+                        <svg class="w-8 h-8 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+                        </svg>
+                    </div>
+                    
+                    <div class="flex-1">
+                        <h3 class="text-xl font-bold text-white mb-4 flex items-center">
+                            AI Financial Insights
+                            <svg class="w-5 h-5 ml-2 text-purple-400 animate-sparkle" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                            </svg>
+                        </h3>
+                        
+                        <div class="space-y-4">
+                            <div class="glass-effect rounded-xl p-4 border border-purple-500/20">
+                                <h4 class="text-purple-300 font-semibold mb-2">💡 Key Insights</h4>
+                                <ul class="text-white/80 text-sm space-y-2">
+                                    <li>• Your spending increased by 8.3% compared to last month, mainly due to higher bills & utilities</li>
+                                    <li>• Food & dining expenses are within your budget target of Rp 10M</li>
+                                    <li>• Transportation costs decreased by 15% thanks to remote work days</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="glass-effect rounded-xl p-4 border border-purple-500/20">
+                                <h4 class="text-purple-300 font-semibold mb-2">🎯 Recommendations</h4>
+                                <ul class="text-white/80 text-sm space-y-2">
+                                    <li>• Consider setting up automatic bill payments to avoid late fees</li>
+                                    <li>• Your entertainment budget has room for Rp 2.8M more this month</li>
+                                    <li>• Try meal planning to optimize your food expenses further</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="glass-effect rounded-xl p-4 border border-purple-500/20">
+                                <h4 class="text-purple-300 font-semibold mb-2">📈 Predictions</h4>
+                                <ul class="text-white/80 text-sm space-y-2">
+                                    <li>• Based on current trends, you'll save approximately Rp 25M this month</li>
+                                    <li>• Your annual savings goal is 78% achievable at this pace</li>
+                                    <li>• Consider increasing your investment allocation by 5%</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <button onclick="showProModal()" class="mt-4 bg-gradient-to-r from-purple-500 to-indigo-600 text-white px-6 py-3 rounded-xl font-semibold hover:from-purple-600 hover:to-indigo-700 transition-all duration-300 transform hover:scale-105">
+                            Unlock Full AI Analysis
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pro Modal -->
+    <div id="proModal" class="fixed inset-0 z-50 hidden">
+        <div class="modal-backdrop fixed inset-0" onclick="closeProModal()"></div>
+        <div class="fixed inset-0 flex items-center justify-center p-4">
+            <div class="glass-effect rounded-2xl border border-white/20 w-full max-w-md animate-slide-up">
+                <!-- Modal Header -->
+                <div class="flex items-center justify-between p-6 border-b border-white/10">
+                    <h2 class="text-2xl font-bold text-white">Upgrade to Pro</h2>
+                    <button onclick="closeProModal()" class="text-white/70 hover:text-white transition-colors">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- Modal Body -->
+                <div class="p-6 text-center">
+                    <div class="bg-gradient-to-br from-amber-500 to-orange-600 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-4 animate-sparkle">
+                        <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                        </svg>
+                    </div>
+                    
+                    <h3 class="text-xl font-bold text-white mb-2">Unlock Premium Features</h3>
+                    <p class="text-white/70 mb-6">Get access to advanced analytics, AI insights, and export capabilities</p>
+                    
+                    <div class="space-y-3 mb-6 text-left">
+                        <div class="flex items-center space-x-3">
+                            <svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            <span class="text-white/80">AI-powered financial insights</span>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            <span class="text-white/80">Export reports to CSV & PDF</span>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            <span class="text-white/80">Advanced analytics & predictions</span>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            <span class="text-white/80">Priority customer support</span>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-gradient-to-r from-primary to-secondary text-white p-4 rounded-xl mb-6">
+                        <p class="text-2xl font-bold">Rp 99K/month</p>
+                        <p class="text-sm opacity-90">Cancel anytime</p>
+                    </div>
+                    
+                    <button class="w-full bg-gradient-to-r from-primary to-secondary text-white py-3 rounded-xl font-semibold hover:from-secondary hover:to-primary transition-all duration-300 transform hover:scale-105">
+                        Upgrade Now
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Navigation functions
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('-translate-x-full');
+        }
+
+        // Timeline selection
+        function selectMonth(month) {
+            // Remove active class from all timeline items
+            document.querySelectorAll('.timeline-item').forEach(item => {
+                item.classList.remove('active');
+                item.classList.remove('border-primary/50');
+                item.classList.add('border-white/20');
+            });
+            
+            // Add active class to selected item
+            event.currentTarget.classList.add('active');
+            event.currentTarget.classList.add('border-primary/50');
+            event.currentTarget.classList.remove('border-white/20');
+            
+            // Update charts and data for selected month
+            updateReportData(month);
+        }
+
+        // Update report data
+        function updateReportData(month) {
+            console.log('Loading data for:', month);
+            // Here you would typically fetch new data from your backend
+            // and update the charts and summary cards
+        }
+
+        // Pro modal functions
+        function showProModal() {
+            document.getElementById('proModal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeProModal() {
+            document.getElementById('proModal').classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Chart initialization
+        function initializeCharts() {
+            // Category Chart (Doughnut)
+            const categoryCtx = document.getElementById('categoryChart').getContext('2d');
+            new Chart(categoryCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Bills & Utilities', 'Shopping', 'Food & Dining', 'Transportation', 'Healthcare', 'Entertainment'],
+                    datasets: [{
+                        data: [29.4, 23.4, 16.3, 13.1, 9.8, 8.1],
+                        backgroundColor: [
+                            'rgba(245, 158, 11, 0.8)',
+                            'rgba(236, 72, 153, 0.8)',
+                            'rgba(239, 68, 68, 0.8)',
+                            'rgba(59, 130, 246, 0.8)',
+                            'rgba(139, 92, 246, 0.8)',
+                            'rgba(16, 185, 129, 0.8)'
+                        ],
+                        borderColor: [
+                            'rgba(245, 158, 11, 1)',
+                            'rgba(236, 72, 153, 1)',
+                            'rgba(239, 68, 68, 1)',
+                            'rgba(59, 130, 246, 1)',
+                            'rgba(139, 92, 246, 1)',
+                            'rgba(16, 185, 129, 1)'
+                        ],
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                color: 'rgba(255, 255, 255, 0.8)',
+                                padding: 20,
+                                usePointStyle: true
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Trend Chart (Line)
+            const trendCtx = document.getElementById('trendChart').getContext('2d');
+            new Chart(trendCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar'],
+                    datasets: [{
+                        label: 'Income',
+                        data: [65, 68, 72, 70, 75, 75],
+                        borderColor: 'rgba(16, 185, 129, 1)',
+                        backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }, {
+                        label: 'Expenses',
+                        data: [45, 48, 52, 48, 45, 52],
+                        borderColor: 'rgba(239, 68, 68, 1)',
+                        backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: 'rgba(255, 255, 255, 0.8)',
+                                usePointStyle: true
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            ticks: {
+                                color: 'rgba(255, 255, 255, 0.6)'
+                            },
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            }
+                        },
+                        y: {
+                            ticks: {
+                                color: 'rgba(255, 255, 255, 0.6)',
+                                callback: function(value) {
+                                    return 'Rp ' + value + 'M';
+                                }
+                            },
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Initialize everything when DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeCharts();
+            
+            // Add hover effects to category items
+            const categoryItems = document.querySelectorAll('.category-item');
+            categoryItems.forEach(item => {
+                item.addEventListener('mouseenter', function() {
+                    this.style.transform = 'scale(1.02)';
+                    this.style.background = 'rgba(255, 255, 255, 0.05)';
+                });
+                
+                item.addEventListener('mouseleave', function() {
+                    this.style.transform = 'scale(1)';
+                    this.style.background = '';
+                });
+            });
+            
+            // Add sparkle animation to pro badges
+            const proBadges = document.querySelectorAll('.pro-badge');
+            proBadges.forEach(badge => {
+                setInterval(() => {
+                    badge.style.transform = 'scale(1.1)';
+                    setTimeout(() => {
+                        badge.style.transform = 'scale(1)';
+                    }, 200);
+                }, 3000);
+            });
+        });
+
+        // Export functions (Pro features)
+        function exportCSV() {
+            showProModal();
+        }
+
+        function exportPDF() {
+            showProModal();
+        }
+
+        // Add notification for demo purposes
+        setTimeout(() => {
+            const notification = document.createElement('div');
+            notification.className = 'fixed top-4 right-4 z-50 bg-gradient-to-r from-blue-500 to-purple-600 text-white p-4 rounded-xl font-medium animate-slide-up';
+            notification.innerHTML = '📊 Monthly report for March 2024 is ready!';
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 5000);
+        }, 2000);
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97073dbc408f8198',t:'MTc1NTQxMzQ2Ny4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>

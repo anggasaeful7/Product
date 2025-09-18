@@ -1,0 +1,917 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terms & Privacy Policy | Angsflow</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#60A5FA',
+                        secondary: '#3B82F6',
+                        accent: '#F59E0B',
+                        dark: '#0F172A',
+                        light: '#F8FAFC'
+                    },
+                    fontFamily: {
+                        'inter': ['Inter', 'sans-serif']
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'glow': 'glow 2s ease-in-out infinite alternate',
+                        'slide-up': 'slideUp 0.8s ease-out',
+                        'fade-in': 'fadeIn 1s ease-out',
+                        'slide-in': 'slideIn 0.6s ease-out'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        @keyframes glow {
+            from { box-shadow: 0 0 20px #60A5FA40; }
+            to { box-shadow: 0 0 30px #60A5FA80, 0 0 40px #60A5FA40; }
+        }
+        @keyframes slideUp {
+            from { transform: translateY(30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        @keyframes slideIn {
+            from { transform: translateX(-30px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .gradient-text {
+            background: linear-gradient(135deg, #60A5FA, #3B82F6, #1E40AF);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .legal-bg {
+            background: linear-gradient(135deg, #0F172A 0%, #1E293B 25%, #334155 50%, #475569 75%, #64748B 100%);
+        }
+        .section-active {
+            background: rgba(96, 165, 250, 0.2);
+            border-color: rgba(96, 165, 250, 0.5);
+        }
+        .toc-item {
+            transition: all 0.3s ease;
+        }
+        .toc-item:hover {
+            background: rgba(96, 165, 250, 0.1);
+            transform: translateX(5px);
+        }
+        .legal-section {
+            scroll-margin-top: 100px;
+        }
+        .highlight-box {
+            background: linear-gradient(135deg, rgba(96, 165, 250, 0.1), rgba(59, 130, 246, 0.05));
+            border-left: 4px solid #60A5FA;
+        }
+    </style>
+</head>
+<body class="font-inter legal-bg min-h-screen">
+    <!-- Animated Background -->
+    <div class="fixed inset-0 overflow-hidden pointer-events-none">
+        <div class="absolute -top-40 -right-40 w-80 h-80 bg-blue-500/20 rounded-full blur-3xl animate-float"></div>
+        <div class="absolute top-1/2 -left-40 w-96 h-96 bg-indigo-500/10 rounded-full blur-3xl animate-float" style="animation-delay: -2s;"></div>
+        <div class="absolute bottom-0 right-1/3 w-64 h-64 bg-purple-500/15 rounded-full blur-3xl animate-float" style="animation-delay: -4s;"></div>
+    </div>
+
+    <!-- Navigation Header -->
+    <nav class="relative z-10 glass-effect border-b border-white/10 sticky top-0">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo -->
+                <div class="flex items-center">
+                    <svg width="40" height="40" viewBox="0 0 48 48" class="animate-glow mr-3">
+                        <circle cx="24" cy="24" r="22" fill="url(#logoGradient)" stroke="rgba(96, 165, 250, 0.3)" stroke-width="2"/>
+                        <path d="M16 32 L20 20 L24 32 M18 28 L22 28" stroke="#ffffff" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M28 32 L28 20 M28 20 L34 20 M28 26 L32 26" stroke="#ffffff" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                        <defs>
+                            <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#60A5FA;stop-opacity:1" />
+                                <stop offset="50%" style="stop-color:#3B82F6;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#1E40AF;stop-opacity:1" />
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                    <span class="text-xl font-bold text-white">Angs<span class="gradient-text">Flow</span></span>
+                </div>
+                
+                <!-- Navigation Links -->
+                <div class="hidden md:flex items-center space-x-6">
+                    <button onclick="scrollToSection('terms')" class="text-white/70 hover:text-primary transition-colors font-medium">Terms of Service</button>
+                    <button onclick="scrollToSection('privacy')" class="text-white/70 hover:text-primary transition-colors font-medium">Privacy Policy</button>
+                    <button onclick="goHome()" class="bg-gradient-to-r from-blue-500 to-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:from-blue-600 hover:to-blue-700 transition-colors">
+                        Back to Home
+                    </button>
+                </div>
+                
+                <!-- Mobile Menu Button -->
+                <button onclick="toggleMobileMenu()" class="md:hidden text-white/70 hover:text-primary transition-colors">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+            
+            <!-- Table of Contents Sidebar -->
+            <div class="lg:col-span-1">
+                <div class="glass-effect rounded-2xl border border-white/20 p-6 sticky top-24">
+                    <h3 class="text-lg font-semibold text-white mb-4 flex items-center">
+                        <svg class="w-5 h-5 mr-2 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                        </svg>
+                        Daftar Isi
+                    </h3>
+                    
+                    <nav class="space-y-2">
+                        <div class="text-white/60 text-sm font-medium mb-3">Terms of Service</div>
+                        <button onclick="scrollToSection('terms-intro')" class="toc-item block w-full text-left text-white/70 hover:text-primary text-sm py-2 px-3 rounded-lg">1. Pengantar</button>
+                        <button onclick="scrollToSection('terms-acceptance')" class="toc-item block w-full text-left text-white/70 hover:text-primary text-sm py-2 px-3 rounded-lg">2. Penerimaan Syarat</button>
+                        <button onclick="scrollToSection('terms-services')" class="toc-item block w-full text-left text-white/70 hover:text-primary text-sm py-2 px-3 rounded-lg">3. Layanan Kami</button>
+                        <button onclick="scrollToSection('terms-accounts')" class="toc-item block w-full text-left text-white/70 hover:text-primary text-sm py-2 px-3 rounded-lg">4. Akun Pengguna</button>
+                        <button onclick="scrollToSection('terms-conduct')" class="toc-item block w-full text-left text-white/70 hover:text-primary text-sm py-2 px-3 rounded-lg">5. Kode Etik</button>
+                        <button onclick="scrollToSection('terms-intellectual')" class="toc-item block w-full text-left text-white/70 hover:text-primary text-sm py-2 px-3 rounded-lg">6. Hak Kekayaan Intelektual</button>
+                        <button onclick="scrollToSection('terms-termination')" class="toc-item block w-full text-left text-white/70 hover:text-primary text-sm py-2 px-3 rounded-lg">7. Penghentian Layanan</button>
+                        
+                        <div class="text-white/60 text-sm font-medium mb-3 mt-6">Privacy Policy</div>
+                        <button onclick="scrollToSection('privacy-intro')" class="toc-item block w-full text-left text-white/70 hover:text-primary text-sm py-2 px-3 rounded-lg">1. Pengantar</button>
+                        <button onclick="scrollToSection('privacy-collection')" class="toc-item block w-full text-left text-white/70 hover:text-primary text-sm py-2 px-3 rounded-lg">2. Pengumpulan Data</button>
+                        <button onclick="scrollToSection('privacy-usage')" class="toc-item block w-full text-left text-white/70 hover:text-primary text-sm py-2 px-3 rounded-lg">3. Penggunaan Data</button>
+                        <button onclick="scrollToSection('privacy-sharing')" class="toc-item block w-full text-left text-white/70 hover:text-primary text-sm py-2 px-3 rounded-lg">4. Berbagi Data</button>
+                        <button onclick="scrollToSection('privacy-security')" class="toc-item block w-full text-left text-white/70 hover:text-primary text-sm py-2 px-3 rounded-lg">5. Keamanan Data</button>
+                        <button onclick="scrollToSection('privacy-rights')" class="toc-item block w-full text-left text-white/70 hover:text-primary text-sm py-2 px-3 rounded-lg">6. Hak Pengguna</button>
+                        <button onclick="scrollToSection('privacy-contact')" class="toc-item block w-full text-left text-white/70 hover:text-primary text-sm py-2 px-3 rounded-lg">7. Kontak</button>
+                    </nav>
+                </div>
+            </div>
+
+            <!-- Main Content Area -->
+            <div class="lg:col-span-3">
+                
+                <!-- Header -->
+                <div class="text-center mb-12 animate-slide-up">
+                    <h1 class="text-4xl md:text-5xl font-bold text-white mb-4">
+                        Terms & Privacy Policy
+                    </h1>
+                    <p class="text-xl text-white/80 mb-2">
+                        Syarat Ketentuan dan Kebijakan Privasi Angsflow
+                    </p>
+                    <p class="text-white/60 max-w-2xl mx-auto">
+                        Dokumen ini menjelaskan hak dan kewajiban Anda sebagai pengguna layanan Angsflow, 
+                        serta bagaimana kami melindungi privasi dan data pribadi Anda.
+                    </p>
+                    <div class="mt-6 flex items-center justify-center space-x-4 text-sm text-white/60">
+                        <span>Terakhir diperbarui: 15 Desember 2024</span>
+                        <span>•</span>
+                        <span>Berlaku efektif: 1 Januari 2025</span>
+                    </div>
+                </div>
+
+                <!-- Terms of Service Section -->
+                <section id="terms" class="legal-section mb-16">
+                    <div class="glass-effect rounded-2xl border border-white/20 p-8 animate-slide-up" style="animation-delay: 0.2s;">
+                        <div class="flex items-center mb-8">
+                            <div class="bg-blue-500/20 rounded-full p-3 mr-4">
+                                <svg class="w-8 h-8 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                </svg>
+                            </div>
+                            <h2 class="text-3xl font-bold text-white">Terms of Service</h2>
+                        </div>
+
+                        <!-- Terms Introduction -->
+                        <div id="terms-intro" class="legal-section mb-8">
+                            <h3 class="text-xl font-semibold text-white mb-4">1. Pengantar</h3>
+                            <div class="text-white/80 space-y-4">
+                                <p>
+                                    Selamat datang di Angsflow! Syarat dan Ketentuan ini mengatur penggunaan Anda atas 
+                                    platform, layanan, dan produk yang disediakan oleh PT Angsflow Indonesia ("kami", "kita", atau "Angsflow").
+                                </p>
+                                <div class="highlight-box p-4 rounded-lg">
+                                    <p class="text-blue-200 font-medium">
+                                        <strong>Penting:</strong> Dengan menggunakan layanan kami, Anda menyetujui untuk terikat 
+                                        dengan syarat dan ketentuan ini. Jika Anda tidak setuju, mohon untuk tidak menggunakan layanan kami.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Terms Acceptance -->
+                        <div id="terms-acceptance" class="legal-section mb-8">
+                            <h3 class="text-xl font-semibold text-white mb-4">2. Penerimaan Syarat</h3>
+                            <div class="text-white/80 space-y-4">
+                                <p>
+                                    Dengan mengakses atau menggunakan layanan Angsflow, Anda menyatakan bahwa:
+                                </p>
+                                <ul class="list-disc list-inside space-y-2 ml-4">
+                                    <li>Anda berusia minimal 18 tahun atau memiliki izin dari orang tua/wali</li>
+                                    <li>Anda memiliki kapasitas hukum untuk mengikat diri dalam perjanjian</li>
+                                    <li>Informasi yang Anda berikan adalah akurat dan terkini</li>
+                                    <li>Anda akan mematuhi semua hukum dan peraturan yang berlaku</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Services -->
+                        <div id="terms-services" class="legal-section mb-8">
+                            <h3 class="text-xl font-semibold text-white mb-4">3. Layanan Kami</h3>
+                            <div class="text-white/80 space-y-4">
+                                <p>
+                                    Angsflow menyediakan platform digital yang memungkinkan pengguna untuk:
+                                </p>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                                    <div class="bg-white/5 rounded-lg p-4">
+                                        <h4 class="font-semibold text-white mb-2">Manajemen Proyek</h4>
+                                        <p class="text-sm text-white/70">Kelola proyek dan tim dengan tools yang powerful</p>
+                                    </div>
+                                    <div class="bg-white/5 rounded-lg p-4">
+                                        <h4 class="font-semibold text-white mb-2">Kolaborasi Tim</h4>
+                                        <p class="text-sm text-white/70">Bekerja sama secara real-time dengan anggota tim</p>
+                                    </div>
+                                    <div class="bg-white/5 rounded-lg p-4">
+                                        <h4 class="font-semibold text-white mb-2">Analytics & Reporting</h4>
+                                        <p class="text-sm text-white/70">Dapatkan insights mendalam tentang performa</p>
+                                    </div>
+                                    <div class="bg-white/5 rounded-lg p-4">
+                                        <h4 class="font-semibold text-white mb-2">Integrasi API</h4>
+                                        <p class="text-sm text-white/70">Hubungkan dengan tools favorit Anda</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- User Accounts -->
+                        <div id="terms-accounts" class="legal-section mb-8">
+                            <h3 class="text-xl font-semibold text-white mb-4">4. Akun Pengguna</h3>
+                            <div class="text-white/80 space-y-4">
+                                <p>
+                                    Untuk menggunakan layanan tertentu, Anda perlu membuat akun. Anda bertanggung jawab untuk:
+                                </p>
+                                <ul class="list-disc list-inside space-y-2 ml-4">
+                                    <li>Menjaga kerahasiaan informasi login Anda</li>
+                                    <li>Memberikan informasi yang akurat dan lengkap</li>
+                                    <li>Memperbarui informasi akun secara berkala</li>
+                                    <li>Melaporkan penggunaan akun yang tidak sah</li>
+                                    <li>Tidak berbagi akun dengan pihak lain</li>
+                                </ul>
+                                <div class="highlight-box p-4 rounded-lg mt-4">
+                                    <p class="text-amber-200">
+                                        <strong>Catatan:</strong> Anda sepenuhnya bertanggung jawab atas semua aktivitas 
+                                        yang terjadi di bawah akun Anda.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- User Conduct -->
+                        <div id="terms-conduct" class="legal-section mb-8">
+                            <h3 class="text-xl font-semibold text-white mb-4">5. Kode Etik Pengguna</h3>
+                            <div class="text-white/80 space-y-4">
+                                <p>
+                                    Dalam menggunakan layanan Angsflow, Anda setuju untuk TIDAK:
+                                </p>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div class="space-y-2">
+                                        <h4 class="font-semibold text-red-300">Dilarang:</h4>
+                                        <ul class="list-disc list-inside space-y-1 text-sm ml-4">
+                                            <li>Mengunggah konten ilegal atau berbahaya</li>
+                                            <li>Melanggar hak kekayaan intelektual</li>
+                                            <li>Melakukan spam atau phishing</li>
+                                            <li>Menggunakan bot atau script otomatis</li>
+                                            <li>Mencoba mengakses sistem secara tidak sah</li>
+                                        </ul>
+                                    </div>
+                                    <div class="space-y-2">
+                                        <h4 class="font-semibold text-green-300">Dianjurkan:</h4>
+                                        <ul class="list-disc list-inside space-y-1 text-sm ml-4">
+                                            <li>Berkomunikasi dengan sopan dan profesional</li>
+                                            <li>Melaporkan konten yang melanggar</li>
+                                            <li>Menggunakan fitur sesuai tujuan</li>
+                                            <li>Memberikan feedback konstruktif</li>
+                                            <li>Menjaga keamanan data tim</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Intellectual Property -->
+                        <div id="terms-intellectual" class="legal-section mb-8">
+                            <h3 class="text-xl font-semibold text-white mb-4">6. Hak Kekayaan Intelektual</h3>
+                            <div class="text-white/80 space-y-4">
+                                <p>
+                                    Semua konten, fitur, dan fungsionalitas layanan Angsflow (termasuk namun tidak terbatas pada 
+                                    teks, grafik, logo, ikon, gambar, klip audio, unduhan digital, kompilasi data, dan perangkat lunak) 
+                                    adalah milik eksklusif Angsflow dan dilindungi oleh hukum hak cipta internasional.
+                                </p>
+                                <div class="bg-white/5 rounded-lg p-4">
+                                    <h4 class="font-semibold text-white mb-2">Konten Pengguna</h4>
+                                    <p class="text-sm">
+                                        Anda mempertahankan hak atas konten yang Anda unggah, namun memberikan lisensi 
+                                        kepada Angsflow untuk menggunakan, menyimpan, dan memproses konten tersebut 
+                                        dalam rangka menyediakan layanan.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Termination -->
+                        <div id="terms-termination" class="legal-section">
+                            <h3 class="text-xl font-semibold text-white mb-4">7. Penghentian Layanan</h3>
+                            <div class="text-white/80 space-y-4">
+                                <p>
+                                    Kami berhak untuk menangguhkan atau menghentikan akses Anda ke layanan jika:
+                                </p>
+                                <ul class="list-disc list-inside space-y-2 ml-4">
+                                    <li>Anda melanggar syarat dan ketentuan ini</li>
+                                    <li>Kami mencurigai aktivitas penipuan atau penyalahgunaan</li>
+                                    <li>Diperlukan untuk mematuhi hukum yang berlaku</li>
+                                    <li>Untuk melindungi keamanan platform dan pengguna lain</li>
+                                </ul>
+                                <div class="highlight-box p-4 rounded-lg">
+                                    <p class="text-blue-200">
+                                        <strong>Pemberitahuan:</strong> Kami akan berusaha memberikan pemberitahuan 
+                                        sebelum penghentian layanan, kecuali dalam situasi darurat.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Privacy Policy Section -->
+                <section id="privacy" class="legal-section">
+                    <div class="glass-effect rounded-2xl border border-white/20 p-8 animate-slide-up" style="animation-delay: 0.4s;">
+                        <div class="flex items-center mb-8">
+                            <div class="bg-green-500/20 rounded-full p-3 mr-4">
+                                <svg class="w-8 h-8 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                                </svg>
+                            </div>
+                            <h2 class="text-3xl font-bold text-white">Privacy Policy</h2>
+                        </div>
+
+                        <!-- Privacy Introduction -->
+                        <div id="privacy-intro" class="legal-section mb-8">
+                            <h3 class="text-xl font-semibold text-white mb-4">1. Pengantar</h3>
+                            <div class="text-white/80 space-y-4">
+                                <p>
+                                    Angsflow berkomitmen untuk melindungi privasi dan keamanan data pribadi Anda. 
+                                    Kebijakan Privasi ini menjelaskan bagaimana kami mengumpulkan, menggunakan, 
+                                    menyimpan, dan melindungi informasi Anda.
+                                </p>
+                                <div class="highlight-box p-4 rounded-lg">
+                                    <p class="text-green-200 font-medium">
+                                        <strong>Komitmen Kami:</strong> Kami tidak akan pernah menjual data pribadi Anda 
+                                        kepada pihak ketiga untuk tujuan komersial.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Data Collection -->
+                        <div id="privacy-collection" class="legal-section mb-8">
+                            <h3 class="text-xl font-semibold text-white mb-4">2. Pengumpulan Data</h3>
+                            <div class="text-white/80 space-y-4">
+                                <p>Kami mengumpulkan informasi dalam beberapa cara:</p>
+                                
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                    <div class="bg-white/5 rounded-lg p-4">
+                                        <h4 class="font-semibold text-blue-300 mb-2">Data yang Anda Berikan</h4>
+                                        <ul class="text-sm space-y-1">
+                                            <li>• Nama dan email</li>
+                                            <li>• Informasi profil</li>
+                                            <li>• Konten yang diunggah</li>
+                                            <li>• Komunikasi dengan kami</li>
+                                        </ul>
+                                    </div>
+                                    
+                                    <div class="bg-white/5 rounded-lg p-4">
+                                        <h4 class="font-semibold text-green-300 mb-2">Data Otomatis</h4>
+                                        <ul class="text-sm space-y-1">
+                                            <li>• Alamat IP</li>
+                                            <li>• Jenis browser</li>
+                                            <li>• Aktivitas penggunaan</li>
+                                            <li>• Cookies dan teknologi serupa</li>
+                                        </ul>
+                                    </div>
+                                    
+                                    <div class="bg-white/5 rounded-lg p-4">
+                                        <h4 class="font-semibold text-purple-300 mb-2">Data Pihak Ketiga</h4>
+                                        <ul class="text-sm space-y-1">
+                                            <li>• Integrasi sosial media</li>
+                                            <li>• Layanan analytics</li>
+                                            <li>• Partner bisnis</li>
+                                            <li>• Sumber publik</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Data Usage -->
+                        <div id="privacy-usage" class="legal-section mb-8">
+                            <h3 class="text-xl font-semibold text-white mb-4">3. Penggunaan Data</h3>
+                            <div class="text-white/80 space-y-4">
+                                <p>Kami menggunakan data Anda untuk:</p>
+                                
+                                <div class="space-y-3">
+                                    <div class="flex items-start space-x-3">
+                                        <div class="bg-blue-500/20 rounded-full p-1 mt-1">
+                                            <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                            </svg>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-medium text-white">Menyediakan Layanan</h4>
+                                            <p class="text-sm text-white/70">Memproses permintaan, mengelola akun, dan memberikan dukungan teknis</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="flex items-start space-x-3">
+                                        <div class="bg-green-500/20 rounded-full p-1 mt-1">
+                                            <svg class="w-4 h-4 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                            </svg>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-medium text-white">Meningkatkan Pengalaman</h4>
+                                            <p class="text-sm text-white/70">Personalisasi konten dan rekomendasi berdasarkan preferensi Anda</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="flex items-start space-x-3">
+                                        <div class="bg-purple-500/20 rounded-full p-1 mt-1">
+                                            <svg class="w-4 h-4 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                            </svg>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-medium text-white">Komunikasi</h4>
+                                            <p class="text-sm text-white/70">Mengirim notifikasi penting, update layanan, dan newsletter (dengan persetujuan)</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="flex items-start space-x-3">
+                                        <div class="bg-amber-500/20 rounded-full p-1 mt-1">
+                                            <svg class="w-4 h-4 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                            </svg>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-medium text-white">Keamanan dan Kepatuhan</h4>
+                                            <p class="text-sm text-white/70">Mencegah penipuan, memastikan keamanan, dan mematuhi kewajiban hukum</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Data Sharing -->
+                        <div id="privacy-sharing" class="legal-section mb-8">
+                            <h3 class="text-xl font-semibold text-white mb-4">4. Berbagi Data</h3>
+                            <div class="text-white/80 space-y-4">
+                                <p>Kami hanya berbagi data Anda dalam situasi terbatas:</p>
+                                
+                                <div class="space-y-4">
+                                    <div class="bg-red-500/10 border border-red-500/20 rounded-lg p-4">
+                                        <h4 class="font-semibold text-red-300 mb-2">Dengan Persetujuan Anda</h4>
+                                        <p class="text-sm">Ketika Anda secara eksplisit memberikan izin untuk berbagi informasi dengan pihak ketiga tertentu.</p>
+                                    </div>
+                                    
+                                    <div class="bg-blue-500/10 border border-blue-500/20 rounded-lg p-4">
+                                        <h4 class="font-semibold text-blue-300 mb-2">Penyedia Layanan</h4>
+                                        <p class="text-sm">Dengan vendor tepercaya yang membantu kami mengoperasikan layanan (hosting, analytics, customer support).</p>
+                                    </div>
+                                    
+                                    <div class="bg-amber-500/10 border border-amber-500/20 rounded-lg p-4">
+                                        <h4 class="font-semibold text-amber-300 mb-2">Kewajiban Hukum</h4>
+                                        <p class="text-sm">Ketika diwajibkan oleh hukum, perintah pengadilan, atau untuk melindungi hak dan keselamatan.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Data Security -->
+                        <div id="privacy-security" class="legal-section mb-8">
+                            <h3 class="text-xl font-semibold text-white mb-4">5. Keamanan Data</h3>
+                            <div class="text-white/80 space-y-4">
+                                <p>Kami menerapkan berbagai langkah keamanan untuk melindungi data Anda:</p>
+                                
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div class="space-y-3">
+                                        <h4 class="font-semibold text-green-300">Keamanan Teknis</h4>
+                                        <ul class="space-y-2 text-sm">
+                                            <li class="flex items-center space-x-2">
+                                                <svg class="w-4 h-4 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                                </svg>
+                                                <span>Enkripsi SSL/TLS</span>
+                                            </li>
+                                            <li class="flex items-center space-x-2">
+                                                <svg class="w-4 h-4 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                                </svg>
+                                                <span>Firewall dan monitoring 24/7</span>
+                                            </li>
+                                            <li class="flex items-center space-x-2">
+                                                <svg class="w-4 h-4 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                                </svg>
+                                                <span>Backup data terenkripsi</span>
+                                            </li>
+                                            <li class="flex items-center space-x-2">
+                                                <svg class="w-4 h-4 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                                </svg>
+                                                <span>Autentikasi multi-faktor</span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    
+                                    <div class="space-y-3">
+                                        <h4 class="font-semibold text-blue-300">Keamanan Operasional</h4>
+                                        <ul class="space-y-2 text-sm">
+                                            <li class="flex items-center space-x-2">
+                                                <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                                </svg>
+                                                <span>Akses terbatas berdasarkan peran</span>
+                                            </li>
+                                            <li class="flex items-center space-x-2">
+                                                <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                                </svg>
+                                                <span>Audit keamanan berkala</span>
+                                            </li>
+                                            <li class="flex items-center space-x-2">
+                                                <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                                </svg>
+                                                <span>Pelatihan keamanan karyawan</span>
+                                            </li>
+                                            <li class="flex items-center space-x-2">
+                                                <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                                </svg>
+                                                <span>Incident response plan</span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- User Rights -->
+                        <div id="privacy-rights" class="legal-section mb-8">
+                            <h3 class="text-xl font-semibold text-white mb-4">6. Hak Pengguna</h3>
+                            <div class="text-white/80 space-y-4">
+                                <p>Anda memiliki hak-hak berikut terkait data pribadi Anda:</p>
+                                
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div class="bg-white/5 rounded-lg p-4">
+                                        <h4 class="font-semibold text-blue-300 mb-2 flex items-center">
+                                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                                            </svg>
+                                            Hak Akses
+                                        </h4>
+                                        <p class="text-sm">Meminta salinan data pribadi yang kami simpan tentang Anda</p>
+                                    </div>
+                                    
+                                    <div class="bg-white/5 rounded-lg p-4">
+                                        <h4 class="font-semibold text-green-300 mb-2 flex items-center">
+                                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                                            </svg>
+                                            Hak Koreksi
+                                        </h4>
+                                        <p class="text-sm">Memperbarui atau memperbaiki data yang tidak akurat</p>
+                                    </div>
+                                    
+                                    <div class="bg-white/5 rounded-lg p-4">
+                                        <h4 class="font-semibold text-red-300 mb-2 flex items-center">
+                                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                            </svg>
+                                            Hak Penghapusan
+                                        </h4>
+                                        <p class="text-sm">Meminta penghapusan data pribadi dalam kondisi tertentu</p>
+                                    </div>
+                                    
+                                    <div class="bg-white/5 rounded-lg p-4">
+                                        <h4 class="font-semibold text-purple-300 mb-2 flex items-center">
+                                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l4-4 4 4m0 6l-4 4-4-4"></path>
+                                            </svg>
+                                            Hak Portabilitas
+                                        </h4>
+                                        <p class="text-sm">Mendapatkan data dalam format yang dapat dipindahkan</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="highlight-box p-4 rounded-lg">
+                                    <p class="text-blue-200">
+                                        <strong>Cara Menggunakan Hak Anda:</strong> Hubungi kami melalui email 
+                                        <a href="mailto:privacy@angsflow.com" class="text-blue-300 hover:text-blue-200 underline">privacy@angsflow.com</a> 
+                                        atau gunakan form kontak di bawah ini.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Contact -->
+                        <div id="privacy-contact" class="legal-section">
+                            <h3 class="text-xl font-semibold text-white mb-4">7. Kontak</h3>
+                            <div class="text-white/80 space-y-4">
+                                <p>
+                                    Jika Anda memiliki pertanyaan tentang kebijakan privasi ini atau ingin menggunakan hak-hak Anda, 
+                                    silakan hubungi kami:
+                                </p>
+                                
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <div class="bg-white/5 rounded-lg p-6">
+                                        <h4 class="font-semibold text-white mb-4">Data Protection Officer</h4>
+                                        <div class="space-y-2 text-sm">
+                                            <p class="flex items-center">
+                                                <svg class="w-4 h-4 mr-2 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                                                </svg>
+                                                privacy@angsflow.com
+                                            </p>
+                                            <p class="flex items-center">
+                                                <svg class="w-4 h-4 mr-2 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
+                                                </svg>
+                                                +62 21 1234 5678
+                                            </p>
+                                            <p class="flex items-start">
+                                                <svg class="w-4 h-4 mr-2 mt-0.5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                                </svg>
+                                                <span>Jl. Sudirman No. 123<br>Jakarta Pusat 10220<br>Indonesia</span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="bg-white/5 rounded-lg p-6">
+                                        <h4 class="font-semibold text-white mb-4">Quick Contact Form</h4>
+                                        <form class="space-y-3">
+                                            <input type="text" placeholder="Nama Anda" class="w-full bg-white/10 border border-white/20 rounded-lg px-3 py-2 text-white placeholder-white/60 focus:outline-none focus:border-primary">
+                                            <input type="email" placeholder="Email Anda" class="w-full bg-white/10 border border-white/20 rounded-lg px-3 py-2 text-white placeholder-white/60 focus:outline-none focus:border-primary">
+                                            <select class="w-full bg-white/10 border border-white/20 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-primary">
+                                                <option value="">Pilih Topik</option>
+                                                <option value="access">Hak Akses Data</option>
+                                                <option value="correction">Koreksi Data</option>
+                                                <option value="deletion">Penghapusan Data</option>
+                                                <option value="complaint">Keluhan Privasi</option>
+                                                <option value="other">Lainnya</option>
+                                            </select>
+                                            <textarea placeholder="Pesan Anda" rows="3" class="w-full bg-white/10 border border-white/20 rounded-lg px-3 py-2 text-white placeholder-white/60 focus:outline-none focus:border-primary resize-none"></textarea>
+                                            <button type="submit" onclick="submitPrivacyForm(event)" class="w-full bg-gradient-to-r from-blue-500 to-blue-600 text-white py-2 rounded-lg font-medium hover:from-blue-600 hover:to-blue-700 transition-colors">
+                                                Kirim Pesan
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Footer Actions -->
+                <div class="glass-effect rounded-2xl border border-white/20 p-6 mt-8 text-center animate-slide-up" style="animation-delay: 0.6s;">
+                    <h3 class="text-lg font-semibold text-white mb-4">Butuh Bantuan Lebih Lanjut?</h3>
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                        <button onclick="downloadPDF()" class="bg-gradient-to-r from-green-500 to-green-600 text-white px-6 py-3 rounded-lg font-medium hover:from-green-600 hover:to-green-700 transition-colors">
+                            <svg class="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                            </svg>
+                            Download PDF
+                        </button>
+                        
+                        <button onclick="contactSupport()" class="bg-gradient-to-r from-blue-500 to-blue-600 text-white px-6 py-3 rounded-lg font-medium hover:from-blue-600 hover:to-blue-700 transition-colors">
+                            <svg class="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+                            </svg>
+                            Live Chat Support
+                        </button>
+                        
+                        <button onclick="goHome()" class="glass-effect text-white px-6 py-3 rounded-lg font-medium border border-white/20 hover:bg-white/10 transition-colors">
+                            <svg class="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+                            </svg>
+                            Kembali ke Beranda
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile Menu (Hidden by default) -->
+    <div id="mobileMenu" class="fixed inset-0 z-50 hidden">
+        <div class="fixed inset-0 bg-black/80 backdrop-blur-sm" onclick="toggleMobileMenu()"></div>
+        <div class="fixed top-0 right-0 h-full w-64 glass-effect border-l border-white/20 animate-slide-in">
+            <div class="p-6">
+                <div class="flex justify-between items-center mb-8">
+                    <span class="text-lg font-bold text-white">Menu</span>
+                    <button onclick="toggleMobileMenu()" class="text-white/70 hover:text-white">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+                
+                <nav class="space-y-4">
+                    <button onclick="scrollToSection('terms'); toggleMobileMenu();" class="block w-full text-left text-white/70 hover:text-primary transition-colors font-medium py-2">Terms of Service</button>
+                    <button onclick="scrollToSection('privacy'); toggleMobileMenu();" class="block w-full text-left text-white/70 hover:text-primary transition-colors font-medium py-2">Privacy Policy</button>
+                    <button onclick="downloadPDF(); toggleMobileMenu();" class="block w-full text-left text-white/70 hover:text-primary transition-colors font-medium py-2">Download PDF</button>
+                    <button onclick="contactSupport(); toggleMobileMenu();" class="block w-full text-left text-white/70 hover:text-primary transition-colors font-medium py-2">Contact Support</button>
+                    <button onclick="goHome(); toggleMobileMenu();" class="w-full bg-gradient-to-r from-blue-500 to-blue-600 text-white px-4 py-3 rounded-lg font-medium hover:from-blue-600 hover:to-blue-700 transition-colors mt-4">
+                        Back to Home
+                    </button>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Navigation functions
+        function scrollToSection(sectionId) {
+            const element = document.getElementById(sectionId);
+            if (element) {
+                element.scrollIntoView({ 
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+                
+                // Update active section in TOC
+                updateActiveTOC(sectionId);
+            }
+        }
+
+        function updateActiveTOC(activeId) {
+            // Remove active class from all TOC items
+            document.querySelectorAll('.toc-item').forEach(item => {
+                item.classList.remove('section-active');
+            });
+            
+            // Add active class to current section
+            const activeButton = document.querySelector(`button[onclick="scrollToSection('${activeId}')"]`);
+            if (activeButton) {
+                activeButton.classList.add('section-active');
+            }
+        }
+
+        function goHome() {
+            showNotification('Redirecting to homepage...', 'info');
+            setTimeout(() => {
+                window.location.href = '/';
+            }, 1000);
+        }
+
+        // Mobile menu
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.toggle('hidden');
+            document.body.style.overflow = menu.classList.contains('hidden') ? 'auto' : 'hidden';
+        }
+
+        // Form submission
+        function submitPrivacyForm(event) {
+            event.preventDefault();
+            showNotification('Pesan Anda telah dikirim! Kami akan merespons dalam 24 jam.', 'success');
+            event.target.closest('form').reset();
+        }
+
+        // Utility functions
+        function downloadPDF() {
+            showNotification('Generating PDF document...', 'info');
+            setTimeout(() => {
+                showNotification('PDF downloaded successfully!', 'success');
+            }, 2000);
+        }
+
+        function contactSupport() {
+            showNotification('Connecting to live support...', 'info');
+            setTimeout(() => {
+                showNotification('Support chat opened in new window.', 'success');
+            }, 1500);
+        }
+
+        // Notification system
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            const bgColor = type === 'success' ? 'from-emerald-500 to-teal-600' : 
+                           type === 'error' ? 'from-rose-500 to-red-600' : 
+                           type === 'warning' ? 'from-amber-500 to-orange-600' :
+                           'from-blue-500 to-indigo-600';
+            
+            const icon = type === 'success' ? 
+                '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>' :
+                type === 'error' ? 
+                '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>' :
+                type === 'warning' ?
+                '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.268 16.5c-.77.833.192 2.5 1.732 2.5z"></path>' :
+                '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>';
+            
+            notification.className = `fixed top-4 right-4 z-50 bg-gradient-to-r ${bgColor} text-white p-4 rounded-xl font-medium animate-slide-up max-w-sm shadow-lg`;
+            notification.innerHTML = `
+                <div class="flex items-center space-x-3">
+                    <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        ${icon}
+                    </svg>
+                    <span>${message}</span>
+                </div>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.animation = 'slideUp 0.3s ease-out reverse';
+                setTimeout(() => {
+                    notification.remove();
+                }, 300);
+            }, 4000);
+        }
+
+        // Scroll spy for TOC
+        function handleScroll() {
+            const sections = document.querySelectorAll('.legal-section');
+            const scrollPos = window.scrollY + 150;
+            
+            sections.forEach(section => {
+                const top = section.offsetTop;
+                const bottom = top + section.offsetHeight;
+                
+                if (scrollPos >= top && scrollPos <= bottom) {
+                    updateActiveTOC(section.id);
+                }
+            });
+        }
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add scroll listener for TOC
+            window.addEventListener('scroll', handleScroll);
+            
+            // Welcome message
+            setTimeout(() => {
+                showNotification('Welcome to our Terms & Privacy Policy page!', 'info');
+            }, 1000);
+        });
+
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', function(e) {
+            const mobileMenu = document.getElementById('mobileMenu');
+            if (!mobileMenu.classList.contains('hidden') && !e.target.closest('#mobileMenu') && !e.target.closest('button[onclick="toggleMobileMenu()"]')) {
+                toggleMobileMenu();
+            }
+        });
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'h' && (e.ctrlKey || e.metaKey)) {
+                e.preventDefault();
+                goHome();
+            }
+            if (e.key === 't' && (e.ctrlKey || e.metaKey)) {
+                e.preventDefault();
+                scrollToSection('terms');
+            }
+            if (e.key === 'p' && (e.ctrlKey || e.metaKey)) {
+                e.preventDefault();
+                scrollToSection('privacy');
+            }
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9707df0b401cfd41',t:'MTc1NTQyMDA3NS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>

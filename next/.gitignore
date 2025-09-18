@@ -1,0 +1,8 @@
+.next
+node_modules
+.env*
+out
+coverage
+npm-debug.log*
+pnpm-lock.yaml
+firebase.json

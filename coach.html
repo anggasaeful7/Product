@@ -1,0 +1,1024 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Angsflow - AI Coach</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#60A5FA',
+                        secondary: '#3B82F6',
+                        accent: '#F59E0B',
+                        dark: '#0F172A',
+                        light: '#F8FAFC'
+                    },
+                    fontFamily: {
+                        'inter': ['Inter', 'sans-serif']
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'glow': 'glow 2s ease-in-out infinite alternate',
+                        'slide-up': 'slideUp 0.8s ease-out',
+                        'fade-in': 'fadeIn 1s ease-out',
+                        'pulse-slow': 'pulse 3s ease-in-out infinite',
+                        'bounce-slow': 'bounce 2s ease-in-out infinite',
+                        'progress': 'progress 2s ease-out',
+                        'wiggle': 'wiggle 1s ease-in-out infinite',
+                        'sparkle': 'sparkle 2s ease-in-out infinite',
+                        'slide-in': 'slideIn 0.6s ease-out',
+                        'typing': 'typing 1.5s ease-in-out infinite',
+                        'message-in': 'messageIn 0.5s ease-out'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        @keyframes glow {
+            from { box-shadow: 0 0 20px #60A5FA40; }
+            to { box-shadow: 0 0 30px #60A5FA80, 0 0 40px #60A5FA40; }
+        }
+        @keyframes slideUp {
+            from { transform: translateY(30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        @keyframes slideIn {
+            from { transform: translateX(-30px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes progress {
+            from { width: 0%; }
+        }
+        @keyframes wiggle {
+            0%, 7% { transform: rotateZ(0); }
+            15% { transform: rotateZ(-15deg); }
+            20% { transform: rotateZ(10deg); }
+            25% { transform: rotateZ(-10deg); }
+            30% { transform: rotateZ(6deg); }
+            35% { transform: rotateZ(-4deg); }
+            40%, 100% { transform: rotateZ(0); }
+        }
+        @keyframes sparkle {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(1.1); }
+        }
+        @keyframes typing {
+            0%, 60%, 100% { transform: translateY(0); }
+            30% { transform: translateY(-10px); }
+        }
+        @keyframes messageIn {
+            from { transform: translateY(20px) scale(0.95); opacity: 0; }
+            to { transform: translateY(0) scale(1); opacity: 1; }
+        }
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .gradient-text {
+            background: linear-gradient(135deg, #60A5FA, #3B82F6, #1E40AF);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .chat-bubble-user {
+            background: linear-gradient(135deg, #60A5FA, #3B82F6);
+            border-radius: 18px 18px 4px 18px;
+        }
+        .chat-bubble-ai {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 18px 18px 18px 4px;
+        }
+        .typing-indicator {
+            display: inline-flex;
+            align-items: center;
+            space-x: 1px;
+        }
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.6);
+            animation: typing 1.4s ease-in-out infinite;
+        }
+        .typing-dot:nth-child(1) { animation-delay: 0s; }
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+        .send-button {
+            background: linear-gradient(135deg, #60A5FA, #3B82F6);
+            transition: all 0.3s ease;
+        }
+        .send-button:hover {
+            background: linear-gradient(135deg, #3B82F6, #1E40AF);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(96, 165, 250, 0.4);
+        }
+        .send-button:disabled {
+            background: rgba(255, 255, 255, 0.1);
+            transform: none;
+            box-shadow: none;
+        }
+        .insight-card {
+            transition: all 0.3s ease;
+        }
+        .insight-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+        .tab-button {
+            transition: all 0.3s ease;
+        }
+        .tab-button.active {
+            background: linear-gradient(135deg, #60A5FA, #3B82F6);
+            color: white;
+            box-shadow: 0 4px 15px rgba(96, 165, 250, 0.4);
+        }
+        .tab-button:not(.active) {
+            color: rgba(255, 255, 255, 0.7);
+        }
+        .tab-button:not(.active):hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+        .chat-container {
+            height: calc(100vh - 300px);
+            min-height: 400px;
+        }
+        .ai-avatar {
+            background: linear-gradient(135deg, #8B5CF6, #A855F7);
+            animation: glow 3s ease-in-out infinite alternate;
+        }
+        .user-avatar {
+            background: linear-gradient(135deg, #10B981, #059669);
+        }
+        .limit-badge {
+            background: linear-gradient(135deg, #F59E0B, #D97706);
+            animation: sparkle 2s ease-in-out infinite;
+        }
+        .upgrade-button {
+            background: linear-gradient(135deg, #F59E0B, #D97706);
+            transition: all 0.3s ease;
+        }
+        .upgrade-button:hover {
+            background: linear-gradient(135deg, #D97706, #B45309);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(245, 158, 11, 0.4);
+        }
+    </style>
+</head>
+<body class="font-inter bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 min-h-screen">
+    <!-- Animated Background -->
+    <div class="fixed inset-0 overflow-hidden pointer-events-none">
+        <div class="absolute -top-40 -right-40 w-80 h-80 bg-primary/20 rounded-full blur-3xl animate-float"></div>
+        <div class="absolute top-1/2 -left-40 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl animate-float" style="animation-delay: -2s;"></div>
+        <div class="absolute bottom-0 right-1/3 w-64 h-64 bg-indigo-500/15 rounded-full blur-3xl animate-float" style="animation-delay: -4s;"></div>
+    </div>
+
+    <!-- Sidebar (Desktop) -->
+    <div class="fixed inset-y-0 left-0 z-50 w-64 glass-effect border-r border-white/20 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out" id="sidebar">
+        <div class="flex flex-col h-full">
+            <!-- Logo -->
+            <div class="flex items-center px-6 py-4 border-b border-white/10">
+                <svg width="40" height="40" viewBox="0 0 48 48" class="animate-glow mr-3">
+                    <circle cx="24" cy="24" r="22" fill="url(#logoGradient)" stroke="rgba(96, 165, 250, 0.3)" stroke-width="2"/>
+                    <path d="M16 32 L20 20 L24 32 M18 28 L22 28" stroke="#ffffff" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M28 32 L28 20 M28 20 L34 20 M28 26 L32 26" stroke="#ffffff" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                    <defs>
+                        <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#60A5FA;stop-opacity:1" />
+                            <stop offset="50%" style="stop-color:#3B82F6;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#1E40AF;stop-opacity:1" />
+                        </linearGradient>
+                    </defs>
+                </svg>
+                <span class="text-xl font-bold text-white">Angs<span class="gradient-text">Flow</span></span>
+            </div>
+            
+            <!-- Navigation Menu -->
+            <nav class="flex-1 px-4 py-6 space-y-2">
+                <a href="#" class="flex items-center px-4 py-3 text-white/70 hover:text-white hover:bg-white/10 rounded-xl font-medium transition-all duration-200 group">
+                    <svg class="w-5 h-5 mr-3 group-hover:text-primary transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5a2 2 0 012-2h4a2 2 0 012 2v6H8V5z"></path>
+                    </svg>
+                    Dashboard
+                </a>
+                
+                <a href="#" class="flex items-center px-4 py-3 text-white/70 hover:text-white hover:bg-white/10 rounded-xl font-medium transition-all duration-200 group">
+                    <svg class="w-5 h-5 mr-3 group-hover:text-primary transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"></path>
+                    </svg>
+                    Transactions
+                </a>
+                
+                <a href="#" class="flex items-center px-4 py-3 text-white/70 hover:text-white hover:bg-white/10 rounded-xl font-medium transition-all duration-200 group">
+                    <svg class="w-5 h-5 mr-3 group-hover:text-primary transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 002 2z"></path>
+                    </svg>
+                    Budgets
+                </a>
+                
+                <a href="#" class="flex items-center px-4 py-3 text-white/70 hover:text-white hover:bg-white/10 rounded-xl font-medium transition-all duration-200 group">
+                    <svg class="w-5 h-5 mr-3 group-hover:text-primary transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                    </svg>
+                    Reports
+                </a>
+                
+                <a href="#" class="flex items-center px-4 py-3 text-white/70 hover:text-white hover:bg-white/10 rounded-xl font-medium transition-all duration-200 group">
+                    <svg class="w-5 h-5 mr-3 group-hover:text-primary transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"></path>
+                    </svg>
+                    Members
+                </a>
+                
+                <a href="#" class="flex items-center px-4 py-3 text-white bg-primary/20 border border-primary/30 rounded-xl font-medium transition-all duration-200 group">
+                    <svg class="w-5 h-5 mr-3 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+                    </svg>
+                    AI Coach
+                </a>
+                
+                <a href="#" class="flex items-center px-4 py-3 text-white/70 hover:text-white hover:bg-white/10 rounded-xl font-medium transition-all duration-200 group">
+                    <svg class="w-5 h-5 mr-3 group-hover:text-primary transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                    </svg>
+                    Settings
+                </a>
+            </nav>
+            
+            <!-- User Info -->
+            <div class="px-4 py-4 border-t border-white/10">
+                <div class="flex items-center px-4 py-3 bg-white/5 rounded-xl">
+                    <div class="w-10 h-10 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-full flex items-center justify-center text-white font-bold mr-3">
+                        JD
+                    </div>
+                    <div class="flex-1">
+                        <p class="text-white font-medium text-sm">John Doe</p>
+                        <p class="text-white/60 text-xs">Free Plan</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Top Navigation -->
+    <div class="lg:ml-64">
+        <nav class="glass-effect sticky top-0 z-40 border-b border-white/10">
+            <div class="px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between items-center h-16">
+                    <!-- Mobile menu button -->
+                    <button onclick="toggleSidebar()" class="lg:hidden p-2 text-white/70 hover:text-primary transition-colors">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                    </button>
+                    
+                    <!-- Page Title -->
+                    <h1 class="text-xl font-bold text-white">AI Coach</h1>
+                    
+                    <!-- Right side menu -->
+                    <div class="flex items-center space-x-4">
+                        <!-- Usage Limit -->
+                        <div class="limit-badge text-white px-3 py-1 rounded-full text-sm font-semibold">
+                            3/5 chats
+                        </div>
+                        
+                        <!-- Notifications -->
+                        <button class="relative p-2 text-white/70 hover:text-primary transition-colors">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-3.5-3.5a50.002 50.002 0 00-2.5-2.5V9a6 6 0 10-12 0v1.5c0 .9-.4 1.8-1.1 2.4L2 17h5m8 0v1a3 3 0 11-6 0v-1m6 0H9"></path>
+                            </svg>
+                        </button>
+                        
+                        <!-- User Profile -->
+                        <div class="flex items-center space-x-3">
+                            <div class="w-8 h-8 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-full flex items-center justify-center text-white font-bold text-sm">
+                                JD
+                            </div>
+                            <span class="text-white font-medium hidden sm:block">John Doe</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </div>
+
+    <!-- Bottom Navigation (Mobile) -->
+    <div class="lg:hidden fixed bottom-0 left-0 right-0 z-50 glass-effect border-t border-white/20">
+        <div class="grid grid-cols-5 h-16">
+            <a href="#" class="flex flex-col items-center justify-center text-white/60 hover:text-primary transition-colors">
+                <svg class="w-4 h-4 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2z"></path>
+                </svg>
+                <span class="text-xs font-medium">Dashboard</span>
+            </a>
+            <a href="#" class="flex flex-col items-center justify-center text-white/60 hover:text-primary transition-colors">
+                <svg class="w-4 h-4 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4"></path>
+                </svg>
+                <span class="text-xs font-medium">Transactions</span>
+            </a>
+            <a href="#" class="flex flex-col items-center justify-center text-white/60 hover:text-primary transition-colors">
+                <svg class="w-4 h-4 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01"></path>
+                </svg>
+                <span class="text-xs font-medium">Budgets</span>
+            </a>
+            <a href="#" class="flex flex-col items-center justify-center text-primary">
+                <svg class="w-4 h-4 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+                </svg>
+                <span class="text-xs font-medium">AI Coach</span>
+            </a>
+            <a href="#" class="flex flex-col items-center justify-center text-white/60 hover:text-primary transition-colors">
+                <svg class="w-4 h-4 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                </svg>
+                <span class="text-xs font-medium">Settings</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="lg:ml-64 pb-20 lg:pb-8">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 relative z-10">
+            
+            <!-- Header Section -->
+            <div class="mb-8">
+                <h1 class="text-3xl font-bold text-white mb-2">AI Financial Coach</h1>
+                <p class="text-white/70">Get personalized financial advice and insights powered by AI</p>
+            </div>
+
+            <!-- Tab Navigation -->
+            <div class="glass-effect rounded-2xl border border-white/20 mb-8 animate-slide-up">
+                <div class="flex flex-col sm:flex-row border-b border-white/10">
+                    <button onclick="switchTab('insights')" id="tab-insights" class="tab-button active flex-1 px-6 py-4 text-center font-medium rounded-t-2xl sm:rounded-tr-none sm:rounded-tl-2xl">
+                        <div class="flex items-center justify-center space-x-2">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                            </svg>
+                            <span>AI Insights</span>
+                        </div>
+                    </button>
+                    <button onclick="switchTab('chat')" id="tab-chat" class="tab-button flex-1 px-6 py-4 text-center font-medium rounded-b-2xl sm:rounded-bl-none sm:rounded-tr-2xl">
+                        <div class="flex items-center justify-center space-x-2">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+                            </svg>
+                            <span>AI Chat</span>
+                        </div>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Chat Tab -->
+            <div id="content-chat" class="tab-content hidden">
+                <div class="glass-effect rounded-2xl border border-white/20 animate-slide-up">
+                    <!-- Chat Header -->
+                    <div class="px-6 py-4 border-b border-white/10">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-3">
+                                <div class="ai-avatar w-10 h-10 rounded-full flex items-center justify-center text-white font-bold">
+                                    🤖
+                                </div>
+                                <div>
+                                    <h3 class="text-white font-semibold">AI Financial Coach</h3>
+                                    <p class="text-white/60 text-sm">Online • Ready to help</p>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <div class="limit-badge text-white px-3 py-1 rounded-full text-sm font-semibold mb-2">
+                                    3/5 chats remaining
+                                </div>
+                                <button onclick="showUpgradeModal()" class="text-primary hover:text-blue-300 text-sm font-medium">
+                                    Upgrade for unlimited
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Chat Messages -->
+                    <div class="chat-container overflow-y-auto p-6 space-y-4" id="chatMessages">
+                        <!-- Welcome Message -->
+                        <div class="flex items-start space-x-3 animate-message-in">
+                            <div class="ai-avatar w-8 h-8 rounded-full flex items-center justify-center text-white text-sm">
+                                🤖
+                            </div>
+                            <div class="chat-bubble-ai max-w-md p-4">
+                                <p class="text-white">Halo! Saya AI Financial Coach Anda. Saya siap membantu dengan pertanyaan tentang keuangan, budgeting, dan perencanaan finansial. Apa yang ingin Anda tanyakan hari ini?</p>
+                                <span class="text-white/60 text-xs mt-2 block">10:30 AM</span>
+                            </div>
+                        </div>
+
+                        <!-- Sample User Message -->
+                        <div class="flex items-start space-x-3 justify-end animate-message-in" style="animation-delay: 0.5s;">
+                            <div class="chat-bubble-user max-w-md p-4">
+                                <p class="text-white">Bagaimana cara mengatur budget bulanan yang efektif?</p>
+                                <span class="text-white/80 text-xs mt-2 block text-right">10:31 AM</span>
+                            </div>
+                            <div class="user-avatar w-8 h-8 rounded-full flex items-center justify-center text-white text-sm font-bold">
+                                JD
+                            </div>
+                        </div>
+
+                        <!-- Sample AI Response -->
+                        <div class="flex items-start space-x-3 animate-message-in" style="animation-delay: 1s;">
+                            <div class="ai-avatar w-8 h-8 rounded-full flex items-center justify-center text-white text-sm">
+                                🤖
+                            </div>
+                            <div class="chat-bubble-ai max-w-md p-4">
+                                <p class="text-white mb-3">Excellent question! Berikut adalah langkah-langkah untuk membuat budget bulanan yang efektif:</p>
+                                <div class="space-y-2 text-white/90 text-sm">
+                                    <p><strong>1. Hitung Total Pendapatan</strong><br>Catat semua sumber pendapatan bulanan Anda</p>
+                                    <p><strong>2. Kategorikan Pengeluaran</strong><br>• Kebutuhan pokok (50%): sewa, makanan, utilitas<br>• Tabungan & investasi (20%)<br>• Keinginan (30%): hiburan, hobi</p>
+                                    <p><strong>3. Gunakan Aplikasi Tracking</strong><br>Monitor pengeluaran harian untuk tetap on-track</p>
+                                </div>
+                                <span class="text-white/60 text-xs mt-3 block">10:32 AM</span>
+                            </div>
+                        </div>
+
+                        <!-- Typing Indicator (Hidden by default) -->
+                        <div class="flex items-start space-x-3 hidden" id="typingIndicator">
+                            <div class="ai-avatar w-8 h-8 rounded-full flex items-center justify-center text-white text-sm">
+                                🤖
+                            </div>
+                            <div class="chat-bubble-ai p-4">
+                                <div class="typing-indicator">
+                                    <div class="typing-dot"></div>
+                                    <div class="typing-dot"></div>
+                                    <div class="typing-dot"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Chat Input -->
+                    <div class="px-6 py-4 border-t border-white/10">
+                        <form onsubmit="sendMessage(event)" class="flex items-center space-x-3">
+                            <input 
+                                type="text" 
+                                id="messageInput"
+                                placeholder="Tanyakan tentang keuangan, budget, atau investasi..."
+                                class="flex-1 glass-effect text-white placeholder-white/60 px-4 py-3 rounded-xl border border-white/20 bg-transparent focus:outline-none focus:border-primary transition-colors"
+                                maxlength="500"
+                            >
+                            <button 
+                                type="submit" 
+                                id="sendButton"
+                                class="send-button p-3 rounded-xl text-white font-semibold transition-all duration-300"
+                            >
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
+                                </svg>
+                            </button>
+                        </form>
+                        <div class="flex items-center justify-between mt-3">
+                            <p class="text-white/60 text-xs">
+                                💡 Tip: Tanyakan tentang budgeting, investasi, atau analisis pengeluaran
+                            </p>
+                            <p class="text-white/60 text-xs">
+                                <span id="charCount">0</span>/500
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Insights Tab -->
+            <div id="content-insights" class="tab-content">
+                <div class="space-y-6">
+                    <!-- Auto-Generated Insights Header -->
+                    <div class="glass-effect rounded-2xl border border-white/20 p-6 animate-slide-up">
+                        <div class="flex items-center justify-between mb-4">
+                            <div>
+                                <h3 class="text-xl font-bold text-white mb-2">AI Financial Insights</h3>
+                                <p class="text-white/70">Analisis otomatis berdasarkan data keuangan Anda</p>
+                            </div>
+                            <div class="text-right">
+                                <p class="text-white/60 text-sm">Last updated</p>
+                                <p class="text-white font-medium">2 hours ago</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center space-x-2 text-emerald-400">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            <span class="font-medium">Insights automatically generated</span>
+                        </div>
+                    </div>
+
+                    <!-- Insights Grid -->
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <!-- Spending Changes Insight -->
+                        <div class="insight-card glass-effect rounded-2xl border border-white/20 p-6 animate-slide-up">
+                            <div class="flex items-center justify-between mb-4">
+                                <div class="bg-rose-500/20 rounded-lg p-3">
+                                    <svg class="w-6 h-6 text-rose-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6"></path>
+                                    </svg>
+                                </div>
+                                <span class="bg-rose-500/20 text-rose-400 px-3 py-1 rounded-full text-sm font-medium">
+                                    Perhatian
+                                </span>
+                            </div>
+                            <h4 class="text-lg font-bold text-white mb-3">Peningkatan Pengeluaran</h4>
+                            <p class="text-white/80 mb-4">Pengeluaran Anda bulan ini naik 23% dibanding bulan lalu, terutama di kategori makanan dan hiburan.</p>
+                            
+                            <div class="space-y-3 mb-4">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-white/70">Makanan & Minuman</span>
+                                    <div class="flex items-center space-x-2">
+                                        <span class="text-rose-400">+35%</span>
+                                        <span class="text-white">Rp 2.1M</span>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <span class="text-white/70">Hiburan</span>
+                                    <div class="flex items-center space-x-2">
+                                        <span class="text-rose-400">+18%</span>
+                                        <span class="text-white">Rp 850K</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="bg-rose-500/10 rounded-lg p-3 mb-4">
+                                <p class="text-rose-300 text-sm">
+                                    <strong>Rekomendasi:</strong> Pertimbangkan untuk mengurangi makan di luar dan cari alternatif hiburan yang lebih hemat.
+                                </p>
+                            </div>
+
+                            <button onclick="showDetailReport('spending')" class="w-full glass-effect text-white px-4 py-3 rounded-xl font-medium border border-white/20 hover:bg-white/10 transition-colors">
+                                Lihat Detail Laporan
+                            </button>
+                        </div>
+
+                        <!-- Budget Recommendation Insight -->
+                        <div class="insight-card glass-effect rounded-2xl border border-white/20 p-6 animate-slide-up" style="animation-delay: 0.1s;">
+                            <div class="flex items-center justify-between mb-4">
+                                <div class="bg-emerald-500/20 rounded-lg p-3">
+                                    <svg class="w-6 h-6 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                                    </svg>
+                                </div>
+                                <span class="bg-emerald-500/20 text-emerald-400 px-3 py-1 rounded-full text-sm font-medium">
+                                    Rekomendasi
+                                </span>
+                            </div>
+                            <h4 class="text-lg font-bold text-white mb-3">Optimasi Budget</h4>
+                            <p class="text-white/80 mb-4">Berdasarkan pola pengeluaran, kami merekomendasikan penyesuaian alokasi budget untuk bulan depan.</p>
+                            
+                            <div class="space-y-3 mb-4">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-white/70">Kebutuhan Pokok</span>
+                                    <div class="flex items-center space-x-2">
+                                        <span class="text-white/60">55%</span>
+                                        <span class="text-emerald-400">→ 50%</span>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <span class="text-white/70">Tabungan</span>
+                                    <div class="flex items-center space-x-2">
+                                        <span class="text-white/60">15%</span>
+                                        <span class="text-emerald-400">→ 25%</span>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <span class="text-white/70">Hiburan</span>
+                                    <div class="flex items-center space-x-2">
+                                        <span class="text-white/60">30%</span>
+                                        <span class="text-emerald-400">→ 25%</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="bg-emerald-500/10 rounded-lg p-3 mb-4">
+                                <p class="text-emerald-300 text-sm">
+                                    <strong>Potensi Penghematan:</strong> Rp 1.2M per bulan dengan alokasi yang dioptimalkan.
+                                </p>
+                            </div>
+
+                            <button onclick="showDetailReport('budget')" class="w-full glass-effect text-white px-4 py-3 rounded-xl font-medium border border-white/20 hover:bg-white/10 transition-colors">
+                                Lihat Detail Laporan
+                            </button>
+                        </div>
+
+                        <!-- Investment Opportunity -->
+                        <div class="insight-card glass-effect rounded-2xl border border-white/20 p-6 animate-slide-up" style="animation-delay: 0.2s;">
+                            <div class="flex items-center justify-between mb-4">
+                                <div class="bg-blue-500/20 rounded-lg p-3">
+                                    <svg class="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+                                    </svg>
+                                </div>
+                                <span class="bg-blue-500/20 text-blue-400 px-3 py-1 rounded-full text-sm font-medium">
+                                    Peluang
+                                </span>
+                            </div>
+                            <h4 class="text-lg font-bold text-white mb-3">Peluang Investasi</h4>
+                            <p class="text-white/80 mb-4">Dengan surplus bulanan Anda, ada peluang untuk memulai investasi jangka panjang.</p>
+                            
+                            <div class="space-y-3 mb-4">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-white/70">Surplus Bulanan</span>
+                                    <span class="text-white font-medium">Rp 2.5M</span>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <span class="text-white/70">Rekomendasi Investasi</span>
+                                    <span class="text-blue-400 font-medium">Rp 1.5M</span>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <span class="text-white/70">Proyeksi Return (1 tahun)</span>
+                                    <span class="text-emerald-400 font-medium">8-12%</span>
+                                </div>
+                            </div>
+
+                            <div class="bg-blue-500/10 rounded-lg p-3 mb-4">
+                                <p class="text-blue-300 text-sm">
+                                    <strong>Saran:</strong> Mulai dengan reksa dana campuran atau deposito untuk investasi yang aman.
+                                </p>
+                            </div>
+
+                            <button onclick="showDetailReport('investment')" class="w-full glass-effect text-white px-4 py-3 rounded-xl font-medium border border-white/20 hover:bg-white/10 transition-colors">
+                                Lihat Detail Laporan
+                            </button>
+                        </div>
+
+                        <!-- Financial Health Score -->
+                        <div class="insight-card glass-effect rounded-2xl border border-white/20 p-6 animate-slide-up" style="animation-delay: 0.3s;">
+                            <div class="flex items-center justify-between mb-4">
+                                <div class="bg-purple-500/20 rounded-lg p-3">
+                                    <svg class="w-6 h-6 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                </div>
+                                <span class="bg-purple-500/20 text-purple-400 px-3 py-1 rounded-full text-sm font-medium">
+                                    Skor Kesehatan
+                                </span>
+                            </div>
+                            <h4 class="text-lg font-bold text-white mb-3">Skor Kesehatan Finansial</h4>
+                            <p class="text-white/80 mb-4">Evaluasi komprehensif kondisi keuangan Anda saat ini.</p>
+                            
+                            <!-- Score Circle -->
+                            <div class="flex items-center justify-center mb-4">
+                                <div class="relative w-24 h-24">
+                                    <svg class="w-24 h-24 transform -rotate-90" viewBox="0 0 100 100">
+                                        <circle cx="50" cy="50" r="40" stroke="rgba(255,255,255,0.1)" stroke-width="8" fill="none"/>
+                                        <circle cx="50" cy="50" r="40" stroke="url(#scoreGradient)" stroke-width="8" fill="none" 
+                                                stroke-dasharray="251.2" stroke-dashoffset="75.36" stroke-linecap="round"/>
+                                        <defs>
+                                            <linearGradient id="scoreGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                                <stop offset="0%" style="stop-color:#8B5CF6"/>
+                                                <stop offset="100%" style="stop-color:#A855F7"/>
+                                            </linearGradient>
+                                        </defs>
+                                    </svg>
+                                    <div class="absolute inset-0 flex items-center justify-center">
+                                        <span class="text-2xl font-bold text-white">75</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="space-y-2 mb-4">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-white/70">Emergency Fund</span>
+                                    <span class="text-emerald-400">✓ Good</span>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <span class="text-white/70">Debt Ratio</span>
+                                    <span class="text-yellow-400">⚠ Moderate</span>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <span class="text-white/70">Savings Rate</span>
+                                    <span class="text-emerald-400">✓ Excellent</span>
+                                </div>
+                            </div>
+
+                            <button onclick="showDetailReport('health')" class="w-full glass-effect text-white px-4 py-3 rounded-xl font-medium border border-white/20 hover:bg-white/10 transition-colors">
+                                Lihat Detail Laporan
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Upgrade Prompt -->
+                    <div class="glass-effect rounded-2xl border border-amber-500/30 bg-gradient-to-br from-amber-500/10 to-orange-500/10 p-6 animate-slide-up" style="animation-delay: 0.4s;">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-4">
+                                <div class="bg-gradient-to-br from-amber-500 to-orange-500 rounded-lg p-3">
+                                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <h4 class="text-lg font-bold text-white mb-1">Unlock Advanced AI Insights</h4>
+                                    <p class="text-white/70">Get unlimited chats, detailed analysis, and personalized recommendations</p>
+                                </div>
+                            </div>
+                            <button onclick="showUpgradeModal()" class="upgrade-button text-white px-6 py-3 rounded-xl font-semibold">
+                                Upgrade Now
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Upgrade Modal -->
+    <div id="upgradeModal" class="fixed inset-0 z-50 hidden">
+        <div class="fixed inset-0 bg-black/80 backdrop-blur-sm" onclick="closeUpgradeModal()"></div>
+        <div class="fixed inset-0 flex items-center justify-center p-4">
+            <div class="glass-effect rounded-2xl border border-white/20 w-full max-w-md animate-slide-up">
+                <!-- Modal Header -->
+                <div class="flex items-center justify-between p-6 border-b border-white/10">
+                    <h2 class="text-xl font-bold text-white">Upgrade to Pro</h2>
+                    <button onclick="closeUpgradeModal()" class="text-white/70 hover:text-white transition-colors">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- Modal Body -->
+                <div class="p-6">
+                    <div class="text-center mb-6">
+                        <div class="bg-gradient-to-br from-amber-500 to-orange-500 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-bold text-white mb-2">Unlimited AI Coach Access</h3>
+                        <p class="text-white/70">Get unlimited chats and advanced financial insights</p>
+                    </div>
+
+                    <div class="space-y-3 mb-6">
+                        <div class="flex items-center space-x-3">
+                            <svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            <span class="text-white/80">Unlimited AI chat conversations</span>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            <span class="text-white/80">Advanced financial analysis</span>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            <span class="text-white/80">Personalized investment recommendations</span>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            <span class="text-white/80">Priority support</span>
+                        </div>
+                    </div>
+
+                    <div class="text-center mb-6">
+                        <div class="text-3xl font-bold text-white mb-1">$29<span class="text-lg text-white/60">/month</span></div>
+                        <p class="text-white/60 text-sm">Cancel anytime</p>
+                    </div>
+
+                    <button onclick="processUpgrade()" class="upgrade-button w-full text-white px-6 py-3 rounded-xl font-semibold mb-3">
+                        Start Pro Plan
+                    </button>
+                    <button onclick="closeUpgradeModal()" class="w-full text-white/70 hover:text-white transition-colors text-center">
+                        Maybe later
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let chatCount = 3;
+        const maxChats = 5;
+
+        // Navigation functions
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('-translate-x-full');
+        }
+
+        // Tab switching
+        function switchTab(tabName) {
+            // Hide all tab contents
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.add('hidden');
+            });
+            
+            // Remove active class from all tab buttons
+            document.querySelectorAll('.tab-button').forEach(button => {
+                button.classList.remove('active');
+            });
+            
+            // Show selected tab content
+            document.getElementById(`content-${tabName}`).classList.remove('hidden');
+            
+            // Add active class to selected tab button
+            document.getElementById(`tab-${tabName}`).classList.add('active');
+        }
+
+        // Chat functionality
+        function sendMessage(event) {
+            event.preventDefault();
+            
+            if (chatCount >= maxChats) {
+                showUpgradeModal();
+                return;
+            }
+
+            const input = document.getElementById('messageInput');
+            const message = input.value.trim();
+            
+            if (!message) return;
+
+            // Add user message
+            addMessage(message, 'user');
+            input.value = '';
+            updateCharCount();
+            
+            // Show typing indicator
+            showTypingIndicator();
+            
+            // Simulate AI response
+            setTimeout(() => {
+                hideTypingIndicator();
+                const responses = [
+                    "Terima kasih atas pertanyaannya! Berdasarkan data keuangan Anda, saya merekomendasikan untuk fokus pada emergency fund terlebih dahulu. Idealnya, Anda memiliki dana darurat 6-12 bulan pengeluaran.",
+                    "Pertanyaan yang bagus! Untuk investasi pemula, saya sarankan mulai dengan reksa dana indeks yang memiliki biaya rendah dan risiko yang terdiversifikasi. Mulai dengan 10-15% dari pendapatan bulanan.",
+                    "Saya melihat pola pengeluaran Anda cukup konsisten. Untuk mengoptimalkan budget, coba terapkan aturan 50/30/20: 50% kebutuhan, 30% keinginan, 20% tabungan dan investasi.",
+                    "Berdasarkan analisis, Anda bisa menghemat sekitar Rp 800K per bulan dengan mengurangi pengeluaran di kategori hiburan dan makanan. Apakah Anda ingin saya buatkan rencana detail?"
+                ];
+                const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+                addMessage(randomResponse, 'ai');
+                
+                chatCount++;
+                updateChatLimit();
+            }, 2000);
+        }
+
+        function addMessage(message, sender) {
+            const chatMessages = document.getElementById('chatMessages');
+            const messageDiv = document.createElement('div');
+            const currentTime = new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+            
+            if (sender === 'user') {
+                messageDiv.className = 'flex items-start space-x-3 justify-end animate-message-in';
+                messageDiv.innerHTML = `
+                    <div class="chat-bubble-user max-w-md p-4">
+                        <p class="text-white">${message}</p>
+                        <span class="text-white/80 text-xs mt-2 block text-right">${currentTime}</span>
+                    </div>
+                    <div class="user-avatar w-8 h-8 rounded-full flex items-center justify-center text-white text-sm font-bold">
+                        JD
+                    </div>
+                `;
+            } else {
+                messageDiv.className = 'flex items-start space-x-3 animate-message-in';
+                messageDiv.innerHTML = `
+                    <div class="ai-avatar w-8 h-8 rounded-full flex items-center justify-center text-white text-sm">
+                        🤖
+                    </div>
+                    <div class="chat-bubble-ai max-w-md p-4">
+                        <p class="text-white">${message}</p>
+                        <span class="text-white/60 text-xs mt-2 block">${currentTime}</span>
+                    </div>
+                `;
+            }
+            
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function showTypingIndicator() {
+            document.getElementById('typingIndicator').classList.remove('hidden');
+            const chatMessages = document.getElementById('chatMessages');
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function hideTypingIndicator() {
+            document.getElementById('typingIndicator').classList.add('hidden');
+        }
+
+        function updateChatLimit() {
+            const limitBadges = document.querySelectorAll('.limit-badge');
+            limitBadges.forEach(badge => {
+                if (badge.textContent.includes('chats')) {
+                    badge.textContent = `${chatCount}/${maxChats} chats`;
+                    if (chatCount >= maxChats) {
+                        badge.classList.add('bg-rose-500');
+                        badge.classList.remove('bg-gradient-to-r', 'from-amber-500', 'to-orange-500');
+                    }
+                }
+            });
+        }
+
+        function updateCharCount() {
+            const input = document.getElementById('messageInput');
+            const charCount = document.getElementById('charCount');
+            charCount.textContent = input.value.length;
+        }
+
+        // Modal functions
+        function showUpgradeModal() {
+            document.getElementById('upgradeModal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeUpgradeModal() {
+            document.getElementById('upgradeModal').classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
+
+        function processUpgrade() {
+            // Simulate upgrade process
+            showNotification('Redirecting to payment...', 'info');
+            setTimeout(() => {
+                closeUpgradeModal();
+                showNotification('Upgrade successful! You now have unlimited access.', 'success');
+                // Reset chat limit for demo
+                chatCount = 0;
+                updateChatLimit();
+            }, 2000);
+        }
+
+        function showDetailReport(type) {
+            const reportTypes = {
+                'spending': 'Detailed spending analysis report',
+                'budget': 'Budget optimization recommendations',
+                'investment': 'Investment opportunity analysis',
+                'health': 'Complete financial health assessment'
+            };
+            
+            showNotification(`Opening ${reportTypes[type]}...`, 'info');
+        }
+
+        // Notification function
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            const bgColor = type === 'success' ? 'from-emerald-500 to-teal-600' : 
+                           type === 'error' ? 'from-rose-500 to-red-600' : 'from-blue-500 to-indigo-600';
+            
+            notification.className = `fixed top-4 right-4 z-50 bg-gradient-to-r ${bgColor} text-white p-4 rounded-xl font-medium animate-slide-up max-w-sm`;
+            notification.innerHTML = `
+                <div class="flex items-center space-x-3">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    <span>${message}</span>
+                </div>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 4000);
+        }
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Character count listener
+            const messageInput = document.getElementById('messageInput');
+            messageInput.addEventListener('input', updateCharCount);
+            
+            // Enter key to send message
+            messageInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    sendMessage(e);
+                }
+            });
+
+            // Update chat limit display
+            updateChatLimit();
+            
+            // Demo welcome notification
+            setTimeout(() => {
+                showNotification('Welcome to AI Coach! Ask me anything about your finances.', 'info');
+            }, 1500);
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9707b11275433f5a',t:'MTc1NTQxODE5Mi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>

@@ -1,0 +1,1056 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Angsflow - Transactions</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#60A5FA',
+                        secondary: '#3B82F6',
+                        accent: '#F59E0B',
+                        dark: '#0F172A',
+                        light: '#F8FAFC'
+                    },
+                    fontFamily: {
+                        'inter': ['Inter', 'sans-serif']
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'glow': 'glow 2s ease-in-out infinite alternate',
+                        'slide-up': 'slideUp 0.8s ease-out',
+                        'fade-in': 'fadeIn 1s ease-out',
+                        'pulse-slow': 'pulse 3s ease-in-out infinite',
+                        'bounce-slow': 'bounce 2s ease-in-out infinite'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        @keyframes glow {
+            from { box-shadow: 0 0 20px #60A5FA40; }
+            to { box-shadow: 0 0 30px #60A5FA80, 0 0 40px #60A5FA40; }
+        }
+        @keyframes slideUp {
+            from { transform: translateY(30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .gradient-text {
+            background: linear-gradient(135deg, #60A5FA, #3B82F6, #1E40AF);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .modal-backdrop {
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(8px);
+        }
+        .receipt-preview {
+            background: linear-gradient(135deg, #f8fafc, #e2e8f0);
+            border: 2px dashed #cbd5e1;
+        }
+        .drag-over {
+            border-color: #60A5FA;
+            background: rgba(96, 165, 250, 0.1);
+        }
+    </style>
+</head>
+<body class="font-inter bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 min-h-screen">
+    <!-- Animated Background -->
+    <div class="fixed inset-0 overflow-hidden pointer-events-none">
+        <div class="absolute -top-40 -right-40 w-80 h-80 bg-primary/20 rounded-full blur-3xl animate-float"></div>
+        <div class="absolute top-1/2 -left-40 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl animate-float" style="animation-delay: -2s;"></div>
+        <div class="absolute bottom-0 right-1/3 w-64 h-64 bg-indigo-500/15 rounded-full blur-3xl animate-float" style="animation-delay: -4s;"></div>
+    </div>
+
+    <!-- Sidebar (Desktop) -->
+    <div class="fixed inset-y-0 left-0 z-50 w-64 glass-effect border-r border-white/20 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out" id="sidebar">
+        <div class="flex flex-col h-full">
+            <!-- Logo -->
+            <div class="flex items-center px-6 py-4 border-b border-white/10">
+                <svg width="40" height="40" viewBox="0 0 48 48" class="animate-glow mr-3">
+                    <circle cx="24" cy="24" r="22" fill="url(#logoGradient)" stroke="rgba(96, 165, 250, 0.3)" stroke-width="2"/>
+                    <path d="M16 32 L20 20 L24 32 M18 28 L22 28" stroke="#ffffff" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M28 32 L28 20 M28 20 L34 20 M28 26 L32 26" stroke="#ffffff" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                    <defs>
+                        <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#60A5FA;stop-opacity:1" />
+                            <stop offset="50%" style="stop-color:#3B82F6;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#1E40AF;stop-opacity:1" />
+                        </linearGradient>
+                    </defs>
+                </svg>
+                <span class="text-xl font-bold text-white">Angs<span class="gradient-text">Flow</span></span>
+            </div>
+            
+            <!-- Navigation Menu -->
+            <nav class="flex-1 px-4 py-6 space-y-2">
+                <a href="#" class="flex items-center px-4 py-3 text-white/70 hover:text-white hover:bg-white/10 rounded-xl font-medium transition-all duration-200 group">
+                    <svg class="w-5 h-5 mr-3 group-hover:text-primary transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5a2 2 0 012-2h4a2 2 0 012 2v6H8V5z"></path>
+                    </svg>
+                    Dashboard
+                </a>
+                
+                <a href="#" class="flex items-center px-4 py-3 text-white bg-primary/20 border border-primary/30 rounded-xl font-medium transition-all duration-200 group">
+                    <svg class="w-5 h-5 mr-3 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"></path>
+                    </svg>
+                    Transactions
+                </a>
+                
+                <a href="#" class="flex items-center px-4 py-3 text-white/70 hover:text-white hover:bg-white/10 rounded-xl font-medium transition-all duration-200 group">
+                    <svg class="w-5 h-5 mr-3 group-hover:text-primary transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+                    </svg>
+                    Budgets
+                </a>
+                
+                <a href="#" class="flex items-center px-4 py-3 text-white/70 hover:text-white hover:bg-white/10 rounded-xl font-medium transition-all duration-200 group">
+                    <svg class="w-5 h-5 mr-3 group-hover:text-primary transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                    </svg>
+                    Reports
+                </a>
+                
+                <a href="#" class="flex items-center px-4 py-3 text-white/70 hover:text-white hover:bg-white/10 rounded-xl font-medium transition-all duration-200 group">
+                    <svg class="w-5 h-5 mr-3 group-hover:text-primary transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                    </svg>
+                    Settings
+                </a>
+            </nav>
+            
+            <!-- User Info -->
+            <div class="px-4 py-4 border-t border-white/10">
+                <div class="flex items-center px-4 py-3 bg-white/5 rounded-xl">
+                    <div class="w-10 h-10 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-full flex items-center justify-center text-white font-bold mr-3">
+                        JD
+                    </div>
+                    <div class="flex-1">
+                        <p class="text-white font-medium text-sm">John Doe</p>
+                        <p class="text-white/60 text-xs">Personal Account</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Top Navigation -->
+    <div class="lg:ml-64">
+        <nav class="glass-effect sticky top-0 z-40 border-b border-white/10">
+            <div class="px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between items-center h-16">
+                    <!-- Mobile menu button -->
+                    <button onclick="toggleSidebar()" class="lg:hidden p-2 text-white/70 hover:text-primary transition-colors">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                    </button>
+                    
+                    <!-- Page Title -->
+                    <h1 class="text-xl font-bold text-white">Transactions</h1>
+                    
+                    <!-- Right side menu -->
+                    <div class="flex items-center space-x-4">
+                        <!-- Notifications -->
+                        <button class="relative p-2 text-white/70 hover:text-primary transition-colors">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-3.5-3.5a50.002 50.002 0 00-2.5-2.5V9a6 6 0 10-12 0v1.5c0 .9-.4 1.8-1.1 2.4L2 17h5m8 0v1a3 3 0 11-6 0v-1m6 0H9"></path>
+                            </svg>
+                        </button>
+                        
+                        <!-- User Profile -->
+                        <div class="flex items-center space-x-3">
+                            <div class="w-8 h-8 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-full flex items-center justify-center text-white font-bold text-sm">
+                                JD
+                            </div>
+                            <span class="text-white font-medium hidden sm:block">John Doe</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </div>
+
+    <!-- Bottom Navigation (Mobile) -->
+    <div class="lg:hidden fixed bottom-0 left-0 right-0 z-50 glass-effect border-t border-white/20">
+        <div class="grid grid-cols-5 h-16">
+            <a href="#" class="flex flex-col items-center justify-center text-white/60 hover:text-primary transition-colors">
+                <svg class="w-4 h-4 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2z"></path>
+                </svg>
+                <span class="text-xs font-medium">Dashboard</span>
+            </a>
+            <a href="#" class="flex flex-col items-center justify-center text-primary">
+                <svg class="w-4 h-4 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4"></path>
+                </svg>
+                <span class="text-xs font-medium">Transactions</span>
+            </a>
+            <a href="#" class="flex flex-col items-center justify-center text-white/60 hover:text-primary transition-colors">
+                <svg class="w-4 h-4 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01"></path>
+                </svg>
+                <span class="text-xs font-medium">Budgets</span>
+            </a>
+            <a href="#" class="flex flex-col items-center justify-center text-white/60 hover:text-primary transition-colors">
+                <svg class="w-4 h-4 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6"></path>
+                </svg>
+                <span class="text-xs font-medium">Reports</span>
+            </a>
+            <a href="#" class="flex flex-col items-center justify-center text-white/60 hover:text-primary transition-colors">
+                <svg class="w-4 h-4 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0"></path>
+                </svg>
+                <span class="text-xs font-medium">Settings</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="lg:ml-64 pb-20 lg:pb-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 relative z-10">
+            
+            <!-- Header Section -->
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8">
+                <div>
+                    <h1 class="text-3xl font-bold text-white mb-2">Transaction History</h1>
+                    <p class="text-white/70">Track and manage all your financial transactions</p>
+                </div>
+                <button onclick="openAddModal()" class="mt-4 sm:mt-0 bg-gradient-to-r from-primary to-secondary text-white px-6 py-3 rounded-xl font-semibold hover:from-secondary hover:to-primary transition-all duration-300 transform hover:scale-105 flex items-center">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                    </svg>
+                    Add Transaction
+                </button>
+            </div>
+
+            <!-- Summary Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <div class="glass-effect rounded-2xl p-6 border border-white/20">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-white/60 text-sm">Total Income</p>
+                            <p class="text-2xl font-bold text-emerald-400">Rp 15.2M</p>
+                            <p class="text-emerald-400 text-sm mt-1">+12% this month</p>
+                        </div>
+                        <div class="bg-emerald-500/20 rounded-xl p-3">
+                            <svg class="w-8 h-8 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 11l5-5m0 0l5 5m-5-5v12"></path>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-effect rounded-2xl p-6 border border-white/20">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-white/60 text-sm">Total Expenses</p>
+                            <p class="text-2xl font-bold text-rose-400">Rp 8.7M</p>
+                            <p class="text-rose-400 text-sm mt-1">+5% this month</p>
+                        </div>
+                        <div class="bg-rose-500/20 rounded-xl p-3">
+                            <svg class="w-8 h-8 text-rose-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 13l-5 5m0 0l-5-5m5 5V6"></path>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-effect rounded-2xl p-6 border border-white/20">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-white/60 text-sm">Net Balance</p>
+                            <p class="text-2xl font-bold text-primary">Rp 6.5M</p>
+                            <p class="text-primary text-sm mt-1">+18% this month</p>
+                        </div>
+                        <div class="bg-primary/20 rounded-xl p-3">
+                            <svg class="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"></path>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filters Section -->
+            <div class="glass-effect rounded-2xl p-6 border border-white/20 mb-8">
+                <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between space-y-4 lg:space-y-0 lg:space-x-4">
+                    <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 flex-1">
+                        <!-- Date Range Filter -->
+                        <div class="flex-1">
+                            <label class="block text-white/70 text-sm font-medium mb-2">Date Range</label>
+                            <div class="flex space-x-2">
+                                <input type="date" id="startDate" class="glass-effect text-white text-sm px-3 py-2 rounded-lg border border-white/20 bg-transparent flex-1">
+                                <span class="text-white/70 self-center">to</span>
+                                <input type="date" id="endDate" class="glass-effect text-white text-sm px-3 py-2 rounded-lg border border-white/20 bg-transparent flex-1">
+                            </div>
+                        </div>
+
+                        <!-- Category Filter -->
+                        <div class="flex-1">
+                            <label class="block text-white/70 text-sm font-medium mb-2">Category</label>
+                            <select id="categoryFilter" class="glass-effect text-white text-sm px-3 py-2 rounded-lg border border-white/20 bg-transparent w-full">
+                                <option value="" class="bg-slate-800">All Categories</option>
+                                <option value="food" class="bg-slate-800">🍽️ Food & Dining</option>
+                                <option value="transport" class="bg-slate-800">🚗 Transportation</option>
+                                <option value="shopping" class="bg-slate-800">🛍️ Shopping</option>
+                                <option value="entertainment" class="bg-slate-800">🎬 Entertainment</option>
+                                <option value="bills" class="bg-slate-800">📄 Bills & Utilities</option>
+                                <option value="health" class="bg-slate-800">🏥 Healthcare</option>
+                                <option value="salary" class="bg-slate-800">💼 Salary</option>
+                                <option value="investment" class="bg-slate-800">📈 Investment</option>
+                            </select>
+                        </div>
+
+                        <!-- Amount Range Filter -->
+                        <div class="flex-1">
+                            <label class="block text-white/70 text-sm font-medium mb-2">Amount Range</label>
+                            <div class="flex space-x-2">
+                                <input type="number" id="minAmount" placeholder="Min" class="glass-effect text-white text-sm px-3 py-2 rounded-lg border border-white/20 bg-transparent flex-1">
+                                <input type="number" id="maxAmount" placeholder="Max" class="glass-effect text-white text-sm px-3 py-2 rounded-lg border border-white/20 bg-transparent flex-1">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Filter Actions -->
+                    <div class="flex space-x-3">
+                        <button onclick="applyFilters()" class="bg-primary text-white px-4 py-2 rounded-lg font-medium hover:bg-secondary transition-colors">
+                            Apply Filters
+                        </button>
+                        <button onclick="clearFilters()" class="text-white/70 hover:text-white px-4 py-2 rounded-lg border border-white/20 hover:border-white/40 transition-colors">
+                            Clear
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Transactions Table -->
+            <div class="glass-effect rounded-2xl border border-white/20 overflow-hidden">
+                <div class="px-6 py-4 border-b border-white/10">
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-xl font-bold text-white">Recent Transactions</h3>
+                        <div class="flex items-center space-x-3">
+                            <select class="glass-effect text-white text-sm px-3 py-2 rounded-lg border border-white/20 bg-transparent">
+                                <option value="10" class="bg-slate-800">10 per page</option>
+                                <option value="25" class="bg-slate-800">25 per page</option>
+                                <option value="50" class="bg-slate-800">50 per page</option>
+                            </select>
+                            <button class="text-white/70 hover:text-primary transition-colors">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Table Header (Desktop) -->
+                <div class="hidden lg:block">
+                    <div class="grid grid-cols-6 gap-4 px-6 py-4 border-b border-white/10 text-white/70 text-sm font-medium">
+                        <div>Date</div>
+                        <div>Category</div>
+                        <div>Description</div>
+                        <div>Amount</div>
+                        <div>Type</div>
+                        <div>Actions</div>
+                    </div>
+                </div>
+
+                <!-- Transaction Rows -->
+                <div id="transactionsList" class="divide-y divide-white/10">
+                    <!-- Transaction Item 1 -->
+                    <div class="transaction-item p-6 hover:bg-white/5 transition-colors" data-category="salary" data-amount="12500000" data-date="2024-01-15" data-type="income">
+                        <div class="lg:grid lg:grid-cols-6 lg:gap-4 lg:items-center">
+                            <!-- Mobile Layout -->
+                            <div class="lg:hidden space-y-3">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="w-10 h-10 bg-emerald-500/20 rounded-lg flex items-center justify-center">
+                                            <span class="text-emerald-400">💼</span>
+                                        </div>
+                                        <div>
+                                            <p class="text-white font-medium">Monthly Salary</p>
+                                            <p class="text-white/60 text-sm">Jan 15, 2024</p>
+                                        </div>
+                                    </div>
+                                    <div class="text-right">
+                                        <p class="text-emerald-400 font-bold">+Rp 12.5M</p>
+                                        <span class="bg-emerald-500/20 text-emerald-400 px-2 py-1 rounded-full text-xs">Income</span>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <p class="text-white/70 text-sm">💼 Salary</p>
+                                    <div class="flex space-x-2">
+                                        <button onclick="editTransaction(1)" class="text-primary hover:text-blue-300 transition-colors">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                                            </svg>
+                                        </button>
+                                        <button onclick="deleteTransaction(1)" class="text-rose-400 hover:text-rose-300 transition-colors">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Desktop Layout -->
+                            <div class="hidden lg:contents">
+                                <div class="text-white/80">Jan 15, 2024</div>
+                                <div class="flex items-center space-x-2">
+                                    <span class="text-lg">💼</span>
+                                    <span class="text-white/80">Salary</span>
+                                </div>
+                                <div class="text-white">Monthly Salary</div>
+                                <div class="text-emerald-400 font-bold">+Rp 12.5M</div>
+                                <div>
+                                    <span class="bg-emerald-500/20 text-emerald-400 px-3 py-1 rounded-full text-sm">Income</span>
+                                </div>
+                                <div class="flex space-x-2">
+                                    <button onclick="editTransaction(1)" class="text-primary hover:text-blue-300 transition-colors p-1">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                                        </svg>
+                                    </button>
+                                    <button onclick="deleteTransaction(1)" class="text-rose-400 hover:text-rose-300 transition-colors p-1">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Transaction Item 2 -->
+                    <div class="transaction-item p-6 hover:bg-white/5 transition-colors" data-category="food" data-amount="250000" data-date="2024-01-14" data-type="expense">
+                        <div class="lg:grid lg:grid-cols-6 lg:gap-4 lg:items-center">
+                            <!-- Mobile Layout -->
+                            <div class="lg:hidden space-y-3">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="w-10 h-10 bg-rose-500/20 rounded-lg flex items-center justify-center">
+                                            <span class="text-rose-400">🍽️</span>
+                                        </div>
+                                        <div>
+                                            <p class="text-white font-medium">Dinner at Restaurant</p>
+                                            <p class="text-white/60 text-sm">Jan 14, 2024</p>
+                                        </div>
+                                    </div>
+                                    <div class="text-right">
+                                        <p class="text-rose-400 font-bold">-Rp 250K</p>
+                                        <span class="bg-rose-500/20 text-rose-400 px-2 py-1 rounded-full text-xs">Expense</span>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <p class="text-white/70 text-sm">🍽️ Food & Dining</p>
+                                    <div class="flex space-x-2">
+                                        <button onclick="editTransaction(2)" class="text-primary hover:text-blue-300 transition-colors">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                                            </svg>
+                                        </button>
+                                        <button onclick="deleteTransaction(2)" class="text-rose-400 hover:text-rose-300 transition-colors">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Desktop Layout -->
+                            <div class="hidden lg:contents">
+                                <div class="text-white/80">Jan 14, 2024</div>
+                                <div class="flex items-center space-x-2">
+                                    <span class="text-lg">🍽️</span>
+                                    <span class="text-white/80">Food & Dining</span>
+                                </div>
+                                <div class="text-white">Dinner at Restaurant</div>
+                                <div class="text-rose-400 font-bold">-Rp 250K</div>
+                                <div>
+                                    <span class="bg-rose-500/20 text-rose-400 px-3 py-1 rounded-full text-sm">Expense</span>
+                                </div>
+                                <div class="flex space-x-2">
+                                    <button onclick="editTransaction(2)" class="text-primary hover:text-blue-300 transition-colors p-1">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                                        </svg>
+                                    </button>
+                                    <button onclick="deleteTransaction(2)" class="text-rose-400 hover:text-rose-300 transition-colors p-1">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Transaction Item 3 -->
+                    <div class="transaction-item p-6 hover:bg-white/5 transition-colors" data-category="transport" data-amount="150000" data-date="2024-01-13" data-type="expense">
+                        <div class="lg:grid lg:grid-cols-6 lg:gap-4 lg:items-center">
+                            <!-- Mobile Layout -->
+                            <div class="lg:hidden space-y-3">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="w-10 h-10 bg-blue-500/20 rounded-lg flex items-center justify-center">
+                                            <span class="text-blue-400">🚗</span>
+                                        </div>
+                                        <div>
+                                            <p class="text-white font-medium">Fuel & Parking</p>
+                                            <p class="text-white/60 text-sm">Jan 13, 2024</p>
+                                        </div>
+                                    </div>
+                                    <div class="text-right">
+                                        <p class="text-rose-400 font-bold">-Rp 150K</p>
+                                        <span class="bg-rose-500/20 text-rose-400 px-2 py-1 rounded-full text-xs">Expense</span>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <p class="text-white/70 text-sm">🚗 Transportation</p>
+                                    <div class="flex space-x-2">
+                                        <button onclick="editTransaction(3)" class="text-primary hover:text-blue-300 transition-colors">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                                            </svg>
+                                        </button>
+                                        <button onclick="deleteTransaction(3)" class="text-rose-400 hover:text-rose-300 transition-colors">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Desktop Layout -->
+                            <div class="hidden lg:contents">
+                                <div class="text-white/80">Jan 13, 2024</div>
+                                <div class="flex items-center space-x-2">
+                                    <span class="text-lg">🚗</span>
+                                    <span class="text-white/80">Transportation</span>
+                                </div>
+                                <div class="text-white">Fuel & Parking</div>
+                                <div class="text-rose-400 font-bold">-Rp 150K</div>
+                                <div>
+                                    <span class="bg-rose-500/20 text-rose-400 px-3 py-1 rounded-full text-sm">Expense</span>
+                                </div>
+                                <div class="flex space-x-2">
+                                    <button onclick="editTransaction(3)" class="text-primary hover:text-blue-300 transition-colors p-1">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                                        </svg>
+                                    </button>
+                                    <button onclick="deleteTransaction(3)" class="text-rose-400 hover:text-rose-300 transition-colors p-1">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Transaction Item 4 -->
+                    <div class="transaction-item p-6 hover:bg-white/5 transition-colors" data-category="investment" data-amount="2000000" data-date="2024-01-12" data-type="income">
+                        <div class="lg:grid lg:grid-cols-6 lg:gap-4 lg:items-center">
+                            <!-- Mobile Layout -->
+                            <div class="lg:hidden space-y-3">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="w-10 h-10 bg-emerald-500/20 rounded-lg flex items-center justify-center">
+                                            <span class="text-emerald-400">📈</span>
+                                        </div>
+                                        <div>
+                                            <p class="text-white font-medium">Stock Dividend</p>
+                                            <p class="text-white/60 text-sm">Jan 12, 2024</p>
+                                        </div>
+                                    </div>
+                                    <div class="text-right">
+                                        <p class="text-emerald-400 font-bold">+Rp 2M</p>
+                                        <span class="bg-emerald-500/20 text-emerald-400 px-2 py-1 rounded-full text-xs">Income</span>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <p class="text-white/70 text-sm">📈 Investment</p>
+                                    <div class="flex space-x-2">
+                                        <button onclick="editTransaction(4)" class="text-primary hover:text-blue-300 transition-colors">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                                            </svg>
+                                        </button>
+                                        <button onclick="deleteTransaction(4)" class="text-rose-400 hover:text-rose-300 transition-colors">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Desktop Layout -->
+                            <div class="hidden lg:contents">
+                                <div class="text-white/80">Jan 12, 2024</div>
+                                <div class="flex items-center space-x-2">
+                                    <span class="text-lg">📈</span>
+                                    <span class="text-white/80">Investment</span>
+                                </div>
+                                <div class="text-white">Stock Dividend</div>
+                                <div class="text-emerald-400 font-bold">+Rp 2M</div>
+                                <div>
+                                    <span class="bg-emerald-500/20 text-emerald-400 px-3 py-1 rounded-full text-sm">Income</span>
+                                </div>
+                                <div class="flex space-x-2">
+                                    <button onclick="editTransaction(4)" class="text-primary hover:text-blue-300 transition-colors p-1">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                                        </svg>
+                                    </button>
+                                    <button onclick="deleteTransaction(4)" class="text-rose-400 hover:text-rose-300 transition-colors p-1">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Transaction Item 5 -->
+                    <div class="transaction-item p-6 hover:bg-white/5 transition-colors" data-category="shopping" data-amount="750000" data-date="2024-01-11" data-type="expense">
+                        <div class="lg:grid lg:grid-cols-6 lg:gap-4 lg:items-center">
+                            <!-- Mobile Layout -->
+                            <div class="lg:hidden space-y-3">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="w-10 h-10 bg-purple-500/20 rounded-lg flex items-center justify-center">
+                                            <span class="text-purple-400">🛍️</span>
+                                        </div>
+                                        <div>
+                                            <p class="text-white font-medium">Online Shopping</p>
+                                            <p class="text-white/60 text-sm">Jan 11, 2024</p>
+                                        </div>
+                                    </div>
+                                    <div class="text-right">
+                                        <p class="text-rose-400 font-bold">-Rp 750K</p>
+                                        <span class="bg-rose-500/20 text-rose-400 px-2 py-1 rounded-full text-xs">Expense</span>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <p class="text-white/70 text-sm">🛍️ Shopping</p>
+                                    <div class="flex space-x-2">
+                                        <button onclick="editTransaction(5)" class="text-primary hover:text-blue-300 transition-colors">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                                            </svg>
+                                        </button>
+                                        <button onclick="deleteTransaction(5)" class="text-rose-400 hover:text-rose-300 transition-colors">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Desktop Layout -->
+                            <div class="hidden lg:contents">
+                                <div class="text-white/80">Jan 11, 2024</div>
+                                <div class="flex items-center space-x-2">
+                                    <span class="text-lg">🛍️</span>
+                                    <span class="text-white/80">Shopping</span>
+                                </div>
+                                <div class="text-white">Online Shopping</div>
+                                <div class="text-rose-400 font-bold">-Rp 750K</div>
+                                <div>
+                                    <span class="bg-rose-500/20 text-rose-400 px-3 py-1 rounded-full text-sm">Expense</span>
+                                </div>
+                                <div class="flex space-x-2">
+                                    <button onclick="editTransaction(5)" class="text-primary hover:text-blue-300 transition-colors p-1">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                                        </svg>
+                                    </button>
+                                    <button onclick="deleteTransaction(5)" class="text-rose-400 hover:text-rose-300 transition-colors p-1">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pagination -->
+                <div class="px-6 py-4 border-t border-white/10">
+                    <div class="flex items-center justify-between">
+                        <p class="text-white/70 text-sm">Showing 1-5 of 127 transactions</p>
+                        <div class="flex space-x-2">
+                            <button class="px-3 py-2 text-white/70 hover:text-white border border-white/20 rounded-lg hover:border-white/40 transition-colors">
+                                Previous
+                            </button>
+                            <button class="px-3 py-2 bg-primary text-white rounded-lg">1</button>
+                            <button class="px-3 py-2 text-white/70 hover:text-white border border-white/20 rounded-lg hover:border-white/40 transition-colors">2</button>
+                            <button class="px-3 py-2 text-white/70 hover:text-white border border-white/20 rounded-lg hover:border-white/40 transition-colors">3</button>
+                            <button class="px-3 py-2 text-white/70 hover:text-white border border-white/20 rounded-lg hover:border-white/40 transition-colors">
+                                Next
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Transaction Modal -->
+    <div id="addTransactionModal" class="fixed inset-0 z-50 hidden">
+        <div class="modal-backdrop fixed inset-0" onclick="closeAddModal()"></div>
+        <div class="fixed inset-0 flex items-center justify-center p-4">
+            <div class="glass-effect rounded-2xl border border-white/20 w-full max-w-2xl max-h-[90vh] overflow-y-auto animate-slide-up">
+                <!-- Modal Header -->
+                <div class="flex items-center justify-between p-6 border-b border-white/10">
+                    <h2 class="text-2xl font-bold text-white">Add New Transaction</h2>
+                    <button onclick="closeAddModal()" class="text-white/70 hover:text-white transition-colors">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- Modal Body -->
+                <div class="p-6 space-y-6">
+                    <!-- Transaction Type Toggle -->
+                    <div>
+                        <label class="block text-white/70 text-sm font-medium mb-3">Transaction Type</label>
+                        <div class="flex bg-white/10 rounded-xl p-1">
+                            <button id="incomeBtn" onclick="setTransactionType('income')" class="flex-1 py-3 px-4 rounded-lg font-medium transition-all duration-200 text-white/70">
+                                <div class="flex items-center justify-center space-x-2">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 11l5-5m0 0l5 5m-5-5v12"></path>
+                                    </svg>
+                                    <span>Income</span>
+                                </div>
+                            </button>
+                            <button id="expenseBtn" onclick="setTransactionType('expense')" class="flex-1 py-3 px-4 rounded-lg font-medium transition-all duration-200 bg-rose-500/20 text-rose-400">
+                                <div class="flex items-center justify-center space-x-2">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 13l-5 5m0 0l-5-5m5 5V6"></path>
+                                    </svg>
+                                    <span>Expense</span>
+                                </div>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Amount Input -->
+                    <div>
+                        <label class="block text-white/70 text-sm font-medium mb-2">Amount</label>
+                        <div class="relative">
+                            <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-white/70">Rp</span>
+                            <input type="number" id="transactionAmount" placeholder="0" class="glass-effect text-white text-lg px-12 py-4 rounded-xl border border-white/20 bg-transparent w-full focus:border-primary focus:outline-none">
+                        </div>
+                    </div>
+
+                    <!-- Category Selection -->
+                    <div>
+                        <label class="block text-white/70 text-sm font-medium mb-2">Category</label>
+                        <select id="transactionCategory" class="glass-effect text-white px-4 py-3 rounded-xl border border-white/20 bg-transparent w-full focus:border-primary focus:outline-none">
+                            <option value="" class="bg-slate-800">Select Category</option>
+                            <optgroup label="Income Categories" class="bg-slate-800">
+                                <option value="salary" class="bg-slate-800">💼 Salary</option>
+                                <option value="freelance" class="bg-slate-800">💻 Freelance</option>
+                                <option value="investment" class="bg-slate-800">📈 Investment</option>
+                                <option value="business" class="bg-slate-800">🏢 Business</option>
+                                <option value="other-income" class="bg-slate-800">💰 Other Income</option>
+                            </optgroup>
+                            <optgroup label="Expense Categories" class="bg-slate-800">
+                                <option value="food" class="bg-slate-800">🍽️ Food & Dining</option>
+                                <option value="transport" class="bg-slate-800">🚗 Transportation</option>
+                                <option value="shopping" class="bg-slate-800">🛍️ Shopping</option>
+                                <option value="entertainment" class="bg-slate-800">🎬 Entertainment</option>
+                                <option value="bills" class="bg-slate-800">📄 Bills & Utilities</option>
+                                <option value="health" class="bg-slate-800">🏥 Healthcare</option>
+                                <option value="education" class="bg-slate-800">📚 Education</option>
+                                <option value="travel" class="bg-slate-800">✈️ Travel</option>
+                            </optgroup>
+                        </select>
+                    </div>
+
+                    <!-- Date Input -->
+                    <div>
+                        <label class="block text-white/70 text-sm font-medium mb-2">Date</label>
+                        <input type="date" id="transactionDate" class="glass-effect text-white px-4 py-3 rounded-xl border border-white/20 bg-transparent w-full focus:border-primary focus:outline-none">
+                    </div>
+
+                    <!-- Description Input -->
+                    <div>
+                        <label class="block text-white/70 text-sm font-medium mb-2">Description</label>
+                        <textarea id="transactionDescription" placeholder="Add a note about this transaction..." rows="3" class="glass-effect text-white px-4 py-3 rounded-xl border border-white/20 bg-transparent w-full focus:border-primary focus:outline-none resize-none"></textarea>
+                    </div>
+
+                    <!-- Receipt Upload (Pro Feature) -->
+                    <div>
+                        <div class="flex items-center justify-between mb-2">
+                            <label class="block text-white/70 text-sm font-medium">Receipt Photo</label>
+                            <span class="bg-gradient-to-r from-amber-500 to-orange-600 text-white px-2 py-1 rounded-full text-xs font-bold">PRO</span>
+                        </div>
+                        <div id="receiptUpload" class="receipt-preview rounded-xl p-8 text-center border-2 border-dashed border-gray-400 cursor-pointer hover:border-primary transition-colors" onclick="triggerFileUpload()">
+                            <div id="uploadPlaceholder">
+                                <svg class="w-12 h-12 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
+                                </svg>
+                                <p class="text-gray-600 font-medium">Click to upload receipt photo</p>
+                                <p class="text-gray-500 text-sm mt-1">PNG, JPG up to 10MB</p>
+                            </div>
+                            <div id="uploadPreview" class="hidden">
+                                <img id="previewImage" class="max-w-full h-32 object-cover rounded-lg mx-auto mb-2">
+                                <p class="text-gray-600 text-sm">Receipt uploaded successfully</p>
+                            </div>
+                        </div>
+                        <input type="file" id="receiptFile" accept="image/*" class="hidden" onchange="handleFileUpload(event)">
+                    </div>
+                </div>
+
+                <!-- Modal Footer -->
+                <div class="flex items-center justify-end space-x-4 p-6 border-t border-white/10">
+                    <button onclick="closeAddModal()" class="px-6 py-3 text-white/70 hover:text-white border border-white/20 rounded-xl hover:border-white/40 transition-colors">
+                        Cancel
+                    </button>
+                    <button onclick="saveTransaction()" class="px-6 py-3 bg-gradient-to-r from-primary to-secondary text-white rounded-xl font-semibold hover:from-secondary hover:to-primary transition-all duration-300 transform hover:scale-105">
+                        Save Transaction
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentTransactionType = 'expense';
+
+        // Navigation functions
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('-translate-x-full');
+        }
+
+        // Modal functions
+        function openAddModal() {
+            document.getElementById('addTransactionModal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+            
+            // Set default date to today
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('transactionDate').value = today;
+        }
+
+        function closeAddModal() {
+            document.getElementById('addTransactionModal').classList.add('hidden');
+            document.body.style.overflow = 'auto';
+            
+            // Reset form
+            document.getElementById('transactionAmount').value = '';
+            document.getElementById('transactionCategory').value = '';
+            document.getElementById('transactionDescription').value = '';
+            document.getElementById('receiptFile').value = '';
+            
+            // Reset upload preview
+            document.getElementById('uploadPlaceholder').classList.remove('hidden');
+            document.getElementById('uploadPreview').classList.add('hidden');
+        }
+
+        // Transaction type toggle
+        function setTransactionType(type) {
+            currentTransactionType = type;
+            
+            const incomeBtn = document.getElementById('incomeBtn');
+            const expenseBtn = document.getElementById('expenseBtn');
+            
+            if (type === 'income') {
+                incomeBtn.className = 'flex-1 py-3 px-4 rounded-lg font-medium transition-all duration-200 bg-emerald-500/20 text-emerald-400';
+                expenseBtn.className = 'flex-1 py-3 px-4 rounded-lg font-medium transition-all duration-200 text-white/70';
+            } else {
+                incomeBtn.className = 'flex-1 py-3 px-4 rounded-lg font-medium transition-all duration-200 text-white/70';
+                expenseBtn.className = 'flex-1 py-3 px-4 rounded-lg font-medium transition-all duration-200 bg-rose-500/20 text-rose-400';
+            }
+        }
+
+        // File upload functions
+        function triggerFileUpload() {
+            document.getElementById('receiptFile').click();
+        }
+
+        function handleFileUpload(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('previewImage').src = e.target.result;
+                    document.getElementById('uploadPlaceholder').classList.add('hidden');
+                    document.getElementById('uploadPreview').classList.remove('hidden');
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // Drag and drop functionality
+        const uploadArea = document.getElementById('receiptUpload');
+        
+        uploadArea.addEventListener('dragover', function(e) {
+            e.preventDefault();
+            this.classList.add('drag-over');
+        });
+        
+        uploadArea.addEventListener('dragleave', function(e) {
+            e.preventDefault();
+            this.classList.remove('drag-over');
+        });
+        
+        uploadArea.addEventListener('drop', function(e) {
+            e.preventDefault();
+            this.classList.remove('drag-over');
+            
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                const file = files[0];
+                if (file.type.startsWith('image/')) {
+                    document.getElementById('receiptFile').files = files;
+                    handleFileUpload({ target: { files: files } });
+                }
+            }
+        });
+
+        // Save transaction
+        function saveTransaction() {
+            const amount = document.getElementById('transactionAmount').value;
+            const category = document.getElementById('transactionCategory').value;
+            const date = document.getElementById('transactionDate').value;
+            const description = document.getElementById('transactionDescription').value;
+            
+            if (!amount || !category || !date) {
+                alert('Please fill in all required fields');
+                return;
+            }
+            
+            // Here you would typically send the data to your backend
+            console.log('Saving transaction:', {
+                type: currentTransactionType,
+                amount: amount,
+                category: category,
+                date: date,
+                description: description
+            });
+            
+            // Show success message
+            alert('Transaction saved successfully!');
+            closeAddModal();
+            
+            // Refresh the transaction list (in a real app, you'd fetch from backend)
+            // For demo purposes, we'll just close the modal
+        }
+
+        // Filter functions
+        function applyFilters() {
+            const startDate = document.getElementById('startDate').value;
+            const endDate = document.getElementById('endDate').value;
+            const category = document.getElementById('categoryFilter').value;
+            const minAmount = document.getElementById('minAmount').value;
+            const maxAmount = document.getElementById('maxAmount').value;
+            
+            const transactions = document.querySelectorAll('.transaction-item');
+            
+            transactions.forEach(transaction => {
+                let show = true;
+                
+                // Date filter
+                if (startDate || endDate) {
+                    const transactionDate = transaction.dataset.date;
+                    if (startDate && transactionDate < startDate) show = false;
+                    if (endDate && transactionDate > endDate) show = false;
+                }
+                
+                // Category filter
+                if (category && transaction.dataset.category !== category) {
+                    show = false;
+                }
+                
+                // Amount filter
+                const amount = parseInt(transaction.dataset.amount);
+                if (minAmount && amount < parseInt(minAmount)) show = false;
+                if (maxAmount && amount > parseInt(maxAmount)) show = false;
+                
+                transaction.style.display = show ? 'block' : 'none';
+            });
+        }
+
+        function clearFilters() {
+            document.getElementById('startDate').value = '';
+            document.getElementById('endDate').value = '';
+            document.getElementById('categoryFilter').value = '';
+            document.getElementById('minAmount').value = '';
+            document.getElementById('maxAmount').value = '';
+            
+            // Show all transactions
+            document.querySelectorAll('.transaction-item').forEach(transaction => {
+                transaction.style.display = 'block';
+            });
+        }
+
+        // Transaction actions
+        function editTransaction(id) {
+            alert(`Edit transaction ${id} - This would open an edit modal`);
+        }
+
+        function deleteTransaction(id) {
+            if (confirm('Are you sure you want to delete this transaction?')) {
+                alert(`Transaction ${id} deleted successfully!`);
+                // In a real app, you'd remove the transaction from the DOM and update the backend
+            }
+        }
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set default transaction type
+            setTransactionType('expense');
+            
+            // Add hover effects to transaction rows
+            const transactionItems = document.querySelectorAll('.transaction-item');
+            transactionItems.forEach(item => {
+                item.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateX(4px)';
+                });
+                
+                item.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateX(0)';
+                });
+            });
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97031fbcf28f3d35',t:'MTc1NTM3MDI5Ni4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>

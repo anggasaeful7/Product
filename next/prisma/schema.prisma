@@ -1,0 +1,570 @@
+// Prisma schema for AngsFlow per SRS
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url       = env("DATABASE_URL")
+}
+
+// Enums
+enum AccountType {
+  PERSONAL
+  ORG
+}
+
+enum Role {
+  OWNER
+  ADMIN
+  MEMBER
+}
+
+enum MembershipStatus {
+  ACTIVE
+  INVITED
+  LEFT
+}
+
+enum TxnType {
+  INCOME
+  EXPENSE
+}
+
+enum PaymentMethod {
+  CASH
+  TRANSFER
+  CARD
+  EWALLET
+  OTHER
+}
+
+enum Plan {
+  FREE
+  PRO
+  TEAM
+}
+
+enum Provider {
+  STRIPE
+  MIDTRANS
+}
+
+enum SubscriptionStatus {
+  ACTIVE
+  INACTIVE
+  PAST_DUE
+  CANCELED
+}
+
+enum PaymentStatus {
+  REQUIRES_ACTION
+  PENDING
+  SUCCEEDED
+  FAILED
+  CANCELED
+}
+
+enum DevicePlatform {
+  WEB
+  IOS
+  ANDROID
+}
+
+enum StorageBucket {
+  attachments
+  exports
+  avatars
+}
+
+enum AttachmentPurpose {
+  TRANSACTION
+  REPORT
+  AI_SUMMARY
+  OTHER
+}
+
+enum BudgetPeriod {
+  MONTHLY
+  QUARTERLY
+  ANNUAL
+}
+
+enum ReportDeliveryChannel {
+  EMAIL
+  IN_APP
+  NONE
+}
+
+enum ReportTrend {
+  UP
+  DOWN
+  FLAT
+}
+
+enum InsightTone {
+  POSITIVE
+  WARNING
+  NEUTRAL
+}
+
+enum AIMessageRole {
+  USER
+  ASSISTANT
+  SYSTEM
+}
+
+enum NotificationType {
+  GENERAL
+  BUDGET_ALERT
+  REPORT_READY
+  INVITATION
+  PAYMENT
+  TRANSACTION
+}
+
+enum NotificationChannel {
+  IN_APP
+  EMAIL
+  PUSH
+  SLACK
+}
+
+enum NotificationPriority {
+  LOW
+  NORMAL
+  HIGH
+}
+
+// Models
+model User {
+  id           String    @id @default(cuid())
+  email        String    @unique
+  passwordHash String
+  name         String?
+  locale       String?   @default("id")
+  theme        String?   @default("system")
+  isVerified   Boolean   @default(false)
+  lastLoginAt  DateTime?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  accountsOwned Account[] @relation("AccountOwner")
+  memberships   Membership[]
+  transactions  Transaction[]
+  approvedTransactions Transaction[] @relation("TransactionApprovedBy")
+  devices       Device[]
+  auditLogs     AuditLog[] @relation("AuditActor")
+  targetedAuditLogs AuditLog[] @relation("AuditTarget")
+  notifications Notification[]
+  aiConversations AIConversation[]
+  aiUsages      AIUsage[]
+  transactionTags TransactionTag[] @relation("TagAssignedBy")
+  sentInvitations Invitation[] @relation("UserInvitations")
+}
+
+model Account {
+  id        String      @id @default(cuid())
+  name      String
+  currency  String      @default("IDR")
+  type      AccountType
+  ownerId   String
+  owner     User        @relation("AccountOwner", fields: [ownerId], references: [id])
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+
+  memberships  Membership[]
+  categories   Category[]
+  transactions Transaction[]
+  budgets      Budget[]
+  reports      MonthlyReport[]
+  notifications Notification[]
+  attachments  Attachment[]
+  aiConversations AIConversation[]
+  aiUsages     AIUsage[]
+  subscription Subscription?
+  auditLogs    AuditLog[]
+  invitations  Invitation[]
+  tags         Tag[]
+}
+
+model Membership {
+  id             String            @id @default(cuid())
+  accountId      String
+  userId         String
+  role           Role
+  status         MembershipStatus  @default(ACTIVE)
+  invitedEmail   String?
+  invitedAt      DateTime?
+  lastAccessAt   DateTime?
+  createdAt      DateTime          @default(now())
+  updatedAt      DateTime          @updatedAt
+
+  account Account @relation(fields: [accountId], references: [id])
+  user    User    @relation(fields: [userId], references: [id])
+
+  @@unique([accountId, userId])
+  @@index([accountId, status])
+}
+
+model Invitation {
+  id          String            @id @default(cuid())
+  accountId   String
+  email       String
+  role        Role
+  inviterId   String
+  token       String            @unique
+  expiresAt   DateTime
+  acceptedAt  DateTime?
+  createdAt   DateTime          @default(now())
+
+  account Account @relation(fields: [accountId], references: [id])
+  inviter User    @relation("UserInvitations", fields: [inviterId], references: [id])
+}
+
+model Category {
+  id          String    @id @default(cuid())
+  accountId   String
+  name        String
+  type        TxnType
+  color       String?
+  icon        String?
+  order       Int       @default(0)
+  archivedAt   DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  account     Account     @relation(fields: [accountId], references: [id])
+  transactions Transaction[]
+  budgets      Budget[]
+
+  @@unique([accountId, name])
+  @@index([accountId, type])
+  @@index([accountId, archivedAt])
+}
+
+model Tag {
+  id        String   @id @default(cuid())
+  accountId String
+  name      String
+  color     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  account Account @relation(fields: [accountId], references: [id])
+  transactions TransactionTag[]
+
+  @@unique([accountId, name])
+  @@index([accountId])
+}
+
+model Transaction {
+  id               String    @id @default(cuid())
+  accountId        String
+  categoryId       String
+  userId           String
+  type             TxnType
+  amount           Decimal   @db.Decimal(18, 2)
+  currency         String    @default("IDR")
+  occurredAt       DateTime
+  note             String?
+  attachmentsCount Int       @default(0)
+  paymentMethod    PaymentMethod @default(TRANSFER)
+  merchant         String?
+  counterparty     String?
+  recurrenceGroupId String?
+  approvedById     String?
+  approvedAt       DateTime?
+  isFlagged        Boolean   @default(false)
+  deletedAt        DateTime?
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+
+  account     Account     @relation(fields: [accountId], references: [id])
+  category    Category    @relation(fields: [categoryId], references: [id])
+  user        User        @relation(fields: [userId], references: [id])
+  approvedBy  User?       @relation("TransactionApprovedBy", fields: [approvedById], references: [id])
+  attachments Attachment[]
+  tags        TransactionTag[]
+
+  @@index([accountId, occurredAt])
+  @@index([accountId, categoryId])
+  @@index([accountId, paymentMethod])
+  @@index([accountId, recurrenceGroupId])
+  @@index([userId])
+}
+
+model TransactionTag {
+  transactionId String
+  tagId         String
+  assignedById  String?
+  assignedAt    DateTime @default(now())
+
+  transaction Transaction @relation(fields: [transactionId], references: [id])
+  tag         Tag         @relation(fields: [tagId], references: [id])
+  assignedBy  User?       @relation("TagAssignedBy", fields: [assignedById], references: [id])
+
+  @@id([transactionId, tagId])
+  @@index([tagId])
+}
+
+model Budget {
+  id         String       @id @default(cuid())
+  accountId  String
+  categoryId String
+  month      Int
+  year       Int
+  amount     Decimal      @db.Decimal(18, 2)
+  period     BudgetPeriod @default(MONTHLY)
+  carryOver  Boolean      @default(false)
+  notes      String?
+  lockedAt   DateTime?
+  alert80    Boolean      @default(false)
+  alert100   Boolean      @default(false)
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
+
+  account  Account  @relation(fields: [accountId], references: [id])
+  category Category @relation(fields: [categoryId], references: [id])
+
+  @@unique([accountId, categoryId, month, year])
+}
+
+model MonthlyReport {
+  id              String                 @id @default(cuid())
+  accountId       String
+  month           Int
+  year            Int
+  metrics         Json
+  summary         String?
+  insights        Json?
+  sentAt          DateTime?
+  deliveryChannel ReportDeliveryChannel? @default(EMAIL)
+  generatedAt     DateTime               @default(now())
+  generatedByCron Boolean               @default(false)
+  aiSummaryId     String?
+
+  account Account @relation(fields: [accountId], references: [id])
+  highlights ReportHighlight[]
+  kpis       ReportKPI[]
+  insightItems ReportInsight[]
+
+  @@unique([accountId, month, year])
+}
+
+model ReportHighlight {
+  id       String  @id @default(cuid())
+  reportId String
+  text     String
+  order    Int     @default(0)
+  createdAt DateTime @default(now())
+
+  report MonthlyReport @relation(fields: [reportId], references: [id], onDelete: Cascade)
+
+  @@index([reportId, order])
+}
+
+model ReportKPI {
+  id       String     @id @default(cuid())
+  reportId String
+  label    String
+  value    String
+  delta    String?
+  trend    ReportTrend @default(FLAT)
+  order    Int        @default(0)
+  createdAt DateTime  @default(now())
+
+  report MonthlyReport @relation(fields: [reportId], references: [id], onDelete: Cascade)
+
+  @@index([reportId, order])
+}
+
+model ReportInsight {
+  id          String      @id @default(cuid())
+  reportId    String
+  title       String
+  description String
+  tone        InsightTone @default(NEUTRAL)
+  order       Int         @default(0)
+  createdAt   DateTime    @default(now())
+
+  report MonthlyReport @relation(fields: [reportId], references: [id], onDelete: Cascade)
+
+  @@index([reportId, order])
+}
+
+model AIConversation {
+  id                 String   @id @default(cuid())
+  accountId          String
+  userId             String
+  messages           Json?
+  model              String
+  questionCountMonth Int      @default(0)
+  lastQuotaResetAt   DateTime?
+  lastUsedAt         DateTime @default(now())
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  account Account @relation(fields: [accountId], references: [id])
+  user    User    @relation(fields: [userId], references: [id])
+  entries AIMessage[]
+
+  @@index([accountId, userId])
+}
+
+model AIMessage {
+  id             String        @id @default(cuid())
+  conversationId String
+  role           AIMessageRole
+  content        String
+  tokensUsed     Int           @default(0)
+  metadata       Json?
+  createdAt      DateTime      @default(now())
+
+  conversation AIConversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+
+  @@index([conversationId, createdAt])
+}
+
+model AIUsage {
+  id               String   @id @default(cuid())
+  accountId        String
+  userId           String
+  model            String
+  promptTokens     Int
+  completionTokens Int
+  latencyMs        Int
+  costEst          Decimal? @db.Decimal(10, 4)
+  createdAt        DateTime @default(now())
+
+  account Account @relation(fields: [accountId], references: [id])
+  user    User    @relation(fields: [userId], references: [id])
+
+  @@index([accountId, userId])
+}
+
+model Subscription {
+  id               String               @id @default(cuid())
+  accountId        String               @unique
+  plan             Plan                 @default(FREE)
+  provider         Provider?
+  status           SubscriptionStatus   @default(INACTIVE)
+  customerId       String?
+  trialEndsAt      DateTime?
+  lastInvoiceAt    DateTime?
+  cancelAtPeriodEnd Boolean             @default(false)
+  cancelReason     String?
+  createdAt        DateTime             @default(now())
+  updatedAt        DateTime             @updatedAt
+
+  account Account @relation(fields: [accountId], references: [id])
+}
+
+model PaymentIntent {
+  id         String        @id @default(cuid())
+  provider   Provider
+  externalId String        @unique
+  status     PaymentStatus
+  amount     Decimal       @db.Decimal(18, 2)
+  currency   String        @default("IDR")
+  raw        Json
+  createdAt  DateTime      @default(now())
+}
+
+model Notification {
+  id        String               @id @default(cuid())
+  accountId String
+  userId    String
+  type      NotificationType     @default(GENERAL)
+  channel   NotificationChannel  @default(IN_APP)
+  priority  NotificationPriority @default(NORMAL)
+  title     String
+  body      String
+  data      Json?
+  linkUrl   String?
+  scheduledAt DateTime?
+  sentAt    DateTime?
+  readAt    DateTime?
+  createdAt DateTime            @default(now())
+  updatedAt DateTime            @updatedAt
+
+  account Account @relation(fields: [accountId], references: [id])
+  user    User    @relation(fields: [userId], references: [id])
+
+  @@index([accountId, userId])
+  @@index([userId, channel, readAt])
+}
+
+model Device {
+  id         String         @id @default(cuid())
+  userId     String
+  fcmToken   String         @unique
+  platform   DevicePlatform @default(WEB)
+  lastSeenAt DateTime?
+  revokedAt  DateTime?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id])
+}
+
+model Attachment {
+  id            String           @id @default(cuid())
+  accountId     String
+  transactionId String?
+  bucket        StorageBucket
+  purpose       AttachmentPurpose @default(TRANSACTION)
+  path          String
+  size          Int
+  mime          String
+  checksum      String
+  scannedAt     DateTime?
+  isSafe        Boolean @default(true)
+  createdAt     DateTime @default(now())
+
+  account     Account     @relation(fields: [accountId], references: [id])
+  transaction Transaction? @relation(fields: [transactionId], references: [id])
+
+  @@index([accountId, transactionId])
+}
+
+model AuditLog {
+  id         String   @id @default(cuid())
+  accountId  String
+  actorId    String
+  targetUserId String?
+  action     String
+  entity     String
+  entityId   String?
+  before     Json?
+  after      Json?
+  metadata   Json?
+  ip         String?
+  userAgent  String?
+  createdAt  DateTime @default(now())
+
+  account Account @relation(fields: [accountId], references: [id])
+  actor   User    @relation("AuditActor", fields: [actorId], references: [id])
+  targetUser User? @relation("AuditTarget", fields: [targetUserId], references: [id])
+
+  @@index([accountId])
+  @@index([accountId, entity])
+  @@index([actorId, createdAt])
+}
+
+model SystemConfig {
+  key       String @id
+  value     Json
+  updatedAt DateTime @updatedAt
+}
+
+model Idempotency {
+  key         String   @id
+  requestHash String?
+  method      String?
+  path        String?
+  status      Int?
+  response    Json?
+  createdAt   DateTime @default(now())
+}

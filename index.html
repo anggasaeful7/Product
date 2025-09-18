@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Angsflow: platform modern untuk kelola keuangan individu & tim, dengan budgeting, laporan, dan AI Coach." />
+    <link rel="canonical" href="https://angsflow.com/" />
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon.ico">
+    <link rel="apple-touch-icon" href="apple-touch-icon.png">
+    <link rel="manifest" href="site.webmanifest">
+    <meta property="og:title" content="Angsflow - Modern Financial Management" />
+    <meta property="og:description" content="Kelola keuangan modern & kolaboratif untuk individu dan tim." />
+    <meta property="og:image" content="https://angsflow.com/AngsFlow.png" />
+    <meta property="og:url" content="https://angsflow.com/" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <title>Angsflow - Modern Financial Management Platform</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#60A5FA',
+                        secondary: '#3B82F6',
+                        accent: '#F59E0B',
+                        dark: '#0F172A',
+                        light: '#F8FAFC'
+                    },
+                    fontFamily: {
+                        'inter': ['Inter', 'sans-serif']
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'glow': 'glow 2s ease-in-out infinite alternate',
+                        'slide-up': 'slideUp 0.8s ease-out',
+                        'fade-in': 'fadeIn 1s ease-out'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        @keyframes glow {
+            from { box-shadow: 0 0 20px #60A5FA40; }
+            to { box-shadow: 0 0 30px #60A5FA80, 0 0 40px #60A5FA40; }
+        }
+        @keyframes slideUp {
+            from { transform: translateY(30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .gradient-text {
+            background: linear-gradient(135deg, #60A5FA, #3B82F6, #1E40AF);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+    </style>
+</head>
+<body class="font-inter bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 min-h-screen overflow-x-hidden">
+    <!-- Animated Background -->
+    <div class="fixed inset-0 overflow-hidden pointer-events-none">
+        <div class="absolute -top-40 -right-40 w-80 h-80 bg-primary/20 rounded-full blur-3xl animate-float"></div>
+        <div class="absolute top-1/2 -left-40 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl animate-float" style="animation-delay: -2s;"></div>
+        <div class="absolute bottom-0 right-1/3 w-64 h-64 bg-indigo-500/15 rounded-full blur-3xl animate-float" style="animation-delay: -4s;"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="glass-effect fixed top-0 w-full z-50 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <div class="flex items-center">
+                    <!-- Custom AngsFlow Logo -->
+                    <div class="relative mr-4">
+                        <img src="AngsFlow.png" alt="AngsFlow Logo" class="h-12 w-auto md:h-20 object-contain" />
+                    </div>
+                    <span class="text-3xl font-bold text-white tracking-tight">Angs<span class="gradient-text">Flow</span></span>
+                </div>
+                <div class="hidden md:flex space-x-8">
+                    <a href="#features" class="text-white/80 hover:text-primary transition-all duration-300 font-medium relative group">
+                        Fitur
+                        <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full"></span>
+                    </a>
+                    <a href="#pricing" class="text-white/80 hover:text-primary transition-all duration-300 font-medium relative group">
+                        Harga
+                        <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full"></span>
+                    </a>
+                    <a href="#about" class="text-white/80 hover:text-primary transition-all duration-300 font-medium relative group">
+                        Tentang
+                        <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full"></span>
+                    </a>
+                </div>
+                <div class="flex space-x-4">
+                    <a href="./login.html" class="text-white/80 hover:text-primary transition-all duration-300 font-medium px-4 py-2">Masuk</a>
+                    <a href="./register.html" class="bg-gradient-to-r from-primary to-secondary hover:from-secondary hover:to-primary text-white px-6 py-2.5 rounded-full font-semibold transition-all duration-300 shadow-lg hover:shadow-primary/25 transform hover:scale-105">
+                        Daftar Gratis
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative pt-32 pb-20 px-4 overflow-hidden">
+        <div class="max-w-7xl mx-auto text-center relative z-10">
+            <div class="animate-slide-up">
+                <h1 class="text-6xl md:text-8xl font-bold text-white mb-8 leading-tight">
+                    Kelola Keuangan <br>
+                    <span class="gradient-text">Modern</span> & <span class="gradient-text">Kolaboratif</span>
+                </h1>
+                <p class="text-xl md:text-2xl text-white/80 mb-12 max-w-4xl mx-auto leading-relaxed">
+                    Satukan pencatatan transaksi, budgeting, dan laporan AI untuk individu maupun tim. 
+                    <br class="hidden md:block">Tidak lagi tercecer di Excel atau catatan manual!
+                </p>
+            </div>
+            
+            <div class="flex flex-col sm:flex-row gap-6 justify-center mb-16 animate-fade-in" style="animation-delay: 0.3s;">
+                <a href="./register.html" class="group bg-gradient-to-r from-primary to-secondary hover:from-secondary hover:to-primary text-white px-10 py-5 rounded-full text-xl font-bold transition-all duration-300 shadow-2xl hover:shadow-primary/50 transform hover:scale-105 hover:-translate-y-1">
+                    <span class="flex items-center justify-center">
+                        Mulai Gratis Sekarang
+                        <svg class="w-6 h-6 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+                        </svg>
+                    </span>
+                </a>
+                <a href="./register.html" class="glass-effect text-white hover:bg-white/20 px-10 py-5 rounded-full text-xl font-bold transition-all duration-300 border border-white/30 hover:border-primary/50 transform hover:scale-105">
+                    Lihat Demo
+                </a>
+            </div>
+            
+            <!-- Hero Visual - Enhanced -->
+            <div class="relative animate-fade-in" style="animation-delay: 0.6s;">
+                <div class="glass-effect rounded-3xl p-8 max-w-6xl mx-auto shadow-2xl border border-white/20">
+                    <div class="grid md:grid-cols-3 gap-8">
+                        <div class="group bg-gradient-to-br from-emerald-500/20 to-green-600/20 p-8 rounded-2xl border border-emerald-400/30 hover:border-emerald-400/60 transition-all duration-300 hover:transform hover:scale-105">
+                            <div class="text-emerald-400 text-4xl mb-4 group-hover:scale-110 transition-transform">💰</div>
+                            <h3 class="font-bold text-white text-lg mb-3">Pemasukan</h3>
+                            <p class="text-3xl font-bold text-emerald-400 mb-2">Rp 15.5M</p>
+                            <div class="flex items-center text-emerald-300 text-sm">
+                                <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M5.293 7.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 5.414V17a1 1 0 11-2 0V5.414L6.707 7.707a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
+                                </svg>
+                                +12% dari bulan lalu
+                            </div>
+                        </div>
+                        
+                        <div class="group bg-gradient-to-br from-rose-500/20 to-red-600/20 p-8 rounded-2xl border border-rose-400/30 hover:border-rose-400/60 transition-all duration-300 hover:transform hover:scale-105">
+                            <div class="text-rose-400 text-4xl mb-4 group-hover:scale-110 transition-transform">📊</div>
+                            <h3 class="font-bold text-white text-lg mb-3">Pengeluaran</h3>
+                            <p class="text-3xl font-bold text-rose-400 mb-2">Rp 8.2M</p>
+                            <div class="flex items-center text-rose-300 text-sm">
+                                <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M14.707 12.293a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 111.414-1.414L9 14.586V3a1 1 0 012 0v11.586l2.293-2.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                </svg>
+                                -5% dari target
+                            </div>
+                        </div>
+                        
+                        <div class="group bg-gradient-to-br from-primary/20 to-blue-600/20 p-8 rounded-2xl border border-primary/30 hover:border-primary/60 transition-all duration-300 hover:transform hover:scale-105">
+                            <div class="text-primary text-4xl mb-4 group-hover:scale-110 transition-transform">🤖</div>
+                            <h3 class="font-bold text-white text-lg mb-3">AI Insight</h3>
+                            <div class="bg-white/10 rounded-lg p-4 border border-white/20">
+                                <p class="text-white/90 text-sm leading-relaxed">"Biaya makan naik 25%, coba set budget Rp 1jt untuk bulan depan"</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Floating Elements -->
+                    <div class="absolute -top-4 -right-4 w-8 h-8 bg-primary/30 rounded-full animate-float"></div>
+                    <div class="absolute -bottom-4 -left-4 w-6 h-6 bg-emerald-400/30 rounded-full animate-float" style="animation-delay: -1s;"></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Scroll Indicator -->
+        <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
+            <svg class="w-6 h-6 text-white/60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+            </svg>
+        </div>
+    </section>
+
+    <!-- Problem & Solution -->
+    <section class="relative py-20 overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-br from-slate-800 via-slate-900 to-indigo-900"></div>
+        <div class="relative max-w-7xl mx-auto px-4 z-10">
+            <div class="grid lg:grid-cols-2 gap-16 items-center">
+                <div class="space-y-8">
+                    <div class="animate-slide-up">
+                        <h2 class="text-4xl md:text-5xl font-bold text-white mb-8">
+                            Masalah yang <span class="gradient-text">Sering Dialami</span>
+                        </h2>
+                        <div class="space-y-6">
+                            <div class="group flex items-start space-x-4 p-6 rounded-2xl bg-red-500/10 border border-red-500/20 hover:border-red-400/40 transition-all duration-300">
+                                <div class="bg-red-500/20 text-red-400 rounded-full p-3 group-hover:scale-110 transition-transform">
+                                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                                    </svg>
+                                </div>
+                                <p class="text-white/90 text-lg leading-relaxed">Alat keuangan tercecer di Excel, catatan manual, dan app terpisah</p>
+                            </div>
+                            <div class="group flex items-start space-x-4 p-6 rounded-2xl bg-red-500/10 border border-red-500/20 hover:border-red-400/40 transition-all duration-300">
+                                <div class="bg-red-500/20 text-red-400 rounded-full p-3 group-hover:scale-110 transition-transform">
+                                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                                    </svg>
+                                </div>
+                                <p class="text-white/90 text-lg leading-relaxed">Analisis keuangan minim dan tidak mendalam</p>
+                            </div>
+                            <div class="group flex items-start space-x-4 p-6 rounded-2xl bg-red-500/10 border border-red-500/20 hover:border-red-400/40 transition-all duration-300">
+                                <div class="bg-red-500/20 text-red-400 rounded-full p-3 group-hover:scale-110 transition-transform">
+                                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                                    </svg>
+                                </div>
+                                <p class="text-white/90 text-lg leading-relaxed">Sulit berkolaborasi dengan tim atau keluarga</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="space-y-8">
+                    <div class="animate-slide-up" style="animation-delay: 0.2s;">
+                        <h2 class="text-4xl md:text-5xl font-bold text-white mb-8">
+                            Solusi <span class="gradient-text">Angsflow</span>
+                        </h2>
+                        <div class="space-y-6">
+                            <div class="group flex items-start space-x-4 p-6 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 hover:border-emerald-400/40 transition-all duration-300">
+                                <div class="bg-emerald-500/20 text-emerald-400 rounded-full p-3 group-hover:scale-110 transition-transform">
+                                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                    </svg>
+                                </div>
+                                <p class="text-white/90 text-lg leading-relaxed">Satu platform untuk semua: transaksi, budgeting, laporan</p>
+                            </div>
+                            <div class="group flex items-start space-x-4 p-6 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 hover:border-emerald-400/40 transition-all duration-300">
+                                <div class="bg-emerald-500/20 text-emerald-400 rounded-full p-3 group-hover:scale-110 transition-transform">
+                                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                    </svg>
+                                </div>
+                                <p class="text-white/90 text-lg leading-relaxed">AI Coach memberikan insight dan rekomendasi cerdas</p>
+                            </div>
+                            <div class="group flex items-start space-x-4 p-6 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 hover:border-emerald-400/40 transition-all duration-300">
+                                <div class="bg-emerald-500/20 text-emerald-400 rounded-full p-3 group-hover:scale-110 transition-transform">
+                                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                    </svg>
+                                </div>
+                                <p class="text-white/90 text-lg leading-relaxed">Kolaborasi tim dengan role-based access control</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features -->
+    <section id="features" class="relative py-20 overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-br from-indigo-900 via-blue-900 to-slate-900"></div>
+        <div class="relative max-w-7xl mx-auto px-4 z-10">
+            <div class="text-center mb-16">
+                <h2 class="text-5xl md:text-6xl font-bold text-white mb-6">
+                    Fitur <span class="gradient-text">Unggulan</span>
+                </h2>
+                <p class="text-xl md:text-2xl text-white/80 max-w-3xl mx-auto">
+                    Semua yang Anda butuhkan untuk mengelola keuangan modern
+                </p>
+            </div>
+            
+            <div class="grid lg:grid-cols-3 gap-8">
+                <!-- Individual Features -->
+                <div class="group glass-effect rounded-3xl p-8 border border-white/20 hover:border-primary/50 transition-all duration-500 hover:transform hover:scale-105 hover:-translate-y-2">
+                    <div class="bg-gradient-to-br from-primary/20 to-blue-600/20 rounded-2xl w-20 h-20 flex items-center justify-center text-4xl mb-8 group-hover:scale-110 transition-transform">
+                        👤
+                    </div>
+                    <h3 class="text-2xl font-bold text-white mb-6">Dashboard Pribadi</h3>
+                    <ul class="space-y-4 text-white/80">
+                        <li class="flex items-center">
+                            <div class="w-2 h-2 bg-primary rounded-full mr-3"></div>
+                            Tracking kategori (Income, Fixed, Variable)
+                        </li>
+                        <li class="flex items-center">
+                            <div class="w-2 h-2 bg-primary rounded-full mr-3"></div>
+                            Budgeting per kategori
+                        </li>
+                        <li class="flex items-center">
+                            <div class="w-2 h-2 bg-primary rounded-full mr-3"></div>
+                            Reports & Charts real-time
+                        </li>
+                        <li class="flex items-center">
+                            <div class="w-2 h-2 bg-primary rounded-full mr-3"></div>
+                            Export PDF/CSV
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Team Features -->
+                <div class="group glass-effect rounded-3xl p-8 border border-white/20 hover:border-emerald-400/50 transition-all duration-500 hover:transform hover:scale-105 hover:-translate-y-2">
+                    <div class="bg-gradient-to-br from-emerald-500/20 to-green-600/20 rounded-2xl w-20 h-20 flex items-center justify-center text-4xl mb-8 group-hover:scale-110 transition-transform">
+                        👥
+                    </div>
+                    <h3 class="text-2xl font-bold text-white mb-6">Kolaborasi Tim</h3>
+                    <ul class="space-y-4 text-white/80">
+                        <li class="flex items-center">
+                            <div class="w-2 h-2 bg-emerald-400 rounded-full mr-3"></div>
+                            Buat organisasi & undang member
+                        </li>
+                        <li class="flex items-center">
+                            <div class="w-2 h-2 bg-emerald-400 rounded-full mr-3"></div>
+                            Role-based access (Owner/Admin/Member)
+                        </li>
+                        <li class="flex items-center">
+                            <div class="w-2 h-2 bg-emerald-400 rounded-full mr-3"></div>
+                            Shared dashboard & kategori
+                        </li>
+                        <li class="flex items-center">
+                            <div class="w-2 h-2 bg-emerald-400 rounded-full mr-3"></div>
+                            Org switcher untuk multi-tim
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- AI Features -->
+                <div class="group glass-effect rounded-3xl p-8 border border-white/20 hover:border-purple-400/50 transition-all duration-500 hover:transform hover:scale-105 hover:-translate-y-2">
+                    <div class="bg-gradient-to-br from-purple-500/20 to-indigo-600/20 rounded-2xl w-20 h-20 flex items-center justify-center text-4xl mb-8 group-hover:scale-110 transition-transform">
+                        🤖
+                    </div>
+                    <h3 class="text-2xl font-bold text-white mb-6">AI Coach</h3>
+                    <ul class="space-y-4 text-white/80">
+                        <li class="flex items-center">
+                            <div class="w-2 h-2 bg-purple-400 rounded-full mr-3"></div>
+                            Chat dengan AI untuk insight keuangan
+                        </li>
+                        <li class="flex items-center">
+                            <div class="w-2 h-2 bg-purple-400 rounded-full mr-3"></div>
+                            Monthly summary otomatis
+                        </li>
+                        <li class="flex items-center">
+                            <div class="w-2 h-2 bg-purple-400 rounded-full mr-3"></div>
+                            Rekomendasi budgeting cerdas
+                        </li>
+                        <li class="flex items-center">
+                            <div class="w-2 h-2 bg-purple-400 rounded-full mr-3"></div>
+                            Analisis kolektif untuk tim
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing -->
+    <section id="pricing" class="relative py-20 overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-br from-slate-900 via-indigo-900 to-blue-900"></div>
+        <div class="relative max-w-7xl mx-auto px-4 z-10">
+            <div class="text-center mb-16">
+                <h2 class="text-5xl md:text-6xl font-bold text-white mb-6">
+                    Pilih Plan yang <span class="gradient-text">Tepat</span>
+                </h2>
+                <p class="text-xl md:text-2xl text-white/80">Mulai gratis, upgrade kapan saja</p>
+            </div>
+            
+            <div class="grid lg:grid-cols-3 gap-8">
+                <!-- Free Plan -->
+                <div class="group glass-effect rounded-3xl p-8 border border-white/20 hover:border-primary/50 transition-all duration-500 hover:transform hover:scale-105">
+                    <div class="text-center mb-8">
+                        <h3 class="text-3xl font-bold text-white mb-4">Free</h3>
+                        <p class="text-white/70 mb-6">Untuk individu yang baru memulai</p>
+                        <div class="text-5xl font-bold text-white mb-2">Rp 0</div>
+                        <p class="text-white/60">/bulan</p>
+                    </div>
+                    <ul class="space-y-4 mb-8">
+                        <li class="flex items-center text-white/90">
+                            <svg class="w-5 h-5 text-emerald-400 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                            </svg>
+                            Dashboard pribadi
+                        </li>
+                        <li class="flex items-center text-white/90">
+                            <svg class="w-5 h-5 text-emerald-400 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                            </svg>
+                            Kategori & budgeting
+                        </li>
+                        <li class="flex items-center text-white/90">
+                            <svg class="w-5 h-5 text-emerald-400 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                            </svg>
+                            Laporan dasar
+                        </li>
+                        <li class="flex items-center text-white/90">
+                            <svg class="w-5 h-5 text-emerald-400 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                            </svg>
+                            5 pertanyaan AI/bulan
+                        </li>
+                        <li class="flex items-center text-white/50">
+                            <svg class="w-5 h-5 text-gray-500 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                            </svg>
+                            Export PDF/CSV
+                        </li>
+                    </ul>
+                    <button class="w-full border-2 border-primary text-primary hover:bg-primary hover:text-white py-4 rounded-2xl font-bold text-lg transition-all duration-300 group-hover:scale-105">
+                        Mulai Gratis
+                    </button>
+                </div>
+
+                <!-- Pro Individual -->
+                <div class="relative group">
+                    <div class="absolute -inset-1 bg-gradient-to-r from-primary to-secondary rounded-3xl blur opacity-75 group-hover:opacity-100 transition duration-1000 group-hover:duration-200 animate-glow"></div>
+                    <div class="relative glass-effect rounded-3xl p-8 border border-primary/50 transform scale-105">
+                        <div class="absolute -top-4 left-1/2 transform -translate-x-1/2">
+                            <div class="bg-gradient-to-r from-accent to-orange-500 text-white px-6 py-2 rounded-full text-sm font-bold shadow-lg">
+                                POPULER
+                            </div>
+                        </div>
+                        <div class="text-center mb-8 mt-4">
+                            <h3 class="text-3xl font-bold text-white mb-4">Pro Individual</h3>
+                            <p class="text-white/70 mb-6">Untuk profesional & freelancer</p>
+                            <div class="text-5xl font-bold gradient-text mb-2">Rp 49K</div>
+                            <p class="text-white/60">/bulan</p>
+                        </div>
+                        <ul class="space-y-4 mb-8">
+                            <li class="flex items-center text-white/90">
+                                <svg class="w-5 h-5 text-emerald-400 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                </svg>
+                                Semua fitur Free
+                            </li>
+                            <li class="flex items-center text-white/90">
+                                <svg class="w-5 h-5 text-emerald-400 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                </svg>
+                                Export PDF/CSV
+                            </li>
+                            <li class="flex items-center text-white/90">
+                                <svg class="w-5 h-5 text-emerald-400 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                </svg>
+                                AI Chat unlimited
+                            </li>
+                            <li class="flex items-center text-white/90">
+                                <svg class="w-5 h-5 text-emerald-400 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                </svg>
+                                Monthly report otomatis
+                            </li>
+                            <li class="flex items-center text-white/90">
+                                <svg class="w-5 h-5 text-emerald-400 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                </svg>
+                                AI insight & rekomendasi
+                            </li>
+                        </ul>
+                        <button class="w-full bg-gradient-to-r from-primary to-secondary hover:from-secondary hover:to-primary text-white py-4 rounded-2xl font-bold text-lg transition-all duration-300 shadow-lg hover:shadow-primary/50 transform hover:scale-105">
+                            Upgrade ke Pro
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Pro Team -->
+                <div class="group glass-effect rounded-3xl p-8 border border-white/20 hover:border-purple-400/50 transition-all duration-500 hover:transform hover:scale-105">
+                    <div class="text-center mb-8">
+                        <h3 class="text-3xl font-bold text-white mb-4">Pro Team</h3>
+                        <p class="text-white/70 mb-6">Untuk tim & organisasi</p>
+                        <div class="text-5xl font-bold text-white mb-2">Rp 99K</div>
+                        <p class="text-white/60">/bulan</p>
+                    </div>
+                    <ul class="space-y-4 mb-8">
+                        <li class="flex items-center text-white/90">
+                            <svg class="w-5 h-5 text-emerald-400 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                            </svg>
+                            Semua fitur Pro
+                        </li>
+                        <li class="flex items-center text-white/90">
+                            <svg class="w-5 h-5 text-emerald-400 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                            </svg>
+                            Buat organisasi
+                        </li>
+                        <li class="flex items-center text-white/90">
+                            <svg class="w-5 h-5 text-emerald-400 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                            </svg>
+                            Role-based access
+                        </li>
+                        <li class="flex items-center text-white/90">
+                            <svg class="w-5 h-5 text-emerald-400 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                            </svg>
+                            Analisis kolektif AI
+                        </li>
+                        <li class="flex items-center text-white/90">
+                            <svg class="w-5 h-5 text-emerald-400 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                            </svg>
+                            Multi-org switcher
+                        </li>
+                    </ul>
+                    <button class="w-full border-2 border-purple-400 text-purple-400 hover:bg-purple-400 hover:text-white py-4 rounded-2xl font-bold text-lg transition-all duration-300 group-hover:scale-105">
+                        Mulai Team Plan
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Us Section -->
+    <section id="about" class="relative py-20 overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-br from-slate-800 via-gray-900 to-indigo-900"></div>
+        <div class="relative max-w-7xl mx-auto px-4 z-10">
+            <div class="text-center mb-16">
+                <h2 class="text-5xl md:text-6xl font-bold text-white mb-6">
+                    Tentang <span class="gradient-text">Angsflow</span>
+                </h2>
+                <p class="text-xl md:text-2xl text-white/80 max-w-4xl mx-auto">
+                    Kami percaya bahwa mengelola keuangan seharusnya mudah, cerdas, dan kolaboratif
+                </p>
+            </div>
+
+            <div class="grid lg:grid-cols-2 gap-16 items-center mb-20">
+                <div class="space-y-8">
+                    <div class="animate-slide-up">
+                        <h3 class="text-3xl md:text-4xl font-bold text-white mb-6">
+                            Misi Kami: <span class="gradient-text">Democratize Financial Intelligence</span>
+                        </h3>
+                        <p class="text-lg text-white/80 leading-relaxed mb-6">
+                            Angsflow lahir dari frustrasi tim kami yang sering kesulitan mengelola keuangan bisnis dan pribadi. 
+                            Spreadsheet yang berantakan, aplikasi terpisah-pisah, dan tidak ada insight yang actionable.
+                        </p>
+                        <p class="text-lg text-white/80 leading-relaxed">
+                            Kami membangun platform yang menggabungkan kemudahan penggunaan, kekuatan AI, dan kolaborasi tim 
+                            dalam satu tempat. Karena setiap orang berhak mendapat financial intelligence yang powerful.
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="relative">
+                    <div class="glass-effect rounded-3xl p-8 border border-white/20">
+                        <div class="grid grid-cols-2 gap-6">
+                            <div class="text-center p-6 bg-primary/10 rounded-2xl border border-primary/20">
+                                <div class="text-4xl font-bold gradient-text mb-2">10K+</div>
+                                <p class="text-white/80">Active Users</p>
+                            </div>
+                            <div class="text-center p-6 bg-emerald-500/10 rounded-2xl border border-emerald-400/20">
+                                <div class="text-4xl font-bold text-emerald-400 mb-2">500+</div>
+                                <p class="text-white/80">Organizations</p>
+                            </div>
+                            <div class="text-center p-6 bg-purple-500/10 rounded-2xl border border-purple-400/20">
+                                <div class="text-4xl font-bold text-purple-400 mb-2">1M+</div>
+                                <p class="text-white/80">Transactions</p>
+                            </div>
+                            <div class="text-center p-6 bg-yellow-500/10 rounded-2xl border border-yellow-400/20">
+                                <div class="text-4xl font-bold text-yellow-400 mb-2">99.9%</div>
+                                <p class="text-white/80">Uptime</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Values Section -->
+            <div class="mb-20">
+                <h3 class="text-4xl font-bold text-white text-center mb-12">Nilai-Nilai Kami</h3>
+                <div class="grid md:grid-cols-3 gap-8">
+                    <div class="group glass-effect rounded-3xl p-8 border border-white/20 hover:border-primary/50 transition-all duration-500 text-center">
+                        <div class="bg-gradient-to-br from-primary/20 to-blue-600/20 rounded-2xl w-20 h-20 flex items-center justify-center text-4xl mb-6 mx-auto group-hover:scale-110 transition-transform">
+                            🎯
+                        </div>
+                        <h4 class="text-2xl font-bold text-white mb-4">Simplicity First</h4>
+                        <p class="text-white/80 leading-relaxed">
+                            Teknologi canggih harus mudah digunakan. Kami mengutamakan user experience yang intuitif dan tidak membingungkan.
+                        </p>
+                    </div>
+                    
+                    <div class="group glass-effect rounded-3xl p-8 border border-white/20 hover:border-emerald-400/50 transition-all duration-500 text-center">
+                        <div class="bg-gradient-to-br from-emerald-500/20 to-green-600/20 rounded-2xl w-20 h-20 flex items-center justify-center text-4xl mb-6 mx-auto group-hover:scale-110 transition-transform">
+                            🤝
+                        </div>
+                        <h4 class="text-2xl font-bold text-white mb-4">Collaboration</h4>
+                        <p class="text-white/80 leading-relaxed">
+                            Keuangan bukan urusan individu. Kami membangun fitur yang memungkinkan tim dan keluarga bekerja sama dengan efektif.
+                        </p>
+                    </div>
+                    
+                    <div class="group glass-effect rounded-3xl p-8 border border-white/20 hover:border-purple-400/50 transition-all duration-500 text-center">
+                        <div class="bg-gradient-to-br from-purple-500/20 to-indigo-600/20 rounded-2xl w-20 h-20 flex items-center justify-center text-4xl mb-6 mx-auto group-hover:scale-110 transition-transform">
+                            🚀
+                        </div>
+                        <h4 class="text-2xl font-bold text-white mb-4">Innovation</h4>
+                        <p class="text-white/80 leading-relaxed">
+                            Kami terus berinovasi dengan AI dan teknologi terdepan untuk memberikan insight yang tidak bisa didapat di tempat lain.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Team Section -->
+            <div class="text-center">
+                <h3 class="text-4xl font-bold text-white mb-12">Tim Kami</h3>
+                <div class="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+                    <div class="group text-center">
+                        <div class="relative mb-6">
+                            <div class="w-32 h-32 bg-gradient-to-br from-primary to-secondary rounded-full mx-auto flex items-center justify-center text-4xl text-white font-bold group-hover:scale-110 transition-transform">
+                                AP
+                            </div>
+                            <div class="absolute -bottom-2 -right-2 w-8 h-8 bg-emerald-400 rounded-full border-4 border-slate-900"></div>
+                        </div>
+                        <h4 class="text-xl font-bold text-white mb-2">Finding</h4>
+                        <p class="text-primary font-semibold mb-2">CEO & Co-Founder</p>
+                        <p class="text-white/70 text-sm">-</p>
+                    </div>
+                    
+                    <div class="group text-center">
+                        <div class="relative mb-6">
+                            <div class="w-32 h-32 bg-gradient-to-br from-emerald-500 to-green-600 rounded-full mx-auto flex items-center justify-center text-4xl text-white font-bold group-hover:scale-110 transition-transform">
+                                AS
+                            </div>
+                            <div class="absolute -bottom-2 -right-2 w-8 h-8 bg-emerald-400 rounded-full border-4 border-slate-900"></div>
+                        </div>
+                        <h4 class="text-xl font-bold text-white mb-2">Angga Saeful</h4>
+                        <p class="text-emerald-400 font-semibold mb-2">Dreamer</p>
+                        <p class="text-white/70 text-sm">Software Engineer</p>
+                    </div>
+                    
+                    <div class="group text-center">
+                        <div class="relative mb-6">
+                            <div class="w-32 h-32 bg-gradient-to-br from-purple-500 to-indigo-600 rounded-full mx-auto flex items-center justify-center text-4xl text-white font-bold group-hover:scale-110 transition-transform">
+                                SP
+                            </div>
+                            <div class="absolute -bottom-2 -right-2 w-8 h-8 bg-emerald-400 rounded-full border-4 border-slate-900"></div>
+                        </div>
+                        <h4 class="text-xl font-bold text-white mb-2">Finding</h4>
+                        <p class="text-purple-400 font-semibold mb-2">Head of Product</p>
+                        <p class="text-white/70 text-sm">-</p>
+                    </div>
+                </div>
+                
+                <div class="mt-12 glass-effect rounded-2xl p-8 border border-white/20 max-w-3xl mx-auto">
+                    <p class="text-lg text-white/90 leading-relaxed italic">
+                        "Kami membangun Angsflow bukan hanya sebagai produk, tapi sebagai solusi yang benar-benar kami butuhkan sendiri. 
+                        Setiap fitur lahir dari pengalaman nyata mengelola keuangan tim dan bisnis."
+                    </p>
+                    <p class="text-primary font-semibold mt-4">- Tim Angsflow</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="relative py-20 overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-r from-primary via-secondary to-indigo-600"></div>
+        <div class="absolute inset-0 bg-black/20"></div>
+        <div class="relative max-w-6xl mx-auto text-center px-4 z-10">
+            <h2 class="text-5xl md:text-6xl font-bold text-white mb-8 leading-tight">
+                Siap Mengelola Keuangan dengan <span class="text-yellow-300">Lebih Cerdas?</span>
+            </h2>
+            <p class="text-xl md:text-2xl text-white/90 mb-12 max-w-3xl mx-auto">
+                Bergabung dengan ribuan pengguna yang sudah merasakan kemudahan Angsflow
+            </p>
+            <div class="flex flex-col sm:flex-row gap-6 justify-center">
+                <button class="group bg-white text-primary hover:bg-gray-100 px-10 py-5 rounded-full text-xl font-bold transition-all duration-300 shadow-2xl hover:shadow-white/25 transform hover:scale-105 hover:-translate-y-1">
+                    <span class="flex items-center justify-center">
+                        Daftar Gratis Sekarang
+                        <svg class="w-6 h-6 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+                        </svg>
+                    </span>
+                </button>
+                <button class="glass-effect text-white hover:bg-white/20 px-10 py-5 rounded-full text-xl font-bold transition-all duration-300 border border-white/30 hover:border-white/60 transform hover:scale-105">
+                    Hubungi Sales
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="relative bg-slate-900 text-white py-16 overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-br from-slate-900 via-gray-900 to-black"></div>
+        <div class="relative max-w-7xl mx-auto px-4 z-10">
+            <div class="grid lg:grid-cols-4 gap-12">
+                <div class="lg:col-span-2">
+                    <div class="flex items-center mb-6">
+                        <div class="relative mr-4">
+                            <svg width="48" height="48" viewBox="0 0 48 48" class="animate-glow">
+                                <circle cx="24" cy="24" r="22" fill="url(#footerLogoGradient)" stroke="rgba(96, 165, 250, 0.3)" stroke-width="2"/>
+                                <path d="M16 32 L20 20 L24 32 M18 28 L22 28" stroke="#ffffff" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M28 32 L28 20 M28 20 L34 20 M28 26 L32 26" stroke="#ffffff" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                                <defs>
+                                    <linearGradient id="footerLogoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                        <stop offset="0%" style="stop-color:#60A5FA;stop-opacity:1" />
+                                        <stop offset="50%" style="stop-color:#3B82F6;stop-opacity:1" />
+                                        <stop offset="100%" style="stop-color:#1E40AF;stop-opacity:1" />
+                                    </linearGradient>
+                                </defs>
+                            </svg>
+                        </div>
+                        <span class="text-3xl font-bold">Angs<span class="gradient-text">Flow</span></span>
+                    </div>
+                    <p class="text-white/70 text-lg leading-relaxed max-w-md">
+                        Modern financial management platform untuk individu dan tim. 
+                        Kelola keuangan dengan cerdas, kolaboratif, dan didukung AI.
+                    </p>
+                </div>
+                <div>
+                    <h4 class="font-bold text-xl mb-6 text-white">Produk</h4>
+                    <ul class="space-y-3">
+                        <li><a href="#features" class="text-white/70 hover:text-primary transition-colors text-lg">Fitur</a></li>
+                        <li><a href="#pricing" class="text-white/70 hover:text-primary transition-colors text-lg">Harga</a></li>
+                        <li><a href="#" class="text-white/70 hover:text-primary transition-colors text-lg">API</a></li>
+                        <li><a href="#" class="text-white/70 hover:text-primary transition-colors text-lg">Integrasi</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold text-xl mb-6 text-white">Dukungan</h4>
+                    <ul class="space-y-3">
+                        <li><a href="#" class="text-white/70 hover:text-primary transition-colors text-lg">Help Center</a></li>
+                        <li><a href="#" class="text-white/70 hover:text-primary transition-colors text-lg">Kontak</a></li>
+                        <li><a href="#" class="text-white/70 hover:text-primary transition-colors text-lg">Status</a></li>
+                        <li><a href="#" class="text-white/70 hover:text-primary transition-colors text-lg">Blog</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-white/20 mt-12 pt-8 text-center">
+                <p class="text-white/60 text-lg">&copy; 2024 Angsflow. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Add scroll effect to navbar
+        window.addEventListener('scroll', function() {
+            const nav = document.querySelector('nav');
+            if (window.scrollY > 100) {
+                nav.classList.add('shadow-lg');
+            } else {
+                nav.classList.remove('shadow-lg');
+            }
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'96ffa57081d340b5',t:'MTc1NTMzMzgyOS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>

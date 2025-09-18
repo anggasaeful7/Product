@@ -1,0 +1,22 @@
+{
+  "name": "AngsFlow",
+  "short_name": "AngsFlow",
+  "description": "Angsflow: platform modern untuk kelola keuangan individu & tim, dengan budgeting, laporan, dan AI Coach.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#0F172A",
+  "theme_color": "#0F172A",
+  "icons": [
+    {
+      "src": "/AngsFlow.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    },
+    {
+      "src": "/apple-touch-icon.png",
+      "type": "image/png",
+      "sizes": "180x180"
+    }
+  ]
+}

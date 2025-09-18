@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>500 - Internal Server Error | Angsflow</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#60A5FA',
+                        secondary: '#3B82F6',
+                        accent: '#F59E0B',
+                        dark: '#0F172A',
+                        light: '#F8FAFC'
+                    },
+                    fontFamily: {
+                        'inter': ['Inter', 'sans-serif']
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'glow': 'glow 2s ease-in-out infinite alternate',
+                        'slide-up': 'slideUp 0.8s ease-out',
+                        'fade-in': 'fadeIn 1s ease-out',
+                        'pulse-slow': 'pulse 3s ease-in-out infinite',
+                        'bounce-slow': 'bounce 2s ease-in-out infinite',
+                        'wiggle': 'wiggle 1s ease-in-out infinite',
+                        'sparkle': 'sparkle 2s ease-in-out infinite',
+                        'slide-in': 'slideIn 0.6s ease-out',
+                        'shake': 'shake 0.5s ease-in-out',
+                        'number-bounce': 'numberBounce 2s ease-in-out infinite',
+                        'rotate-slow': 'rotateSlow 20s linear infinite',
+                        'scale-pulse': 'scalePulse 3s ease-in-out infinite',
+                        'glitch': 'glitch 2s ease-in-out infinite',
+                        'circuit': 'circuit 4s ease-in-out infinite',
+                        'blink': 'blink 1.5s ease-in-out infinite'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        @keyframes glow {
+            from { box-shadow: 0 0 20px #60A5FA40; }
+            to { box-shadow: 0 0 30px #60A5FA80, 0 0 40px #60A5FA40; }
+        }
+        @keyframes slideUp {
+            from { transform: translateY(30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        @keyframes slideIn {
+            from { transform: translateX(-30px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes wiggle {
+            0%, 7% { transform: rotateZ(0); }
+            15% { transform: rotateZ(-15deg); }
+            20% { transform: rotateZ(10deg); }
+            25% { transform: rotateZ(-10deg); }
+            30% { transform: rotateZ(6deg); }
+            35% { transform: rotateZ(-4deg); }
+            40%, 100% { transform: rotateZ(0); }
+        }
+        @keyframes sparkle {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(1.1); }
+        }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+        @keyframes numberBounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-30px); }
+            60% { transform: translateY(-15px); }
+        }
+        @keyframes rotateSlow {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        @keyframes scalePulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        @keyframes glitch {
+            0%, 100% { transform: translate(0); }
+            20% { transform: translate(-2px, 2px); }
+            40% { transform: translate(-2px, -2px); }
+            60% { transform: translate(2px, 2px); }
+            80% { transform: translate(2px, -2px); }
+        }
+        @keyframes circuit {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0.3; }
+        }
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .gradient-text {
+            background: linear-gradient(135deg, #60A5FA, #3B82F6, #1E40AF);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .error-number {
+            font-size: clamp(8rem, 20vw, 16rem);
+            font-weight: 800;
+            line-height: 0.8;
+            text-shadow: 0 0 50px rgba(239, 68, 68, 0.5);
+        }
+        .server-icon {
+            animation: float 8s ease-in-out infinite;
+        }
+        .circuit-line {
+            animation: circuit 4s ease-in-out infinite;
+        }
+        .circuit-line:nth-child(2) {
+            animation-delay: -1s;
+        }
+        .circuit-line:nth-child(3) {
+            animation-delay: -2s;
+        }
+        .circuit-line:nth-child(4) {
+            animation-delay: -3s;
+        }
+        .status-indicator {
+            animation: blink 1.5s ease-in-out infinite;
+        }
+        .status-indicator.error {
+            background: #EF4444;
+        }
+        .status-indicator.warning {
+            background: #F59E0B;
+        }
+        .status-indicator.success {
+            background: #10B981;
+        }
+        .progress-bar {
+            background: linear-gradient(90deg, #EF4444, #F59E0B, #10B981);
+            background-size: 200% 100%;
+            animation: progress-flow 3s ease-in-out infinite;
+        }
+        @keyframes progress-flow {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        .terminal-text {
+            font-family: 'Courier New', monospace;
+            color: #10B981;
+        }
+        .glitch-text {
+            animation: glitch 2s ease-in-out infinite;
+        }
+    </style>
+</head>
+<body class="font-inter bg-gradient-to-br from-slate-900 via-red-900 to-rose-900 min-h-screen overflow-x-hidden">
+    <!-- Animated Background -->
+    <div class="fixed inset-0 overflow-hidden pointer-events-none">
+        <!-- Floating Background Elements -->
+        <div class="absolute -top-40 -right-40 w-80 h-80 bg-red-500/20 rounded-full blur-3xl animate-float"></div>
+        <div class="absolute top-1/2 -left-40 w-96 h-96 bg-rose-500/10 rounded-full blur-3xl animate-float" style="animation-delay: -2s;"></div>
+        <div class="absolute bottom-0 right-1/3 w-64 h-64 bg-orange-500/15 rounded-full blur-3xl animate-float" style="animation-delay: -4s;"></div>
+        
+        <!-- Circuit Lines -->
+        <div class="circuit-line absolute top-20 left-10 w-32 h-0.5 bg-gradient-to-r from-transparent via-red-400 to-transparent opacity-30"></div>
+        <div class="circuit-line absolute top-40 right-20 w-24 h-0.5 bg-gradient-to-r from-transparent via-orange-400 to-transparent opacity-30"></div>
+        <div class="circuit-line absolute bottom-32 left-1/4 w-40 h-0.5 bg-gradient-to-r from-transparent via-red-400 to-transparent opacity-30"></div>
+        <div class="circuit-line absolute bottom-60 right-1/3 w-28 h-0.5 bg-gradient-to-r from-transparent via-orange-400 to-transparent opacity-30"></div>
+        
+        <!-- Floating Error Symbols -->
+        <div class="absolute top-32 left-20 text-red-400/30 text-2xl animate-float">⚠️</div>
+        <div class="absolute top-60 right-32 text-orange-400/30 text-xl animate-float" style="animation-delay: -1s;">🔧</div>
+        <div class="absolute bottom-40 left-32 text-red-400/30 text-lg animate-float" style="animation-delay: -2s;">💥</div>
+        <div class="absolute bottom-60 right-20 text-orange-400/30 text-xl animate-float" style="animation-delay: -3s;">⚡</div>
+    </div>
+
+    <!-- Navigation Header -->
+    <nav class="relative z-10 glass-effect border-b border-white/10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo -->
+                <div class="flex items-center">
+                    <svg width="40" height="40" viewBox="0 0 48 48" class="animate-glow mr-3">
+                        <circle cx="24" cy="24" r="22" fill="url(#logoGradient)" stroke="rgba(96, 165, 250, 0.3)" stroke-width="2"/>
+                        <path d="M16 32 L20 20 L24 32 M18 28 L22 28" stroke="#ffffff" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M28 32 L28 20 M28 20 L34 20 M28 26 L32 26" stroke="#ffffff" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                        <defs>
+                            <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#60A5FA;stop-opacity:1" />
+                                <stop offset="50%" style="stop-color:#3B82F6;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#1E40AF;stop-opacity:1" />
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                    <span class="text-xl font-bold text-white">Angs<span class="gradient-text">Flow</span></span>
+                </div>
+                
+                <!-- Status Indicators -->
+                <div class="hidden md:flex items-center space-x-4">
+                    <div class="flex items-center space-x-2">
+                        <div class="status-indicator error w-3 h-3 rounded-full"></div>
+                        <span class="text-white/70 text-sm">Server Error</span>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <div class="status-indicator warning w-3 h-3 rounded-full"></div>
+                        <span class="text-white/70 text-sm">Investigating</span>
+                    </div>
+                </div>
+                
+                <!-- Mobile Menu Button -->
+                <button onclick="toggleMobileMenu()" class="md:hidden text-white/70 hover:text-primary transition-colors">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="relative z-10 min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8">
+        <div class="max-w-4xl mx-auto text-center">
+            
+            <!-- Server Illustration -->
+            <div class="server-icon mb-8 relative">
+                <svg width="200" height="200" viewBox="0 0 200 200" class="mx-auto">
+                    <!-- Server Rack -->
+                    <rect x="50" y="60" width="100" height="120" rx="8" fill="url(#serverGradient)" stroke="rgba(255,255,255,0.3)" stroke-width="2"/>
+                    
+                    <!-- Server Units -->
+                    <rect x="55" y="70" width="90" height="20" rx="4" fill="rgba(239, 68, 68, 0.3)" stroke="#EF4444" stroke-width="1"/>
+                    <rect x="55" y="95" width="90" height="20" rx="4" fill="rgba(245, 158, 11, 0.3)" stroke="#F59E0B" stroke-width="1"/>
+                    <rect x="55" y="120" width="90" height="20" rx="4" fill="rgba(16, 185, 129, 0.3)" stroke="#10B981" stroke-width="1"/>
+                    <rect x="55" y="145" width="90" height="20" rx="4" fill="rgba(96, 165, 250, 0.3)" stroke="#60A5FA" stroke-width="1"/>
+                    
+                    <!-- Status LEDs -->
+                    <circle cx="135" cy="80" r="3" fill="#EF4444" class="animate-blink"/>
+                    <circle cx="135" cy="105" r="3" fill="#F59E0B" class="animate-pulse"/>
+                    <circle cx="135" cy="130" r="3" fill="#10B981"/>
+                    <circle cx="135" cy="155" r="3" fill="#60A5FA" class="animate-pulse"/>
+                    
+                    <!-- Cables -->
+                    <path d="M50 100 Q30 100 30 120 Q30 140 50 140" stroke="#6B7280" stroke-width="3" fill="none"/>
+                    <path d="M150 110 Q170 110 170 130 Q170 150 150 150" stroke="#6B7280" stroke-width="3" fill="none"/>
+                    
+                    <!-- Error Sparks -->
+                    <g class="animate-sparkle">
+                        <path d="M60 75 L65 70 L60 65 L55 70 Z" fill="#EF4444"/>
+                        <path d="M70 85 L75 80 L70 75 L65 80 Z" fill="#F59E0B"/>
+                    </g>
+                    
+                    <!-- Smoke Effect -->
+                    <ellipse cx="100" cy="50" rx="15" ry="8" fill="rgba(107, 114, 128, 0.4)" class="animate-pulse-slow"/>
+                    <ellipse cx="95" cy="45" rx="10" ry="5" fill="rgba(107, 114, 128, 0.3)" class="animate-pulse-slow" style="animation-delay: -1s;"/>
+                    
+                    <defs>
+                        <linearGradient id="serverGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#374151;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#1F2937;stop-opacity:1" />
+                        </linearGradient>
+                    </defs>
+                </svg>
+            </div>
+
+            <!-- 500 Error Number -->
+            <div class="error-number text-red-400 animate-number-bounce mb-8 glitch-text">
+                500
+            </div>
+
+            <!-- Error Message -->
+            <div class="animate-slide-up mb-8">
+                <h1 class="text-4xl md:text-5xl font-bold text-white mb-4">
+                    Internal Server Error
+                </h1>
+                <p class="text-xl text-white/80 mb-2">
+                    Oops! Terjadi kesalahan pada server kami 🔧
+                </p>
+                <p class="text-white/60 max-w-2xl mx-auto">
+                    Tim teknis kami sedang bekerja keras untuk memperbaiki masalah ini. 
+                    Mohon maaf atas ketidaknyamanan yang terjadi.
+                </p>
+            </div>
+
+            <!-- Error Details -->
+            <div class="glass-effect rounded-2xl border border-white/20 p-6 mb-8 animate-slide-up" style="animation-delay: 0.2s;">
+                <div class="text-left">
+                    <h3 class="text-lg font-semibold text-white mb-4 flex items-center">
+                        <svg class="w-5 h-5 mr-2 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                        </svg>
+                        Error Details
+                    </h3>
+                    <div class="terminal-text bg-black/30 rounded-lg p-4 text-sm">
+                        <div class="mb-2">
+                            <span class="text-red-400">Error ID:</span> 
+                            <span class="text-white" id="errorId">AF-500-2024-001</span>
+                        </div>
+                        <div class="mb-2">
+                            <span class="text-red-400">Timestamp:</span> 
+                            <span class="text-white" id="timestamp"></span>
+                        </div>
+                        <div class="mb-2">
+                            <span class="text-red-400">Status:</span> 
+                            <span class="text-orange-400">Investigating</span>
+                        </div>
+                        <div>
+                            <span class="text-red-400">ETA Fix:</span> 
+                            <span class="text-yellow-400">~15 minutes</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recovery Progress -->
+            <div class="glass-effect rounded-2xl border border-white/20 p-6 mb-8 animate-slide-up" style="animation-delay: 0.4s;">
+                <h3 class="text-lg font-semibold text-white mb-4 flex items-center">
+                    <svg class="w-5 h-5 mr-2 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                    </svg>
+                    Recovery Progress
+                </h3>
+                <div class="space-y-3">
+                    <div class="flex items-center justify-between text-sm">
+                        <span class="text-white/70">Identifying Issue</span>
+                        <span class="text-emerald-400">✓ Complete</span>
+                    </div>
+                    <div class="flex items-center justify-between text-sm">
+                        <span class="text-white/70">Isolating Problem</span>
+                        <span class="text-emerald-400">✓ Complete</span>
+                    </div>
+                    <div class="flex items-center justify-between text-sm">
+                        <span class="text-white/70">Applying Fix</span>
+                        <span class="text-yellow-400">⏳ In Progress</span>
+                    </div>
+                    <div class="flex items-center justify-between text-sm">
+                        <span class="text-white/70">Testing Solution</span>
+                        <span class="text-white/40">⏸️ Pending</span>
+                    </div>
+                    <div class="w-full bg-white/10 rounded-full h-2 mt-4">
+                        <div class="progress-bar h-2 rounded-full" style="width: 65%"></div>
+                    </div>
+                    <p class="text-center text-white/60 text-sm mt-2">65% Complete</p>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8 animate-slide-up" style="animation-delay: 0.6s;">
+                <button onclick="refreshPage()" class="bg-gradient-to-r from-blue-500 to-blue-600 text-white px-8 py-3 rounded-xl font-semibold hover:from-blue-600 hover:to-blue-700 transition-all duration-300 transform hover:scale-105 hover:shadow-lg">
+                    <svg class="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                    </svg>
+                    Refresh Halaman
+                </button>
+                
+                <button onclick="goHome()" class="glass-effect text-white px-8 py-3 rounded-xl font-semibold border border-white/20 hover:bg-white/10 transition-all duration-300 transform hover:scale-105">
+                    <svg class="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+                    </svg>
+                    Kembali ke Beranda
+                </button>
+                
+                <button onclick="reportIssue()" class="bg-gradient-to-r from-red-500 to-red-600 text-white px-8 py-3 rounded-xl font-semibold hover:from-red-600 hover:to-red-700 transition-all duration-300 transform hover:scale-105 hover:shadow-lg">
+                    <svg class="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.268 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
+                    </svg>
+                    Laporkan Masalah
+                </button>
+            </div>
+
+            <!-- System Status -->
+            <div class="glass-effect rounded-2xl border border-white/20 p-6 mb-8 animate-slide-up" style="animation-delay: 0.8s;">
+                <h3 class="text-lg font-semibold text-white mb-4 flex items-center">
+                    <svg class="w-5 h-5 mr-2 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    System Status
+                </h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="text-center">
+                        <div class="status-indicator success w-4 h-4 rounded-full mx-auto mb-2"></div>
+                        <p class="text-white font-medium">Database</p>
+                        <p class="text-green-400 text-sm">Operational</p>
+                    </div>
+                    <div class="text-center">
+                        <div class="status-indicator error w-4 h-4 rounded-full mx-auto mb-2"></div>
+                        <p class="text-white font-medium">API Server</p>
+                        <p class="text-red-400 text-sm">Down</p>
+                    </div>
+                    <div class="text-center">
+                        <div class="status-indicator warning w-4 h-4 rounded-full mx-auto mb-2"></div>
+                        <p class="text-white font-medium">CDN</p>
+                        <p class="text-yellow-400 text-sm">Degraded</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Help Options -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 animate-slide-up" style="animation-delay: 1s;">
+                <div class="glass-effect rounded-2xl border border-white/20 p-6 text-center hover:transform hover:scale-105 transition-all duration-300">
+                    <div class="bg-blue-500/20 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                        <svg class="w-8 h-8 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </div>
+                    <h4 class="text-lg font-semibold text-white mb-2">Live Support</h4>
+                    <p class="text-white/70 text-sm mb-4">Chat dengan tim support kami untuk bantuan langsung</p>
+                    <button onclick="openLiveChat()" class="text-blue-400 hover:text-blue-300 font-medium transition-colors">
+                        Mulai Chat →
+                    </button>
+                </div>
+
+                <div class="glass-effect rounded-2xl border border-white/20 p-6 text-center hover:transform hover:scale-105 transition-all duration-300">
+                    <div class="bg-green-500/20 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                        <svg class="w-8 h-8 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                        </svg>
+                    </div>
+                    <h4 class="text-lg font-semibold text-white mb-2">Status Page</h4>
+                    <p class="text-white/70 text-sm mb-4">Pantau status real-time semua layanan kami</p>
+                    <button onclick="openStatusPage()" class="text-green-400 hover:text-green-300 font-medium transition-colors">
+                        Lihat Status →
+                    </button>
+                </div>
+
+                <div class="glass-effect rounded-2xl border border-white/20 p-6 text-center hover:transform hover:scale-105 transition-all duration-300">
+                    <div class="bg-purple-500/20 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                        <svg class="w-8 h-8 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-3.5-3.5a50.002 50.002 0 00-2.5-2.5V9a6 6 0 10-12 0v1.5c0 .9-.4 1.8-1.1 2.4L2 17h5m8 0v1a3 3 0 11-6 0v-1m6 0H9"></path>
+                        </svg>
+                    </div>
+                    <h4 class="text-lg font-semibold text-white mb-2">Get Updates</h4>
+                    <p class="text-white/70 text-sm mb-4">Dapatkan notifikasi ketika masalah sudah teratasi</p>
+                    <button onclick="subscribeUpdates()" class="text-purple-400 hover:text-purple-300 font-medium transition-colors">
+                        Subscribe →
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="relative z-10 glass-effect border-t border-white/10 mt-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="flex items-center mb-4 md:mb-0">
+                    <svg width="32" height="32" viewBox="0 0 48 48" class="mr-3">
+                        <circle cx="24" cy="24" r="22" fill="url(#footerGradient)" stroke="rgba(96, 165, 250, 0.3)" stroke-width="2"/>
+                        <path d="M16 32 L20 20 L24 32 M18 28 L22 28" stroke="#ffffff" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M28 32 L28 20 M28 20 L34 20 M28 26 L32 26" stroke="#ffffff" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                        <defs>
+                            <linearGradient id="footerGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#60A5FA;stop-opacity:1" />
+                                <stop offset="50%" style="stop-color:#3B82F6;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#1E40AF;stop-opacity:1" />
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                    <span class="text-lg font-bold text-white">Angs<span class="gradient-text">Flow</span></span>
+                </div>
+                
+                <div class="flex items-center space-x-6 text-white/60 text-sm">
+                    <a href="#" onclick="openStatusPage()" class="hover:text-primary transition-colors">System Status</a>
+                    <a href="#" onclick="openLiveChat()" class="hover:text-primary transition-colors">Support</a>
+                    <a href="#" onclick="showIncidentHistory()" class="hover:text-primary transition-colors">Incident History</a>
+                </div>
+            </div>
+            
+            <div class="border-t border-white/10 mt-6 pt-6 text-center text-white/60 text-sm">
+                <p>&copy; 2024 Angsflow. Server Error - We're working on it! 🔧</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Mobile Menu (Hidden by default) -->
+    <div id="mobileMenu" class="fixed inset-0 z-50 hidden">
+        <div class="fixed inset-0 bg-black/80 backdrop-blur-sm" onclick="toggleMobileMenu()"></div>
+        <div class="fixed top-0 right-0 h-full w-64 glass-effect border-l border-white/20 animate-slide-in">
+            <div class="p-6">
+                <div class="flex justify-between items-center mb-8">
+                    <span class="text-lg font-bold text-white">Menu</span>
+                    <button onclick="toggleMobileMenu()" class="text-white/70 hover:text-white">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+                
+                <nav class="space-y-4">
+                    <button onclick="refreshPage(); toggleMobileMenu();" class="block w-full text-left text-white/70 hover:text-primary transition-colors font-medium py-2">Refresh Page</button>
+                    <button onclick="goHome(); toggleMobileMenu();" class="block w-full text-left text-white/70 hover:text-primary transition-colors font-medium py-2">Go Home</button>
+                    <button onclick="openStatusPage(); toggleMobileMenu();" class="block w-full text-left text-white/70 hover:text-primary transition-colors font-medium py-2">System Status</button>
+                    <button onclick="openLiveChat(); toggleMobileMenu();" class="block w-full text-left text-white/70 hover:text-primary transition-colors font-medium py-2">Live Support</button>
+                    <button onclick="reportIssue(); toggleMobileMenu();" class="w-full bg-gradient-to-r from-red-500 to-red-600 text-white px-4 py-3 rounded-lg font-medium hover:from-red-600 hover:to-red-700 transition-colors mt-4">
+                        Report Issue
+                    </button>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Auto-refresh countdown
+        let refreshCountdown = 300; // 5 minutes
+        let countdownInterval;
+
+        // Navigation functions
+        function goHome() {
+            showNotification('Redirecting to homepage...', 'info');
+            setTimeout(() => {
+                window.location.href = '/';
+            }, 1000);
+        }
+
+        function refreshPage() {
+            showNotification('Refreshing page...', 'info');
+            setTimeout(() => {
+                window.location.reload();
+            }, 1000);
+        }
+
+        function reportIssue() {
+            showNotification('Opening issue report form...', 'info');
+            // Simulate opening report form
+            setTimeout(() => {
+                showNotification('Issue reported successfully! Reference: #AF-500-001', 'success');
+            }, 2000);
+        }
+
+        // Mobile menu
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.toggle('hidden');
+            document.body.style.overflow = menu.classList.contains('hidden') ? 'auto' : 'hidden';
+        }
+
+        // Support functions
+        function openLiveChat() {
+            showNotification('Connecting to live support...', 'info');
+            setTimeout(() => {
+                showNotification('Connected! Support agent will be with you shortly.', 'success');
+            }, 2000);
+        }
+
+        function openStatusPage() {
+            showNotification('Opening system status page...', 'info');
+        }
+
+        function subscribeUpdates() {
+            showNotification('Subscribing to status updates...', 'info');
+            setTimeout(() => {
+                showNotification('Subscribed! You\'ll get notified when the issue is resolved.', 'success');
+            }, 1500);
+        }
+
+        function showIncidentHistory() {
+            showNotification('Loading incident history...', 'info');
+        }
+
+        // Auto-refresh functionality
+        function startAutoRefresh() {
+            countdownInterval = setInterval(() => {
+                refreshCountdown--;
+                if (refreshCountdown <= 0) {
+                    refreshPage();
+                }
+            }, 1000);
+        }
+
+        function stopAutoRefresh() {
+            if (countdownInterval) {
+                clearInterval(countdownInterval);
+            }
+        }
+
+        // Simulate recovery progress
+        function updateRecoveryProgress() {
+            const progressSteps = [
+                { step: 'Identifying Issue', status: 'complete' },
+                { step: 'Isolating Problem', status: 'complete' },
+                { step: 'Applying Fix', status: 'progress' },
+                { step: 'Testing Solution', status: 'pending' }
+            ];
+            
+            // Simulate progress updates every 30 seconds
+            setTimeout(() => {
+                showNotification('Recovery progress updated: Testing solution...', 'info');
+            }, 30000);
+        }
+
+        // Notification system
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            const bgColor = type === 'success' ? 'from-emerald-500 to-teal-600' : 
+                           type === 'error' ? 'from-rose-500 to-red-600' : 
+                           type === 'warning' ? 'from-amber-500 to-orange-600' :
+                           'from-blue-500 to-indigo-600';
+            
+            const icon = type === 'success' ? 
+                '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>' :
+                type === 'error' ? 
+                '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>' :
+                type === 'warning' ?
+                '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.268 16.5c-.77.833.192 2.5 1.732 2.5z"></path>' :
+                '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>';
+            
+            notification.className = `fixed top-4 right-4 z-50 bg-gradient-to-r ${bgColor} text-white p-4 rounded-xl font-medium animate-slide-up max-w-sm shadow-lg`;
+            notification.innerHTML = `
+                <div class="flex items-center space-x-3">
+                    <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        ${icon}
+                    </svg>
+                    <span>${message}</span>
+                </div>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.animation = 'slideUp 0.3s ease-out reverse';
+                setTimeout(() => {
+                    notification.remove();
+                }, 300);
+            }, 4000);
+        }
+
+        // Generate random error ID
+        function generateErrorId() {
+            const timestamp = Date.now().toString().slice(-6);
+            return `AF-500-2024-${timestamp}`;
+        }
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set current timestamp
+            document.getElementById('timestamp').textContent = new Date().toLocaleString('id-ID');
+            
+            // Generate unique error ID
+            document.getElementById('errorId').textContent = generateErrorId();
+            
+            // Start auto-refresh countdown
+            startAutoRefresh();
+            
+            // Start recovery progress simulation
+            updateRecoveryProgress();
+            
+            // Welcome message
+            setTimeout(() => {
+                showNotification('Server error detected. Our team is working on a fix.', 'warning');
+            }, 1000);
+            
+            // Simulate periodic status updates
+            setInterval(() => {
+                const messages = [
+                    'Investigating root cause...',
+                    'Applying server patches...',
+                    'Running diagnostic tests...',
+                    'Monitoring system stability...'
+                ];
+                const randomMessage = messages[Math.floor(Math.random() * messages.length)];
+                showNotification(randomMessage, 'info');
+            }, 60000); // Every minute
+        });
+
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', function(e) {
+            const mobileMenu = document.getElementById('mobileMenu');
+            if (!mobileMenu.classList.contains('hidden') && !e.target.closest('#mobileMenu') && !e.target.closest('button[onclick="toggleMobileMenu()"]')) {
+                toggleMobileMenu();
+            }
+        });
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'r' && (e.ctrlKey || e.metaKey)) {
+                e.preventDefault();
+                refreshPage();
+            }
+            if (e.key === 'h' && (e.ctrlKey || e.metaKey)) {
+                e.preventDefault();
+                goHome();
+            }
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9707ccde258e3f5a',t:'MTc1NTQxOTMzMC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>

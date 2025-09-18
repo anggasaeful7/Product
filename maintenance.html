@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maintenance Mode | Angsflow</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#60A5FA',
+                        secondary: '#3B82F6',
+                        accent: '#F59E0B',
+                        dark: '#0F172A',
+                        light: '#F8FAFC'
+                    },
+                    fontFamily: {
+                        'inter': ['Inter', 'sans-serif']
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'glow': 'glow 2s ease-in-out infinite alternate',
+                        'slide-up': 'slideUp 0.8s ease-out',
+                        'fade-in': 'fadeIn 1s ease-out',
+                        'pulse-slow': 'pulse 3s ease-in-out infinite',
+                        'bounce-slow': 'bounce 2s ease-in-out infinite',
+                        'wiggle': 'wiggle 1s ease-in-out infinite',
+                        'sparkle': 'sparkle 2s ease-in-out infinite',
+                        'slide-in': 'slideIn 0.6s ease-out',
+                        'shake': 'shake 0.5s ease-in-out',
+                        'rotate-slow': 'rotateSlow 20s linear infinite',
+                        'scale-pulse': 'scalePulse 3s ease-in-out infinite',
+                        'construction': 'construction 3s ease-in-out infinite',
+                        'hammer': 'hammer 2s ease-in-out infinite',
+                        'drill': 'drill 1.5s linear infinite',
+                        'progress-fill': 'progressFill 4s ease-in-out infinite'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        @keyframes glow {
+            from { box-shadow: 0 0 20px #60A5FA40; }
+            to { box-shadow: 0 0 30px #60A5FA80, 0 0 40px #60A5FA40; }
+        }
+        @keyframes slideUp {
+            from { transform: translateY(30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        @keyframes slideIn {
+            from { transform: translateX(-30px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes wiggle {
+            0%, 7% { transform: rotateZ(0); }
+            15% { transform: rotateZ(-15deg); }
+            20% { transform: rotateZ(10deg); }
+            25% { transform: rotateZ(-10deg); }
+            30% { transform: rotateZ(6deg); }
+            35% { transform: rotateZ(-4deg); }
+            40%, 100% { transform: rotateZ(0); }
+        }
+        @keyframes sparkle {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(1.1); }
+        }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+        @keyframes rotateSlow {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        @keyframes scalePulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        @keyframes construction {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            25% { transform: translateY(-10px) rotate(-5deg); }
+            50% { transform: translateY(-5px) rotate(5deg); }
+            75% { transform: translateY(-15px) rotate(-3deg); }
+        }
+        @keyframes hammer {
+            0%, 100% { transform: rotate(0deg); }
+            50% { transform: rotate(-30deg); }
+        }
+        @keyframes drill {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        @keyframes progressFill {
+            0% { width: 0%; }
+            50% { width: 75%; }
+            100% { width: 100%; }
+        }
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .gradient-text {
+            background: linear-gradient(135deg, #60A5FA, #3B82F6, #1E40AF);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .construction-icon {
+            animation: construction 3s ease-in-out infinite;
+        }
+        .construction-icon:nth-child(2) {
+            animation-delay: -1s;
+        }
+        .construction-icon:nth-child(3) {
+            animation-delay: -2s;
+        }
+        .hammer-tool {
+            animation: hammer 2s ease-in-out infinite;
+        }
+        .drill-tool {
+            animation: drill 1.5s linear infinite;
+        }
+        .progress-bar-fill {
+            animation: progressFill 4s ease-in-out infinite;
+        }
+        .countdown-digit {
+            background: linear-gradient(135deg, #F59E0B, #D97706);
+            box-shadow: 0 0 20px rgba(245, 158, 11, 0.3);
+        }
+        .maintenance-bg {
+            background: linear-gradient(135deg, #0F172A 0%, #1E293B 25%, #334155 50%, #475569 75%, #64748B 100%);
+        }
+        .tool-shadow {
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+        }
+    </style>
+</head>
+<body class="font-inter maintenance-bg min-h-screen overflow-x-hidden">
+    <!-- Animated Background -->
+    <div class="fixed inset-0 overflow-hidden pointer-events-none">
+        <!-- Floating Background Elements -->
+        <div class="absolute -top-40 -right-40 w-80 h-80 bg-amber-500/20 rounded-full blur-3xl animate-float"></div>
+        <div class="absolute top-1/2 -left-40 w-96 h-96 bg-orange-500/10 rounded-full blur-3xl animate-float" style="animation-delay: -2s;"></div>
+        <div class="absolute bottom-0 right-1/3 w-64 h-64 bg-yellow-500/15 rounded-full blur-3xl animate-float" style="animation-delay: -4s;"></div>
+        
+        <!-- Construction Elements -->
+        <div class="construction-icon absolute top-20 left-20 text-amber-400/30 text-3xl">🔧</div>
+        <div class="construction-icon absolute top-40 right-32 text-orange-400/30 text-2xl">🔨</div>
+        <div class="construction-icon absolute bottom-40 left-32 text-yellow-400/30 text-2xl">⚙️</div>
+        <div class="construction-icon absolute bottom-60 right-20 text-amber-400/30 text-3xl">🏗️</div>
+        <div class="construction-icon absolute top-1/3 right-1/4 text-orange-400/30 text-xl">🚧</div>
+        <div class="construction-icon absolute bottom-1/3 left-1/4 text-yellow-400/30 text-xl">👷</div>
+        
+        <!-- Floating Sparks -->
+        <div class="absolute top-32 left-1/4 w-1 h-1 bg-amber-400 rounded-full animate-sparkle"></div>
+        <div class="absolute top-60 right-1/3 w-1.5 h-1.5 bg-orange-400 rounded-full animate-sparkle" style="animation-delay: -1s;"></div>
+        <div class="absolute bottom-32 left-1/3 w-1 h-1 bg-yellow-400 rounded-full animate-sparkle" style="animation-delay: -2s;"></div>
+    </div>
+
+    <!-- Navigation Header -->
+    <nav class="relative z-10 glass-effect border-b border-white/10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo -->
+                <div class="flex items-center">
+                    <svg width="40" height="40" viewBox="0 0 48 48" class="animate-glow mr-3">
+                        <circle cx="24" cy="24" r="22" fill="url(#logoGradient)" stroke="rgba(96, 165, 250, 0.3)" stroke-width="2"/>
+                        <path d="M16 32 L20 20 L24 32 M18 28 L22 28" stroke="#ffffff" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M28 32 L28 20 M28 20 L34 20 M28 26 L32 26" stroke="#ffffff" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                        <defs>
+                            <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#60A5FA;stop-opacity:1" />
+                                <stop offset="50%" style="stop-color:#3B82F6;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#1E40AF;stop-opacity:1" />
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                    <span class="text-xl font-bold text-white">Angs<span class="gradient-text">Flow</span></span>
+                </div>
+                
+                <!-- Status Badge -->
+                <div class="hidden md:flex items-center space-x-4">
+                    <div class="flex items-center space-x-2 bg-amber-500/20 px-3 py-1 rounded-full">
+                        <div class="w-2 h-2 bg-amber-400 rounded-full animate-pulse"></div>
+                        <span class="text-amber-300 text-sm font-medium">Under Maintenance</span>
+                    </div>
+                </div>
+                
+                <!-- Mobile Menu Button -->
+                <button onclick="toggleMobileMenu()" class="md:hidden text-white/70 hover:text-primary transition-colors">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="relative z-10 min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8">
+        <div class="max-w-4xl mx-auto text-center">
+            
+            <!-- Construction Illustration -->
+            <div class="mb-8 relative">
+                <svg width="250" height="200" viewBox="0 0 250 200" class="mx-auto">
+                    <!-- Construction Site Base -->
+                    <rect x="50" y="150" width="150" height="30" rx="5" fill="url(#groundGradient)" stroke="rgba(245, 158, 11, 0.3)" stroke-width="1"/>
+                    
+                    <!-- Building Under Construction -->
+                    <rect x="80" y="80" width="90" height="70" rx="4" fill="url(#buildingGradient)" stroke="rgba(255, 255, 255, 0.2)" stroke-width="2"/>
+                    
+                    <!-- Construction Crane -->
+                    <line x1="200" y1="40" x2="200" y2="160" stroke="#F59E0B" stroke-width="4"/>
+                    <line x1="200" y1="50" x2="240" y2="50" stroke="#F59E0B" stroke-width="3"/>
+                    <line x1="200" y1="50" x2="160" y2="70" stroke="#F59E0B" stroke-width="3"/>
+                    
+                    <!-- Crane Hook -->
+                    <circle cx="230" cy="60" r="3" fill="#D97706"/>
+                    <line x1="230" y1="50" x2="230" y2="60" stroke="#6B7280" stroke-width="2"/>
+                    
+                    <!-- Construction Worker -->
+                    <g class="construction-icon">
+                        <!-- Worker Body -->
+                        <rect x="110" y="120" width="12" height="20" rx="2" fill="#F59E0B"/>
+                        <!-- Worker Head -->
+                        <circle cx="116" cy="115" r="6" fill="#FDE68A"/>
+                        <!-- Hard Hat -->
+                        <path d="M110 112 Q116 108 122 112 L122 115 L110 115 Z" fill="#EF4444"/>
+                        <!-- Arms -->
+                        <rect x="105" y="125" width="8" height="3" rx="1" fill="#F59E0B" transform="rotate(-20 109 126.5)"/>
+                        <rect x="119" y="125" width="8" height="3" rx="1" fill="#F59E0B" transform="rotate(20 123 126.5)"/>
+                    </g>
+                    
+                    <!-- Tools -->
+                    <g class="hammer-tool tool-shadow">
+                        <rect x="140" y="130" width="15" height="3" rx="1" fill="#8B5CF6" transform="rotate(45 147.5 131.5)"/>
+                        <rect x="150" y="125" width="6" height="6" rx="1" fill="#6B7280" transform="rotate(45 153 128)"/>
+                    </g>
+                    
+                    <g class="drill-tool tool-shadow">
+                        <circle cx="90" cy="135" r="4" fill="#10B981"/>
+                        <rect x="85" y="133" width="10" height="2" rx="1" fill="#059669"/>
+                    </g>
+                    
+                    <!-- Construction Barriers -->
+                    <rect x="60" y="145" width="20" height="8" rx="2" fill="#EF4444" opacity="0.8"/>
+                    <rect x="170" y="145" width="20" height="8" rx="2" fill="#EF4444" opacity="0.8"/>
+                    
+                    <!-- Warning Signs -->
+                    <polygon points="70,140 75,130 80,140" fill="#F59E0B"/>
+                    <text x="75" y="138" text-anchor="middle" fill="#000" font-size="8" font-weight="bold">!</text>
+                    
+                    <polygon points="175,140 180,130 185,140" fill="#F59E0B"/>
+                    <text x="180" y="138" text-anchor="middle" fill="#000" font-size="8" font-weight="bold">!</text>
+                    
+                    <!-- Sparks and Effects -->
+                    <g class="animate-sparkle">
+                        <circle cx="145" cy="125" r="1" fill="#FDE047"/>
+                        <circle cx="148" cy="128" r="0.5" fill="#FACC15"/>
+                        <circle cx="142" cy="130" r="0.8" fill="#EAB308"/>
+                    </g>
+                    
+                    <defs>
+                        <linearGradient id="groundGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#92400E;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#78350F;stop-opacity:1" />
+                        </linearGradient>
+                        <linearGradient id="buildingGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#475569;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#334155;stop-opacity:1" />
+                        </linearGradient>
+                    </defs>
+                </svg>
+            </div>
+
+            <!-- Maintenance Title -->
+            <div class="animate-slide-up mb-8">
+                <h1 class="text-5xl md:text-6xl font-bold text-white mb-4">
+                    🚧 Under Maintenance 🚧
+                </h1>
+                <p class="text-xl text-white/80 mb-2">
+                    Kami sedang melakukan perbaikan sistem untuk pengalaman yang lebih baik
+                </p>
+                <p class="text-white/60 max-w-2xl mx-auto">
+                    Angsflow sedang dalam tahap maintenance terjadwal. Kami akan kembali online sebentar lagi 
+                    dengan fitur-fitur baru dan peningkatan performa yang signifikan.
+                </p>
+            </div>
+
+            <!-- Countdown Timer -->
+            <div class="animate-slide-up mb-8" style="animation-delay: 0.2s;">
+                <h3 class="text-2xl font-semibold text-white mb-6">Estimasi Selesai:</h3>
+                <div class="flex justify-center space-x-4 mb-4">
+                    <div class="countdown-digit text-center p-4 rounded-xl">
+                        <div class="text-3xl md:text-4xl font-bold text-white" id="hours">02</div>
+                        <div class="text-sm text-amber-200 font-medium">Jam</div>
+                    </div>
+                    <div class="countdown-digit text-center p-4 rounded-xl">
+                        <div class="text-3xl md:text-4xl font-bold text-white" id="minutes">45</div>
+                        <div class="text-sm text-amber-200 font-medium">Menit</div>
+                    </div>
+                    <div class="countdown-digit text-center p-4 rounded-xl">
+                        <div class="text-3xl md:text-4xl font-bold text-white" id="seconds">30</div>
+                        <div class="text-sm text-amber-200 font-medium">Detik</div>
+                    </div>
+                </div>
+                <p class="text-white/60 text-sm">
+                    Target selesai: <span id="targetTime" class="text-amber-300 font-medium"></span>
+                </p>
+            </div>
+
+            <!-- Maintenance Progress -->
+            <div class="glass-effect rounded-2xl border border-white/20 p-6 mb-8 animate-slide-up" style="animation-delay: 0.4s;">
+                <h3 class="text-xl font-semibold text-white mb-4 flex items-center">
+                    <svg class="w-6 h-6 mr-2 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                    </svg>
+                    Progress Maintenance
+                </h3>
+                <div class="space-y-4">
+                    <div class="flex items-center justify-between text-sm">
+                        <span class="text-white/70">Database Optimization</span>
+                        <span class="text-emerald-400">✓ Selesai</span>
+                    </div>
+                    <div class="flex items-center justify-between text-sm">
+                        <span class="text-white/70">Server Infrastructure Update</span>
+                        <span class="text-emerald-400">✓ Selesai</span>
+                    </div>
+                    <div class="flex items-center justify-between text-sm">
+                        <span class="text-white/70">Security Patches</span>
+                        <span class="text-amber-400">🔧 Sedang Dikerjakan</span>
+                    </div>
+                    <div class="flex items-center justify-between text-sm">
+                        <span class="text-white/70">Performance Testing</span>
+                        <span class="text-white/40">⏳ Menunggu</span>
+                    </div>
+                    <div class="flex items-center justify-between text-sm">
+                        <span class="text-white/70">Final System Check</span>
+                        <span class="text-white/40">⏳ Menunggu</span>
+                    </div>
+                    
+                    <!-- Progress Bar -->
+                    <div class="w-full bg-white/10 rounded-full h-3 mt-6">
+                        <div class="progress-bar-fill bg-gradient-to-r from-amber-400 via-orange-400 to-yellow-400 h-3 rounded-full" style="width: 60%"></div>
+                    </div>
+                    <p class="text-center text-white/60 text-sm mt-2">60% Selesai</p>
+                </div>
+            </div>
+
+            <!-- What's New -->
+            <div class="glass-effect rounded-2xl border border-white/20 p-6 mb-8 animate-slide-up" style="animation-delay: 0.6s;">
+                <h3 class="text-xl font-semibold text-white mb-4 flex items-center">
+                    <svg class="w-6 h-6 mr-2 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                    </svg>
+                    Yang Baru Setelah Maintenance
+                </h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-left">
+                    <div class="flex items-start space-x-3">
+                        <div class="bg-emerald-500/20 rounded-full p-2 mt-1">
+                            <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <h4 class="text-white font-medium">Performa Lebih Cepat</h4>
+                            <p class="text-white/60 text-sm">Loading 3x lebih cepat dengan optimasi database</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-start space-x-3">
+                        <div class="bg-blue-500/20 rounded-full p-2 mt-1">
+                            <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <h4 class="text-white font-medium">Keamanan Ditingkatkan</h4>
+                            <p class="text-white/60 text-sm">Enkripsi end-to-end untuk semua data</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-start space-x-3">
+                        <div class="bg-purple-500/20 rounded-full p-2 mt-1">
+                            <svg class="w-4 h-4 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17v4a2 2 0 002 2h4M15 5l2 2"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <h4 class="text-white font-medium">UI/UX Baru</h4>
+                            <p class="text-white/60 text-sm">Interface yang lebih intuitif dan modern</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-start space-x-3">
+                        <div class="bg-amber-500/20 rounded-full p-2 mt-1">
+                            <svg class="w-4 h-4 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <h4 class="text-white font-medium">Fitur Analytics</h4>
+                            <p class="text-white/60 text-sm">Dashboard analitik yang lebih detail</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contact & Updates -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 animate-slide-up" style="animation-delay: 0.8s;">
+                <div class="glass-effect rounded-2xl border border-white/20 p-6 text-center hover:transform hover:scale-105 transition-all duration-300">
+                    <div class="bg-blue-500/20 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                        <svg class="w-8 h-8 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-3.5-3.5a50.002 50.002 0 00-2.5-2.5V9a6 6 0 10-12 0v1.5c0 .9-.4 1.8-1.1 2.4L2 17h5m8 0v1a3 3 0 11-6 0v-1m6 0H9"></path>
+                        </svg>
+                    </div>
+                    <h4 class="text-lg font-semibold text-white mb-2">Notifikasi Selesai</h4>
+                    <p class="text-white/70 text-sm mb-4">Dapatkan pemberitahuan ketika maintenance selesai</p>
+                    <button onclick="subscribeNotification()" class="text-blue-400 hover:text-blue-300 font-medium transition-colors">
+                        Subscribe →
+                    </button>
+                </div>
+
+                <div class="glass-effect rounded-2xl border border-white/20 p-6 text-center hover:transform hover:scale-105 transition-all duration-300">
+                    <div class="bg-green-500/20 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                        <svg class="w-8 h-8 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                        </svg>
+                    </div>
+                    <h4 class="text-lg font-semibold text-white mb-2">Status Real-time</h4>
+                    <p class="text-white/70 text-sm mb-4">Pantau progress maintenance secara langsung</p>
+                    <button onclick="openStatusPage()" class="text-green-400 hover:text-green-300 font-medium transition-colors">
+                        Lihat Status →
+                    </button>
+                </div>
+
+                <div class="glass-effect rounded-2xl border border-white/20 p-6 text-center hover:transform hover:scale-105 transition-all duration-300">
+                    <div class="bg-purple-500/20 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                        <svg class="w-8 h-8 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </div>
+                    <h4 class="text-lg font-semibold text-white mb-2">Butuh Bantuan?</h4>
+                    <p class="text-white/70 text-sm mb-4">Tim support tetap siap membantu Anda</p>
+                    <button onclick="contactSupport()" class="text-purple-400 hover:text-purple-300 font-medium transition-colors">
+                        Hubungi Kami →
+                    </button>
+                </div>
+            </div>
+
+            <!-- Social Media Updates -->
+            <div class="glass-effect rounded-2xl border border-white/20 p-6 mt-8 animate-slide-up" style="animation-delay: 1s;">
+                <h3 class="text-lg font-semibold text-white mb-4 flex items-center justify-center">
+                    <svg class="w-5 h-5 mr-2 text-pink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                    </svg>
+                    Ikuti Update Terbaru
+                </h3>
+                <div class="flex justify-center space-x-6">
+                    <button onclick="openSocial('twitter')" class="flex items-center space-x-2 text-blue-400 hover:text-blue-300 transition-colors">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/>
+                        </svg>
+                        <span>Twitter</span>
+                    </button>
+                    
+                    <button onclick="openSocial('instagram')" class="flex items-center space-x-2 text-pink-400 hover:text-pink-300 transition-colors">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 6.62 5.367 11.987 11.988 11.987s11.987-5.367 11.987-11.987C24.014 5.367 18.647.001 12.017.001zM8.449 16.988c-1.297 0-2.448-.49-3.323-1.297C4.198 14.864 3.708 13.713 3.708 12.416s.49-2.448 1.418-3.323c.875-.875 2.026-1.297 3.323-1.297s2.448.422 3.323 1.297c.928.875 1.418 2.026 1.418 3.323s-.49 2.448-1.418 3.275c-.875.807-2.026 1.297-3.323 1.297zm7.83-9.404c-.49 0-.875-.385-.875-.875s.385-.875.875-.875.875.385.875.875-.385.875-.875.875zm0 0"/>
+                        </svg>
+                        <span>Instagram</span>
+                    </button>
+                    
+                    <button onclick="openSocial('telegram')" class="flex items-center space-x-2 text-blue-500 hover:text-blue-400 transition-colors">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
+                        </svg>
+                        <span>Telegram</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="relative z-10 glass-effect border-t border-white/10 mt-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="flex items-center mb-4 md:mb-0">
+                    <svg width="32" height="32" viewBox="0 0 48 48" class="mr-3">
+                        <circle cx="24" cy="24" r="22" fill="url(#footerGradient)" stroke="rgba(96, 165, 250, 0.3)" stroke-width="2"/>
+                        <path d="M16 32 L20 20 L24 32 M18 28 L22 28" stroke="#ffffff" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M28 32 L28 20 M28 20 L34 20 M28 26 L32 26" stroke="#ffffff" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                        <defs>
+                            <linearGradient id="footerGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#60A5FA;stop-opacity:1" />
+                                <stop offset="50%" style="stop-color:#3B82F6;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#1E40AF;stop-opacity:1" />
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                    <span class="text-lg font-bold text-white">Angs<span class="gradient-text">Flow</span></span>
+                </div>
+                
+                <div class="flex items-center space-x-6 text-white/60 text-sm">
+                    <a href="#" onclick="openStatusPage()" class="hover:text-primary transition-colors">Status Page</a>
+                    <a href="#" onclick="contactSupport()" class="hover:text-primary transition-colors">Support</a>
+                    <a href="#" onclick="showMaintenanceSchedule()" class="hover:text-primary transition-colors">Maintenance Schedule</a>
+                </div>
+            </div>
+            
+            <div class="border-t border-white/10 mt-6 pt-6 text-center text-white/60 text-sm">
+                <p>&copy; 2024 Angsflow. Under Maintenance - We'll be back soon! 🔧</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Mobile Menu (Hidden by default) -->
+    <div id="mobileMenu" class="fixed inset-0 z-50 hidden">
+        <div class="fixed inset-0 bg-black/80 backdrop-blur-sm" onclick="toggleMobileMenu()"></div>
+        <div class="fixed top-0 right-0 h-full w-64 glass-effect border-l border-white/20 animate-slide-in">
+            <div class="p-6">
+                <div class="flex justify-between items-center mb-8">
+                    <span class="text-lg font-bold text-white">Menu</span>
+                    <button onclick="toggleMobileMenu()" class="text-white/70 hover:text-white">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+                
+                <nav class="space-y-4">
+                    <button onclick="subscribeNotification(); toggleMobileMenu();" class="block w-full text-left text-white/70 hover:text-primary transition-colors font-medium py-2">Subscribe Updates</button>
+                    <button onclick="openStatusPage(); toggleMobileMenu();" class="block w-full text-left text-white/70 hover:text-primary transition-colors font-medium py-2">Status Page</button>
+                    <button onclick="contactSupport(); toggleMobileMenu();" class="block w-full text-left text-white/70 hover:text-primary transition-colors font-medium py-2">Contact Support</button>
+                    <button onclick="showMaintenanceSchedule(); toggleMobileMenu();" class="block w-full text-left text-white/70 hover:text-primary transition-colors font-medium py-2">Maintenance Schedule</button>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Countdown Timer
+        let maintenanceEndTime = new Date();
+        maintenanceEndTime.setHours(maintenanceEndTime.getHours() + 2);
+        maintenanceEndTime.setMinutes(maintenanceEndTime.getMinutes() + 45);
+        maintenanceEndTime.setSeconds(maintenanceEndTime.getSeconds() + 30);
+
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const distance = maintenanceEndTime.getTime() - now;
+
+            if (distance > 0) {
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
+                document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
+                document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
+            } else {
+                // Maintenance completed
+                document.getElementById('hours').textContent = '00';
+                document.getElementById('minutes').textContent = '00';
+                document.getElementById('seconds').textContent = '00';
+                showNotification('Maintenance completed! Redirecting...', 'success');
+                setTimeout(() => {
+                    window.location.reload();
+                }, 3000);
+            }
+        }
+
+        // Mobile menu
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.toggle('hidden');
+            document.body.style.overflow = menu.classList.contains('hidden') ? 'auto' : 'hidden';
+        }
+
+        // Notification functions
+        function subscribeNotification() {
+            showNotification('Subscribing to maintenance updates...', 'info');
+            setTimeout(() => {
+                showNotification('Subscribed! You\'ll be notified when we\'re back online.', 'success');
+            }, 1500);
+        }
+
+        function openStatusPage() {
+            showNotification('Opening real-time status page...', 'info');
+        }
+
+        function contactSupport() {
+            showNotification('Connecting to emergency support...', 'info');
+            setTimeout(() => {
+                showNotification('Support team is available 24/7 during maintenance.', 'success');
+            }, 2000);
+        }
+
+        function showMaintenanceSchedule() {
+            showNotification('Loading maintenance schedule...', 'info');
+        }
+
+        function openSocial(platform) {
+            showNotification(`Opening ${platform} for latest updates...`, 'info');
+        }
+
+        // Notification system
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            const bgColor = type === 'success' ? 'from-emerald-500 to-teal-600' : 
+                           type === 'error' ? 'from-rose-500 to-red-600' : 
+                           type === 'warning' ? 'from-amber-500 to-orange-600' :
+                           'from-blue-500 to-indigo-600';
+            
+            const icon = type === 'success' ? 
+                '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>' :
+                type === 'error' ? 
+                '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>' :
+                type === 'warning' ?
+                '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.268 16.5c-.77.833.192 2.5 1.732 2.5z"></path>' :
+                '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>';
+            
+            notification.className = `fixed top-4 right-4 z-50 bg-gradient-to-r ${bgColor} text-white p-4 rounded-xl font-medium animate-slide-up max-w-sm shadow-lg`;
+            notification.innerHTML = `
+                <div class="flex items-center space-x-3">
+                    <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        ${icon}
+                    </svg>
+                    <span>${message}</span>
+                </div>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.animation = 'slideUp 0.3s ease-out reverse';
+                setTimeout(() => {
+                    notification.remove();
+                }, 300);
+            }, 4000);
+        }
+
+        // Simulate maintenance progress updates
+        function updateMaintenanceProgress() {
+            const progressSteps = [
+                { text: 'Initializing maintenance procedures...', delay: 5000 },
+                { text: 'Backing up critical data...', delay: 15000 },
+                { text: 'Applying security patches...', delay: 30000 },
+                { text: 'Optimizing database performance...', delay: 45000 },
+                { text: 'Running system diagnostics...', delay: 60000 },
+                { text: 'Final testing in progress...', delay: 75000 }
+            ];
+
+            progressSteps.forEach(step => {
+                setTimeout(() => {
+                    showNotification(step.text, 'info');
+                }, step.delay);
+            });
+        }
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set target completion time
+            document.getElementById('targetTime').textContent = maintenanceEndTime.toLocaleString('id-ID');
+            
+            // Start countdown
+            updateCountdown();
+            setInterval(updateCountdown, 1000);
+            
+            // Start maintenance progress updates
+            updateMaintenanceProgress();
+            
+            // Welcome message
+            setTimeout(() => {
+                showNotification('Maintenance in progress. Thank you for your patience! 🔧', 'warning');
+            }, 1000);
+            
+            // Periodic status updates
+            setInterval(() => {
+                const updates = [
+                    'Systems are being optimized for better performance...',
+                    'Security enhancements are being applied...',
+                    'Database optimization in progress...',
+                    'New features are being deployed...',
+                    'Final testing and validation ongoing...'
+                ];
+                const randomUpdate = updates[Math.floor(Math.random() * updates.length)];
+                showNotification(randomUpdate, 'info');
+            }, 120000); // Every 2 minutes
+        });
+
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', function(e) {
+            const mobileMenu = document.getElementById('mobileMenu');
+            if (!mobileMenu.classList.contains('hidden') && !e.target.closest('#mobileMenu') && !e.target.closest('button[onclick="toggleMobileMenu()"]')) {
+                toggleMobileMenu();
+            }
+        });
+
+        // Auto-refresh when maintenance is complete
+        function checkMaintenanceStatus() {
+            // Simulate checking if maintenance is complete
+            // In real implementation, this would check server status
+            const now = new Date().getTime();
+            if (maintenanceEndTime.getTime() <= now) {
+                showNotification('Maintenance completed! Redirecting to homepage...', 'success');
+                setTimeout(() => {
+                    window.location.href = '/';
+                }, 3000);
+            }
+        }
+
+        // Check maintenance status every 30 seconds
+        setInterval(checkMaintenanceStatus, 30000);
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9707d196500e3f5a',t:'MTc1NTQxOTUyMy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>

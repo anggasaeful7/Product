@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 - Page Not Found | Angsflow</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#60A5FA',
+                        secondary: '#3B82F6',
+                        accent: '#F59E0B',
+                        dark: '#0F172A',
+                        light: '#F8FAFC'
+                    },
+                    fontFamily: {
+                        'inter': ['Inter', 'sans-serif']
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'glow': 'glow 2s ease-in-out infinite alternate',
+                        'slide-up': 'slideUp 0.8s ease-out',
+                        'fade-in': 'fadeIn 1s ease-out',
+                        'pulse-slow': 'pulse 3s ease-in-out infinite',
+                        'bounce-slow': 'bounce 2s ease-in-out infinite',
+                        'wiggle': 'wiggle 1s ease-in-out infinite',
+                        'sparkle': 'sparkle 2s ease-in-out infinite',
+                        'slide-in': 'slideIn 0.6s ease-out',
+                        'shake': 'shake 0.5s ease-in-out',
+                        'number-bounce': 'numberBounce 2s ease-in-out infinite',
+                        'rotate-slow': 'rotateSlow 20s linear infinite',
+                        'scale-pulse': 'scalePulse 3s ease-in-out infinite'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        @keyframes glow {
+            from { box-shadow: 0 0 20px #60A5FA40; }
+            to { box-shadow: 0 0 30px #60A5FA80, 0 0 40px #60A5FA40; }
+        }
+        @keyframes slideUp {
+            from { transform: translateY(30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        @keyframes slideIn {
+            from { transform: translateX(-30px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes wiggle {
+            0%, 7% { transform: rotateZ(0); }
+            15% { transform: rotateZ(-15deg); }
+            20% { transform: rotateZ(10deg); }
+            25% { transform: rotateZ(-10deg); }
+            30% { transform: rotateZ(6deg); }
+            35% { transform: rotateZ(-4deg); }
+            40%, 100% { transform: rotateZ(0); }
+        }
+        @keyframes sparkle {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(1.1); }
+        }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+        @keyframes numberBounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-30px); }
+            60% { transform: translateY(-15px); }
+        }
+        @keyframes rotateSlow {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        @keyframes scalePulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .gradient-text {
+            background: linear-gradient(135deg, #60A5FA, #3B82F6, #1E40AF);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .error-number {
+            font-size: clamp(8rem, 20vw, 16rem);
+            font-weight: 800;
+            line-height: 0.8;
+            text-shadow: 0 0 50px rgba(96, 165, 250, 0.5);
+        }
+        .floating-element {
+            animation: float 6s ease-in-out infinite;
+        }
+        .floating-element:nth-child(2) {
+            animation-delay: -2s;
+        }
+        .floating-element:nth-child(3) {
+            animation-delay: -4s;
+        }
+        .search-container {
+            position: relative;
+        }
+        .search-container::before {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            background: linear-gradient(45deg, #60A5FA, #3B82F6, #1E40AF, #60A5FA);
+            border-radius: 12px;
+            z-index: -1;
+            animation: rotate-slow 20s linear infinite;
+        }
+        .search-input {
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(10px);
+        }
+        .suggestion-item {
+            transition: all 0.3s ease;
+        }
+        .suggestion-item:hover {
+            transform: translateX(10px);
+            background: rgba(96, 165, 250, 0.1);
+        }
+        .help-card {
+            transition: all 0.3s ease;
+        }
+        .help-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+        .astronaut {
+            animation: float 8s ease-in-out infinite;
+        }
+        .planet {
+            animation: rotate-slow 30s linear infinite;
+        }
+        .star {
+            animation: sparkle 2s ease-in-out infinite;
+        }
+        .star:nth-child(odd) {
+            animation-delay: -1s;
+        }
+    </style>
+</head>
+<body class="font-inter bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 min-h-screen overflow-x-hidden">
+    <!-- Animated Background -->
+    <div class="fixed inset-0 overflow-hidden pointer-events-none">
+        <!-- Floating Background Elements -->
+        <div class="absolute -top-40 -right-40 w-80 h-80 bg-primary/20 rounded-full blur-3xl floating-element"></div>
+        <div class="absolute top-1/2 -left-40 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl floating-element"></div>
+        <div class="absolute bottom-0 right-1/3 w-64 h-64 bg-indigo-500/15 rounded-full blur-3xl floating-element"></div>
+        
+        <!-- Animated Stars -->
+        <div class="star absolute top-20 left-20 w-2 h-2 bg-white rounded-full"></div>
+        <div class="star absolute top-40 right-32 w-1 h-1 bg-primary rounded-full"></div>
+        <div class="star absolute top-60 left-1/3 w-1.5 h-1.5 bg-white rounded-full"></div>
+        <div class="star absolute bottom-40 left-20 w-1 h-1 bg-blue-400 rounded-full"></div>
+        <div class="star absolute bottom-60 right-20 w-2 h-2 bg-white rounded-full"></div>
+        <div class="star absolute top-1/3 right-1/4 w-1 h-1 bg-primary rounded-full"></div>
+        
+        <!-- Floating Planets -->
+        <div class="planet absolute top-32 right-20 w-16 h-16 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full opacity-30"></div>
+        <div class="planet absolute bottom-32 left-32 w-12 h-12 bg-gradient-to-br from-emerald-500 to-teal-500 rounded-full opacity-20"></div>
+    </div>
+
+    <!-- Navigation Header -->
+    <nav class="relative z-10 glass-effect border-b border-white/10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo -->
+                <div class="flex items-center">
+                    <svg width="40" height="40" viewBox="0 0 48 48" class="animate-glow mr-3">
+                        <circle cx="24" cy="24" r="22" fill="url(#logoGradient)" stroke="rgba(96, 165, 250, 0.3)" stroke-width="2"/>
+                        <path d="M16 32 L20 20 L24 32 M18 28 L22 28" stroke="#ffffff" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M28 32 L28 20 M28 20 L34 20 M28 26 L32 26" stroke="#ffffff" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                        <defs>
+                            <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#60A5FA;stop-opacity:1" />
+                                <stop offset="50%" style="stop-color:#3B82F6;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#1E40AF;stop-opacity:1" />
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                    <span class="text-xl font-bold text-white">Angs<span class="gradient-text">Flow</span></span>
+                </div>
+                
+                <!-- Navigation Links -->
+                <div class="hidden md:flex items-center space-x-6">
+                    <a href="#" onclick="goHome()" class="text-white/70 hover:text-primary transition-colors font-medium">Home</a>
+                    <a href="#" onclick="goToDashboard()" class="text-white/70 hover:text-primary transition-colors font-medium">Dashboard</a>
+                    <a href="#" onclick="showSupport()" class="text-white/70 hover:text-primary transition-colors font-medium">Support</a>
+                    <button onclick="goHome()" class="bg-gradient-to-r from-primary to-secondary text-white px-4 py-2 rounded-lg font-medium hover:from-secondary hover:to-blue-700 transition-colors">
+                        Get Started
+                    </button>
+                </div>
+                
+                <!-- Mobile Menu Button -->
+                <button onclick="toggleMobileMenu()" class="md:hidden text-white/70 hover:text-primary transition-colors">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="relative z-10 min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8">
+        <div class="max-w-4xl mx-auto text-center">
+            
+            <!-- Astronaut Illustration -->
+            <div class="astronaut mb-8 relative">
+                <svg width="200" height="200" viewBox="0 0 200 200" class="mx-auto">
+                    <!-- Astronaut Body -->
+                    <ellipse cx="100" cy="140" rx="35" ry="45" fill="url(#astronautGradient)" stroke="rgba(255,255,255,0.3)" stroke-width="2"/>
+                    
+                    <!-- Astronaut Head/Helmet -->
+                    <circle cx="100" cy="80" r="40" fill="url(#helmetGradient)" stroke="rgba(255,255,255,0.4)" stroke-width="2"/>
+                    <circle cx="100" cy="80" r="35" fill="rgba(255,255,255,0.1)" stroke="rgba(96,165,250,0.3)" stroke-width="1"/>
+                    
+                    <!-- Face -->
+                    <circle cx="92" cy="75" r="3" fill="#ffffff"/>
+                    <circle cx="108" cy="75" r="3" fill="#ffffff"/>
+                    <path d="M95 85 Q100 90 105 85" stroke="#ffffff" stroke-width="2" fill="none" stroke-linecap="round"/>
+                    
+                    <!-- Arms -->
+                    <ellipse cx="70" cy="120" rx="12" ry="25" fill="url(#astronautGradient)" transform="rotate(-20 70 120)"/>
+                    <ellipse cx="130" cy="120" rx="12" ry="25" fill="url(#astronautGradient)" transform="rotate(20 130 120)"/>
+                    
+                    <!-- Legs -->
+                    <ellipse cx="85" cy="170" rx="10" ry="20" fill="url(#astronautGradient)"/>
+                    <ellipse cx="115" cy="170" rx="10" ry="20" fill="url(#astronautGradient)"/>
+                    
+                    <!-- Jetpack -->
+                    <rect x="90" y="150" width="20" height="30" rx="10" fill="url(#jetpackGradient)"/>
+                    
+                    <!-- Jetpack Fire -->
+                    <ellipse cx="100" cy="185" rx="8" ry="15" fill="url(#fireGradient)" opacity="0.8" class="animate-pulse-slow"/>
+                    
+                    <defs>
+                        <linearGradient id="astronautGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#E5E7EB;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#9CA3AF;stop-opacity:1" />
+                        </linearGradient>
+                        <radialGradient id="helmetGradient" cx="50%" cy="30%" r="70%">
+                            <stop offset="0%" style="stop-color:#60A5FA;stop-opacity:0.3" />
+                            <stop offset="100%" style="stop-color:#1E40AF;stop-opacity:0.6" />
+                        </radialGradient>
+                        <linearGradient id="jetpackGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#F59E0B;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#D97706;stop-opacity:1" />
+                        </linearGradient>
+                        <linearGradient id="fireGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" style="stop-color:#F59E0B;stop-opacity:1" />
+                            <stop offset="50%" style="stop-color:#EF4444;stop-opacity:0.8" />
+                            <stop offset="100%" style="stop-color:#DC2626;stop-opacity:0.6" />
+                        </linearGradient>
+                    </defs>
+                </svg>
+            </div>
+
+            <!-- 404 Error Number -->
+            <div class="error-number gradient-text animate-number-bounce mb-8">
+                404
+            </div>
+
+            <!-- Error Message -->
+            <div class="animate-slide-up mb-8">
+                <h1 class="text-4xl md:text-5xl font-bold text-white mb-4">
+                    Oops! Halaman Tidak Ditemukan
+                </h1>
+                <p class="text-xl text-white/80 mb-2">
+                    Sepertinya Anda tersesat di ruang angkasa digital! 🚀
+                </p>
+                <p class="text-white/60 max-w-2xl mx-auto">
+                    Halaman yang Anda cari mungkin telah dipindahkan, dihapus, atau tidak pernah ada. 
+                    Jangan khawatir, kami akan membantu Anda menemukan jalan kembali.
+                </p>
+            </div>
+
+            <!-- Search Box -->
+            <div class="search-container max-w-md mx-auto mb-8 animate-slide-up" style="animation-delay: 0.2s;">
+                <div class="relative">
+                    <input 
+                        type="text" 
+                        placeholder="Cari halaman yang Anda butuhkan..." 
+                        class="search-input w-full px-4 py-3 pl-12 pr-4 rounded-xl text-white placeholder-white/60 border border-white/20 focus:outline-none focus:border-primary transition-colors"
+                        onkeypress="handleSearch(event)"
+                    >
+                    <svg class="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-white/60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                    </svg>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12 animate-slide-up" style="animation-delay: 0.4s;">
+                <button onclick="goHome()" class="bg-gradient-to-r from-primary to-secondary text-white px-8 py-3 rounded-xl font-semibold hover:from-secondary hover:to-blue-700 transition-all duration-300 transform hover:scale-105 hover:shadow-lg">
+                    <svg class="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+                    </svg>
+                    Kembali ke Beranda
+                </button>
+                
+                <button onclick="goBack()" class="glass-effect text-white px-8 py-3 rounded-xl font-semibold border border-white/20 hover:bg-white/10 transition-all duration-300 transform hover:scale-105">
+                    <svg class="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                    </svg>
+                    Halaman Sebelumnya
+                </button>
+            </div>
+
+            <!-- Quick Suggestions -->
+            <div class="glass-effect rounded-2xl border border-white/20 p-6 mb-8 animate-slide-up" style="animation-delay: 0.6s;">
+                <h3 class="text-xl font-semibold text-white mb-4">Mungkin Anda Mencari:</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <a href="#" onclick="goToDashboard()" class="suggestion-item flex items-center p-3 rounded-lg text-white/80 hover:text-white">
+                        <svg class="w-5 h-5 mr-3 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2z"></path>
+                        </svg>
+                        Dashboard
+                    </a>
+                    <a href="#" onclick="goToTransactions()" class="suggestion-item flex items-center p-3 rounded-lg text-white/80 hover:text-white">
+                        <svg class="w-5 h-5 mr-3 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4"></path>
+                        </svg>
+                        Transaksi
+                    </a>
+                    <a href="#" onclick="goToBudgets()" class="suggestion-item flex items-center p-3 rounded-lg text-white/80 hover:text-white">
+                        <svg class="w-5 h-5 mr-3 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01"></path>
+                        </svg>
+                        Budget
+                    </a>
+                    <a href="#" onclick="goToReports()" class="suggestion-item flex items-center p-3 rounded-lg text-white/80 hover:text-white">
+                        <svg class="w-5 h-5 mr-3 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                        </svg>
+                        Laporan
+                    </a>
+                </div>
+            </div>
+
+            <!-- Help Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 animate-slide-up" style="animation-delay: 0.8s;">
+                <div class="help-card glass-effect rounded-2xl border border-white/20 p-6 text-center">
+                    <div class="bg-primary/20 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                        <svg class="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192L5.636 18.364M12 2.25a9.75 9.75 0 109.75 9.75A9.75 9.75 0 0012 2.25z"></path>
+                        </svg>
+                    </div>
+                    <h4 class="text-lg font-semibold text-white mb-2">Bantuan & Support</h4>
+                    <p class="text-white/70 text-sm mb-4">Butuh bantuan? Tim support kami siap membantu Anda 24/7</p>
+                    <button onclick="showSupport()" class="text-primary hover:text-secondary font-medium transition-colors">
+                        Hubungi Support →
+                    </button>
+                </div>
+
+                <div class="help-card glass-effect rounded-2xl border border-white/20 p-6 text-center">
+                    <div class="bg-emerald-500/20 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                        <svg class="w-8 h-8 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                        </svg>
+                    </div>
+                    <h4 class="text-lg font-semibold text-white mb-2">Dokumentasi</h4>
+                    <p class="text-white/70 text-sm mb-4">Pelajari cara menggunakan semua fitur Angsflow</p>
+                    <button onclick="showDocs()" class="text-emerald-400 hover:text-emerald-300 font-medium transition-colors">
+                        Baca Dokumentasi →
+                    </button>
+                </div>
+
+                <div class="help-card glass-effect rounded-2xl border border-white/20 p-6 text-center">
+                    <div class="bg-amber-500/20 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                        <svg class="w-8 h-8 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                        </svg>
+                    </div>
+                    <h4 class="text-lg font-semibold text-white mb-2">Status Sistem</h4>
+                    <p class="text-white/70 text-sm mb-4">Cek status server dan layanan Angsflow</p>
+                    <button onclick="showStatus()" class="text-amber-400 hover:text-amber-300 font-medium transition-colors">
+                        Lihat Status →
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="relative z-10 glass-effect border-t border-white/10 mt-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="flex items-center mb-4 md:mb-0">
+                    <svg width="32" height="32" viewBox="0 0 48 48" class="mr-3">
+                        <circle cx="24" cy="24" r="22" fill="url(#footerGradient)" stroke="rgba(96, 165, 250, 0.3)" stroke-width="2"/>
+                        <path d="M16 32 L20 20 L24 32 M18 28 L22 28" stroke="#ffffff" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M28 32 L28 20 M28 20 L34 20 M28 26 L32 26" stroke="#ffffff" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                        <defs>
+                            <linearGradient id="footerGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#60A5FA;stop-opacity:1" />
+                                <stop offset="50%" style="stop-color:#3B82F6;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#1E40AF;stop-opacity:1" />
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                    <span class="text-lg font-bold text-white">Angs<span class="gradient-text">Flow</span></span>
+                </div>
+                
+                <div class="flex items-center space-x-6 text-white/60 text-sm">
+                    <a href="#" onclick="showPrivacy()" class="hover:text-primary transition-colors">Privacy Policy</a>
+                    <a href="#" onclick="showTerms()" class="hover:text-primary transition-colors">Terms of Service</a>
+                    <a href="#" onclick="showSupport()" class="hover:text-primary transition-colors">Contact</a>
+                </div>
+            </div>
+            
+            <div class="border-t border-white/10 mt-6 pt-6 text-center text-white/60 text-sm">
+                <p>&copy; 2024 Angsflow. All rights reserved. Made with ❤️ for better financial management.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Mobile Menu (Hidden by default) -->
+    <div id="mobileMenu" class="fixed inset-0 z-50 hidden">
+        <div class="fixed inset-0 bg-black/80 backdrop-blur-sm" onclick="toggleMobileMenu()"></div>
+        <div class="fixed top-0 right-0 h-full w-64 glass-effect border-l border-white/20 animate-slide-in">
+            <div class="p-6">
+                <div class="flex justify-between items-center mb-8">
+                    <span class="text-lg font-bold text-white">Menu</span>
+                    <button onclick="toggleMobileMenu()" class="text-white/70 hover:text-white">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+                
+                <nav class="space-y-4">
+                    <a href="#" onclick="goHome(); toggleMobileMenu();" class="block text-white/70 hover:text-primary transition-colors font-medium py-2">Home</a>
+                    <a href="#" onclick="goToDashboard(); toggleMobileMenu();" class="block text-white/70 hover:text-primary transition-colors font-medium py-2">Dashboard</a>
+                    <a href="#" onclick="showSupport(); toggleMobileMenu();" class="block text-white/70 hover:text-primary transition-colors font-medium py-2">Support</a>
+                    <button onclick="goHome(); toggleMobileMenu();" class="w-full bg-gradient-to-r from-primary to-secondary text-white px-4 py-3 rounded-lg font-medium hover:from-secondary hover:to-blue-700 transition-colors mt-4">
+                        Get Started
+                    </button>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Navigation functions
+        function goHome() {
+            showNotification('Redirecting to homepage...', 'info');
+            // Simulate navigation
+            setTimeout(() => {
+                window.location.href = '/';
+            }, 1000);
+        }
+
+        function goBack() {
+            if (window.history.length > 1) {
+                window.history.back();
+            } else {
+                goHome();
+            }
+        }
+
+        function goToDashboard() {
+            showNotification('Opening dashboard...', 'info');
+            // Simulate navigation
+            setTimeout(() => {
+                window.location.href = '/dashboard';
+            }, 1000);
+        }
+
+        function goToTransactions() {
+            showNotification('Opening transactions...', 'info');
+        }
+
+        function goToBudgets() {
+            showNotification('Opening budgets...', 'info');
+        }
+
+        function goToReports() {
+            showNotification('Opening reports...', 'info');
+        }
+
+        // Mobile menu
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.toggle('hidden');
+            document.body.style.overflow = menu.classList.contains('hidden') ? 'auto' : 'hidden';
+        }
+
+        // Search functionality
+        function handleSearch(event) {
+            if (event.key === 'Enter') {
+                const query = event.target.value.trim();
+                if (query) {
+                    showNotification(`Searching for "${query}"...`, 'info');
+                    // Simulate search
+                    setTimeout(() => {
+                        showNotification('No results found. Try different keywords.', 'warning');
+                    }, 1500);
+                }
+            }
+        }
+
+        // Help functions
+        function showSupport() {
+            showNotification('Opening support center...', 'info');
+        }
+
+        function showDocs() {
+            showNotification('Opening documentation...', 'info');
+        }
+
+        function showStatus() {
+            showNotification('Checking system status...', 'info');
+            setTimeout(() => {
+                showNotification('All systems operational! 🟢', 'success');
+            }, 1500);
+        }
+
+        function showPrivacy() {
+            showNotification('Opening privacy policy...', 'info');
+        }
+
+        function showTerms() {
+            showNotification('Opening terms of service...', 'info');
+        }
+
+        // Notification system
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            const bgColor = type === 'success' ? 'from-emerald-500 to-teal-600' : 
+                           type === 'error' ? 'from-rose-500 to-red-600' : 
+                           type === 'warning' ? 'from-amber-500 to-orange-600' :
+                           'from-blue-500 to-indigo-600';
+            
+            const icon = type === 'success' ? 
+                '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>' :
+                type === 'error' ? 
+                '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>' :
+                type === 'warning' ?
+                '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.268 16.5c-.77.833.192 2.5 1.732 2.5z"></path>' :
+                '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>';
+            
+            notification.className = `fixed top-4 right-4 z-50 bg-gradient-to-r ${bgColor} text-white p-4 rounded-xl font-medium animate-slide-up max-w-sm shadow-lg`;
+            notification.innerHTML = `
+                <div class="flex items-center space-x-3">
+                    <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        ${icon}
+                    </svg>
+                    <span>${message}</span>
+                </div>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.animation = 'slideUp 0.3s ease-out reverse';
+                setTimeout(() => {
+                    notification.remove();
+                }, 300);
+            }, 4000);
+        }
+
+        // Easter egg - Konami code
+        let konamiCode = [];
+        const konamiSequence = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'KeyB', 'KeyA'];
+
+        document.addEventListener('keydown', function(e) {
+            konamiCode.push(e.code);
+            if (konamiCode.length > konamiSequence.length) {
+                konamiCode.shift();
+            }
+            
+            if (konamiCode.join(',') === konamiSequence.join(',')) {
+                showNotification('🎉 Konami Code activated! You found the easter egg!', 'success');
+                // Add some fun animation
+                document.body.style.animation = 'shake 0.5s ease-in-out 3';
+                setTimeout(() => {
+                    document.body.style.animation = '';
+                }, 1500);
+                konamiCode = [];
+            }
+        });
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add some random sparkle effects
+            setInterval(() => {
+                createSparkle();
+            }, 3000);
+            
+            // Welcome message
+            setTimeout(() => {
+                showNotification('Welcome to Angsflow! Let us help you find your way.', 'info');
+            }, 1000);
+        });
+
+        // Create random sparkle effects
+        function createSparkle() {
+            const sparkle = document.createElement('div');
+            sparkle.className = 'fixed w-2 h-2 bg-white rounded-full pointer-events-none z-0 animate-sparkle';
+            sparkle.style.left = Math.random() * window.innerWidth + 'px';
+            sparkle.style.top = Math.random() * window.innerHeight + 'px';
+            
+            document.body.appendChild(sparkle);
+            
+            setTimeout(() => {
+                sparkle.remove();
+            }, 2000);
+        }
+
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', function(e) {
+            const mobileMenu = document.getElementById('mobileMenu');
+            if (!mobileMenu.classList.contains('hidden') && !e.target.closest('#mobileMenu') && !e.target.closest('button[onclick="toggleMobileMenu()"]')) {
+                toggleMobileMenu();
+            }
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9707c3d6e6533f5a',t:'MTc1NTQxODk2MC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
